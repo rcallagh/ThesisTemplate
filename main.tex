@@ -1,0 +1,162 @@
+%\newcommand{\finalversion}{}
+\input{template/template}
+
+\graphicspath{ {src/} }
+
+
+\includeonly{
+   src/acronyms,
+   src/plan,
+   src/introduction,
+   src/mhs2o,
+   src/mhs2p,
+   src/fuzzinel,
+   src/nfge,
+   src/related_work,
+   src/conclusions,
+}
+
+
+
+\newcommand{\titleinfo}{Simulations of the blooh blah }
+
+\pagenumbering{Alph}
+\begin{document}
+
+
+%% Title Page
+\author{Ross Callaghan}
+\title{\titleinfo}
+\supervisor{Supervisor}{Dr. Gary Zhang}
+\supervisor{Co-Supervisor}{Dr. Marco Palombo}
+\thesisdate{\today}
+
+%% Committee Page
+\committeemember{President}{}{}
+\committeemember{Referee}  {}{}
+\committeemember{Referee}  {}{}
+\committeemember{Referee}  {}{}
+
+
+
+
+
+
+\maketitle
+\pagestyle{empty}
+
+\ifx\finalversion\undefined
+\else
+\clearpage
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=center,inner sep=0pt] at (current page.center) {%
+    \includegraphics[width=\paperwidth]{wordcloud/wordcloud0.png}
+  };
+\end{tikzpicture}
+\clearpage
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=center,inner sep=0pt] at (current page.center) {%
+    \includegraphics[width=\paperwidth]{wordcloud/wordcloud1.png}
+  };
+\end{tikzpicture}
+\fi
+
+
+\renewenvironment{dedication}
+{
+  \pagestyle{empty}% no header and footer
+  \cleardoublepage
+  \begin{flushright}
+
+  \vspace*{\stretch{3}}% some space at the top
+  \itshape             % the text is in italics
+  \rmfamily
+  \Large
+}
+{%
+  \par % end the paragraph
+  \vspace{\stretch{1}} % space at bottom is three times that at the top
+  \end{flushright}
+}
+
+
+\begin{dedication}
+  To Lígia, my best friend and love of my life.
+\end{dedication}
+
+
+
+\renewcommand*{\chapterpagestyle}{empty}
+\input{src/abstract}
+\renewcommand*{\chapterpagestyle}{plain}
+\cleardoublepage
+\pagestyle{plain}
+\pagenumbering{roman}
+
+\renewcommand{\BrainFuckChapter}{
+  {+}{+}{+}{+}{+}{+}{+}{+}{[}{>}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{<}{<}{<}{<}{<}{-}{]}{>}{>}{>}{+}{+}{+}{.}{>}{>}
+  {+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{-}{.}{+}{+}{+}{+}{+}{+}{.}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{.}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{+}{+}{+}{+}{+}{+}{.}{-}{.}{[}{>}{]}{<}{[}{[}{-}{]}{<}{]}
+}
+
+\phantomsection
+\addcontentsline{toc}{chapter}{Contents}
+\tableofcontents
+
+\renewcommand{\BrainFuckChapter}{
+  {+}{+}{+}{+}{+}{+}{+}{+}{[}{>}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{<}{<}{<}{<}{<}{-}{]}{>}{>}{>}{>}{-}{-}{-}{-}{.}
+  {>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{+}{.}{<}{<}{<}{<}{.}{>}{>}{>}{>}{-}{-}{-}{-}{-}{.}{-}{-}{-}{-}{-}{-}{-}{-}{-}{.}{<}{<}{<}{<}{.}{>}{>}{+}{+}{+}{+}{+}{+}{.}{>}{>}{+}{+}{+}{.}{-}
+  {-}{.}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{-}{-}{-}{.}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{.}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{[}{>}{]}{<}{[}{[}{-}{]}{<}{]}{-}{<}{>}{+}{>}{>}{>}{+}{>}{<}
+  % {-}{<}{-}{-}{+}{>}
+}
+\listoffigures
+
+\renewcommand{\BrainFuckChapter}{
+  {+}{+}{+}{+}{+}{+}{+}{+}{[}{>}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{<}{<}{<}{<}{<}{-}{]}{>}{>}{>}{>}{-}{-}{-}{-}{.}
+  {>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{+}{.}{<}{<}{<}{<}{.}{>}{>}{>}{>}{-}{-}{-}{-}{-}{.}{-}{-}{-}{-}{-}{-}{-}{-}{-}{.}{<}{<}{<}{<}{.}{>}{>}{+}{.}{>}{>}{+}{+}{+}{+}{+}{+}{.}{-}{-}{-}
+  {-}{-}{.}{+}{+}{+}{+}{+}{+}{+}{+}{.}{+}{+}{+}{.}{-}{-}{-}{-}{-}{-}{-}{-}{-}{.}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{.}{+}{+}{+}{+}{+}{.}{+}{+}{+}{+}{+}{+}{.}{[}{>}{]}{<}{[}{[}
+  {-}{]}{<}{]}{>}{>}{<}{+}{>}{>}{>}{-}{<}{+}{<}{<}{-}{<}{-}{>}{-}{>}{+}{>}{>}{<}{>}{>}{+}{>}{+}{<}{<}{<}{<}{>}{>}{-}{+}{+}{<}{>}{+}{<}{+}{+}{>}{-}{<}{>}{+}{>}{-}{-}{+}{>}{>}{>}{>}{-}{<}{-}{-}{<}{>}{+}{+}{>}{<}{>}
+}
+
+\listofalgorithms
+\addcontentsline{toc}{chapter}{List of Algorithms}
+
+
+\include{src/acronyms}
+
+\cleardoublepage
+
+\acresetall{}
+\renewcommand*{\chapterpagestyle}{scrheadings}
+
+\pagestyle{scrheadings}
+\pagenumbering{arabic}
+
+\include{src/plan}
+%\include{src/introduction}
+%\include{src/mhs2o}
+%\include{src/mhs2p}
+%\include{src/fuzzinel}
+%\include{src/nfge}
+%\include{src/related_work}
+%\include{src/conclusions}
+
+
+\renewcommand{\BrainFuckChapter}{
+  {+}{+}{+}{+}{+}{+}{+}{+}{[}{>}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{>}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{<}{<}{<}{<}{<}{-}{]}{>}{>}{>}{>}{+}{+}{.}{>}{+}
+  {+}{+}{+}{+}{.}{+}{.}{-}{.}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{.}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{.}{+}{+}{.}{+}{+}{+}{+}{+}{+}{+}{+}
+  {+}{+}{+}{+}{+}{+}{.}{[}{>}{]}{<}{[}{[}{-}{]}{<}{]}{<}{>}{.}{<}{.}{-}{+}{<}{+}{-}{-}{-}{-}{<}{>}{>}{>}{-}{<}{<}{-}{+}{<}{>}{>}{>}{+}{+}{>}{>}{+}{<}{>}{-}{+}{+}{+}{<}{-}{>}{+}{<}{-}{<}{-}{-}{>}{-}{>}{+}{<}{<}{-}
+}
+\renewcommand{\LifeChapter}{}
+
+\DeclareRobustCommand{\van}[3]{#2 #1}
+
+\renewcommand{\bibname}{References}
+\bibliography{references}
+\renewcommand{\BrainFuckChapter}{}
+\ifx\finalversion\undefined
+\listoftodos
+\fi
+% \appendix
+% \printindex
+\input{src/acks}
+\end{document}
