@@ -1,0 +1,60 @@
+\message{ !name(../main.tex)}%\newcommand{\finalversion}{}
+\input{template/template}
+
+\graphicspath{ {src/} }
+
+
+\includeonly{
+   src/acronyms,
+   src/plan,
+   src/introduction,
+   src/background,
+   src/conclusions,
+ }
+
+
+
+\newcommand{\titleinfo}{Simulations of diffusion MR (get proper title) }
+
+\pagenumbering{Alph}
+\begin{document}
+
+\message{ !name(src/introduction.tex) !offset(-22) }
+\chapter{Introduction}
+\label{sec:introduction}
+
+This report summarises work towards improving the realism simulations of \ac{MRI}. Realistic simulations allow models of the MRI signal to be validated using controllable and well known ground truth. 
+
+MRI provides researchers and clinicians a powerful and flexible tool for non-invasively imaging the human body \emph{in vivo} and has found extensive use over the past few decades in furthering the understanding the structure and function of the human brain.
+One technique which is commonly employed to study the structure of the human brain is diffusion MRI (dMRI).
+
+dMRI sensitises the MRI signal to the motion of water molecules which is known as diffusion.
+The environment in which the water molecules move will restrict the motion of the molecules and so will affect the MRI signal. 
+This dependency of the dMRI signal on the environment in which water molecules diffuse can be exploited to infer information about the environment solely from the dMRI signal.  
+Microstructure imaging attempts to do exactly this, infer information about the microstructural environment such as cell size and density from the dMRI signal.
+In order to infer meaningful information from the dMRI signal, models are typically used which relate microstructural features to the dMRI signal.
+
+The validation of these microstructural models can be difficult since ground truth microstructural features are inaccessible \emph{in vivo} and classical histological techniques have limitations such as disruption due to tissue extraction and preparation. 
+One approach commonly taken for the validation of new models is simulation of the diffusion MRI signal using well defined ground truth microstructural environments known as numerical phantoms. 
+
+Whilst these numerical often provide a valuable ground truth for simulation, they typically over simplify the complex microstructure of real tissue.
+An example of this is in white matter (WM), where fibres are commonly represented as straight cylinders whereas in real tissue, fibres have complex shapes with undulation and diameter variation.
+
+The main aim of this work is to improve the realism of WM numerical phantoms to more closely match \emph{in vivo} tissue.
+
+The rest of the report is arranged as follows: \Cref{sec:background} outlines some of the physics behind diffusion MRI and how we simulate it. \Cref{sec:literature_review} reviews current literature on diffusion MRI simulations and numerical phantom generation. \Cref{sec:method} outlines the method we have chosen for generating new phantoms and some experiments. \Cref{sec:results} shows examples of the realistic phantoms we generate and the results of the simulation experiments carried out and \Cref{sec:discussion,sec:conclusion} discuss the results, limitations and future perspectives for the work.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:
+
+\message{ !name(../main.tex) !offset(82) }
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

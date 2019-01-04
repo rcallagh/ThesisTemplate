@@ -1,0 +1,495 @@
+\renewcommand{\BrainFuckChapter}{}
+\renewcommand{\LifeChapter}{y}
+\chapter{Background}
+\label{sec:background}
+
+\section{MR Physics}
+\label{sec:bg_mri_physics}
+All forms of \emph{in vivo} use of magnetic resonance have their origins in the 1940s when Purcell, Torrey and Pound independently and almost simultaneously with Bloch, Hansen and Packard detected radio frequency signals from nuclei in ordinary matter\cite{Levitt2008, Barker2009}.
+This discovery gave birth to the field of nuclear magnetic resonance (NMR) which has become widespread, with applications in a number of areas including chemistry, biology, materials science and medical imaging\cite{Barker2009, Salibi1998}.
+
+Within the medical imaging context, NMR typically finds two uses, magnetic resonance imaging (MRI) and magnetic resonance spectroscopy (MRS)\footnote{The `N' from NMR is dropped in the medical imaging context to avoid confusion with nuclear medicine and general squeamishness around the word nuclear}.
+Both of these uses are closely related: MRI is typically concerned with building images of internal structures in the body, whilst MRS is concerned with identifying the chemical composition of tissues in the body.
+
+The theory behind NMR concerns the interaction between nuclei and magnetic fields which can be analysed from a classical mechanics or a quantum mechanical point of view. 
+The classical picture gives perhaps a more intuitive description of the system whereas the quantum mechanical picture offers a more accurate insight into some of the more complex interactions between nuclei and magnetic fields. 
+
+\subsection{Nuclear Magnetism}
+\label{sec:bg_nuclearmagnetism}
+
+The most important property of a nucleus for the application of NMR is nuclear spin. 
+Spin is a property inherent to all subatomic particles and whilst it is a purely quantum effect, it can be thought of loosely as the particle spinning around its axis - much like a tiny planet \cite{Levitt2008}.
+A planet spinning about its axis will have an angular momentum associated with that rotation and similarly the spin of a particle behaves like an angular momentum.
+Unlike the angular momentum of a rotating planet, however, the spin is an intrinsic property of the particle itself and not a result of its motion\cite{Levitt2008}.
+
+One of the postulates of quantum mechanics is that angular momentum is quantised \cite{DeGraaf2007}. This means that the spin angular momentum, $S$, of a particle in its rest state can only take values of 
+\begin{equation}
+S = \hbar \sqrt{(I(I+1))} \,,
+\label{eq:angmom_quant}
+\end{equation} 
+where $I$ is the spin angular momentum quantum number which can only take integer or half-integer values and $\hbar$ is the reduced Planck constant \cite{DeGraaf2007}.
+A second quantum number is used to describe the direction of angular momentum relative to a given direction, usually referred to as $z$. 
+Again, this quantum number is quantised, with the angular momentum in the $z$ direction, $S_z$, given by 
+\begin{equation}
+S_z = \hbar m_z \,.
+\label{eq:angmom_z}
+\end{equation} 
+The $m_z$ quantum number can have $2I + 1$ values in the range \cite{DeGraaf2007}
+\begin{equation}
+m_z = -I,\, -I + 1,\,\dots,\, I-1,\, I\,.
+\label{eq:m_z}
+\end{equation}
+
+Protons, neutrons and electrons - the particles making up all everyday matter - all have a spin quantum number of $I = \sfrac{1}{2}$ meaning that $m_z$ can have two possible values $m_z = \pm \sfrac{1}{2}$.
+
+
+% \todo{IS THIS BIT NECESSARY? JUST FOCUS ON PROTONS?}
+% Nuclei are made up of protons and neutrons, so the spin of a nucleus will be given by the combination of the spins of the protons and neutrons in the nucleus.
+% In general in quantum mechanics, the combination of two angular momenta will result in a third angular momentum, which can take a range of values according to 
+% \begin{equation}
+% I_{12} = |I_1 - I_2|, |I_1-I_2| + 1, \dots, |I_1 + I_2| - 1, |I_1 + I_2|\,. 
+% \end{equation}
+ 
+% The precise way in which the spins combine in any given nucleus is a complicated quantum mechanical problem but there are some rules which describe the possible nuclear spin quantum numbers. 
+% A nucleus with an odd mass number will have a half-integer spin, a nucleus with even mass number and even atomic number will have zero spin and a nucleus with an even mass number and odd atomic number will have integer spin \cite{DeGraaf2007}.
+
+This project is focused on NMR spectroscopy of \ce{^1H} nuclei, which simply consist of a single proton and so have $I = \sfrac{1}{2}$. 
+NMR spectroscopy is, however, feasible on any nucleus with non-zero spin with some of the most biologically relevant nuclei for in-vivo MRS being \ce{^{13}C}, \ce{^{31}P} and \ce{^{23}Na} \cite{DeGraaf2007}.
+
+A proton (or any nucleus) carries a positive electric charge.
+Just as classically a rotating charge with angular momentum, $\mathbf{L}$, will produce a magnetic moment, $
+\boldsymbol{\mu} = \gamma \mathbf{L}$, the intrinsic spin angular momentum, $\mathbf{S}$ of a proton will produce a magnetic moment 
+\begin{equation}
+\label{eq:magnmom}
+\boldsymbol{\mu} = \gamma \mathbf{S} \,,
+\end{equation}
+where $\gamma$ is the gyromagnetic ratio \cite{Levitt2008}.
+For a proton, $\gamma = 2.675 \times 10^8$ rad s$^{-1}$ T$^{-1}$.
+
+The fact that a proton has an intrinsic magnetic moment means that it will interact with magnetic fields and it is understanding this interaction that underpins NMR theory.
+
+
+\subsection{Magnetic Resonance}
+\label{sec:bg_resonance}
+Classically, a magnetic moment, $\boldsymbol{\mu}$, placed in an external magnetic field, $\mathbf{B}_0$, will feel a torque, $\boldsymbol{\tau}$, given by \cite{Haacke1999} 
+\begin{equation}
+\label{eq:torque}
+\boldsymbol{\tau} = \boldsymbol{\mu} \times \mathbf{B}_0 \,.
+\end{equation}
+At the same time, classical mechanics gives a relationship between the change in angular momentum and the torque as \cite{Haacke1999} 
+\begin{equation}
+\label{eq:dLdt}
+\frac{d\mathbf{L}}{dt} = \boldsymbol{\tau}\,. 
+\end{equation}
+For a proton in its rest state, the only angular momentum is the intrinsic spin angular momentum, $\mathbf{S}$, so combining Eq. \ref{eq:torque} and \ref{eq:dLdt} gives the equation of motion for a spin in an external magnetic field
+\begin{equation}
+\frac{d\mathbf{S}}{dt} = \boldsymbol{\mu} \times \mathbf{B}_0 \,.
+\end{equation}
+Since $\mathbf{S}$ is equivalent to $\boldsymbol{\mu}/\gamma$, this becomes
+\begin{equation}
+\frac{d\boldsymbol{\mu}}{dt} = \gamma\boldsymbol{\mu} \times \mathbf{B}_0\,.
+\label{eq:dmudt}
+\end{equation}
+
+This equation of motion can be solved in a few ways for the case of constant external magnetic field, with the result being that the magnetic moment precesses about the magnetic field with a frequency, $\omega_0$, given by\cite{Levitt2008}
+\begin{equation}
+\label{eq:LarmorFreq}
+\omega_0 = \gamma B_0\,,
+\end{equation}
+with $B_0$ being the external field strength. 
+This precessional motional is illustrated in Fig.\ \ref{fig:precession}.
+The frequency $\omega_0$ is known as the Larmor frequency and lies in the radiofrequency (RF) range for typical field strengths found in MRI machines (1.5 - 7 T).
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.3\textwidth}
+		\includegraphics[width = \textwidth]{figures/background/precession.eps}
+		\caption{}
+		\label{fig:precession}
+	\end{subfigure}
+	\hspace{2cm}
+	\begin{subfigure}{0.3\textwidth}
+		\includegraphics[width = \textwidth]{figures/background/manyspins.eps}
+		\caption{}
+		\label{fig:manyspins}
+	\end{subfigure}
+	
+	\caption{a) Illustration of the precessional motion of a single spin with magnetic moment $\mu$ in the presence of an external magnetic field $B_0$. b) Many individual spins in an external magnetic field precess around the external field with random phase producing a net magnetisation in the direction of the $B_0$ field.}
+	\label{fig:precession-spins}
+	
+\end{figure}
+
+
+In practice, it is not possible to observe the magnetic moment of a single spin. 
+The quantity observed is rather the sum of the magnetic moments from many spins together, this is known as the net magnetisation. 
+In order to fully describe the system, a quantum mechanical treatment using density operators is necessary \cite{Levitt2008}, however a classical treatment is sufficient to understand the basic principles. 
+
+As mentioned in Section \ref{sec:nuclearmagnetism}, protons can have two $S_z$ states with $m_z = \pm \sfrac{1}{2}$. 
+These states can be thought of as the magnetic moment either being aligned parallel or anti-parallel to the external magnetic field, known as spin-up and spin-down respectively.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/background/energy_levels.eps}
+	\caption{Energy levels of a spin-1/2 particle. The spin-up state ($\alpha$) has the lowest energy and the spin down state ($\beta$) has the highest. The energy difference between the levels is $\Delta E$.}
+	\label{fig:energylevels}
+\end{figure}
+
+The energy difference between these two states is given by a quantum mechanical effect called the Zeeman effect \cite{Levitt2008}, which gives the difference as  
+\begin{equation}
+	\Delta E = \gamma \hbar B_0\,.
+\end{equation} 
+
+Fig.\ \ref{fig:energylevels} illustrates this splitting of the energy levels showing that the spin-up state, $\alpha$, is the lower of the two energy states. 
+When there are many protons all experiencing the same magnetic field, the proportion of the number of protons in the spin-up, $n_\alpha$, state versus spin-down, $n_\beta$, is given by the Boltzmann distribution\cite{DeGraaf2007}
+\begin{equation}
+\frac{n_\alpha}{n_\beta} = \exp\left(\frac{\Delta E}{k_BT}\right)\,,
+\end{equation}  
+where $k_B$ is the Boltzmann constant and $T$ is the temperature. This means that at a non-zero temperature and with positive $\gamma$, there are slightly more protons aligned with the magnetic field than against it.  
+
+The total magnetisation of a sample will be the sum of all of these magnetic moments, meaning that the net magnetisation will be parallel to $B_0$ since slightly more protons are aligned with the field than against it. 
+Fig.\ \ref{fig:manyspins} shows a pictorial representation of the system of many spins producing a net magnetisation, $\mathbf{M}_0$ aligned with $\mathbf{B}_0$.
+
+Each of the spins will still be precessing about the magnetic field at the Larmor frequency but since they are out of phase with one another, all transverse components of the magnetisation cancel out when they combine and all that is left is a static longitudinal component. 
+
+
+In order to make measurements, the net longitudinal magnetisation needs to be `flipped' into the transverse plane where it can be detected. 
+This is achieved by applying a second magnetic field, $\mathbf{B}_1$, oscillating in the transverse plane. 
+In much the same way as with $\mathbf{B}_0$, the magnetisation feels a torque from $\mathbf{B}_1$ and begins to rotate about $\mathbf{B}_1$, away from the longitudinal axis.
+The two external fields act simultaneously on $\mathbf{M}_0$ so the magnetisation will tip away from the $z$ axis whilst still precessing about $z$ with a frequency $\omega_0$.
+This kind of motion is known as nutation and is illustrated in Fig.\ \ref{fig:nutation}.  
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{figures/background/nutation.eps}
+	\caption{Nutation motion of an on-resonance spin in the presence of an RF field. Precession about the $B_0$ and $B_1$ fields create the spiralling motion in the laboratory frame.}
+	\label{fig:nutation}
+\end{figure}
+
+
+
+\subsection{The Bloch Equations}
+\label{sec:bg_bloch}
+The magnetisation arises from a sum of independent magnetic moments, meaning that we could represent the magnetisation as 
+\begin{equation}
+	\mathbf{M} = \sum_i \mu_i \,,
+\end{equation}
+with $i$ indicating a sum over all the spins in the sample.
+This definition for $\mathbf{M}$ can be combined with the equation of motion for a single spin, Eq. \ref{eq:dmudt}, to give \cite{Haacke1999}
+\begin{equation}
+	\frac{d\mathbf{M}}{dt} = \gamma \mathbf{M} \times \mathbf{B}\,.
+	\label{eq:dMdt}
+\end{equation}  
+
+In the presence of the main external field, $\mathbf{B}_0$, the magnetisation will be static and aligned along the $z$ axis. The $x$ and $y$ components of the magnetisation will have random orientations and precess about $\mathbf{B}_0$ at the Larmor frequency with a mean amplitude of zero. This will give the components of Eq.\ \ref{eq:dMdt} as\cite{DeGraaf2007}
+\begin{align}
+	\frac{d\mathbf{M}_x(t)}{dt} &= \gamma\mathbf{M}_y\mathbf{B}_0\,,\\
+	\frac{d\mathbf{M}_y(t)}{dt} &= -\gamma\mathbf{M}_x\mathbf{B}_0\,,\\	\frac{d\mathbf{M}_z(t)}{dt} &= 0 \,.
+\end{align}
+
+To understand the interaction of the magnetisation with the $\mathbf{B}_1$ field, the oscillation of the field in the transverse plane needs to be described. 
+%The $\mathbf{B}_1$ field is oscillating in the transverse plane, say, along the $x$-axis. 
+%The linearly oscillating field in $x$ can be thought of as two components rotating about the $z$-axis, one with a frequency $\omega$ and one with a frequency $-\omega$. 
+%The sum of these two components will result in a field that is linearly oscillating along $x$ with a frequency $\omega$. \todo{Change/Mention that circularly polarised fields are used}
+%
+%Supposing that this frequency is on the same order as the Larmor frequency, one of the components (for a spin with positive $\gamma$ this will be the $+\omega$ component) will differ from the Larmor frequency by about $2\omega$. 
+%This means that the effect of this component on the magnetisation can be neglected and the exciting magnetic field will have the form\cite{DeGraaf2007}
+Usually, the $\mathbf{B}_1$ field is circularly polarised to oscillate in the transverse plane so that the field can be described as
+\begin{equation}
+	\mathbf{B}_1(t) = B_1\cos(\omega t) \mathbf{e_x} - B_1\sin(\omega t) \mathbf{e_y}\,,
+	\label{eq:circB1}
+\end{equation}
+where $\mathbf{e_x}$ and $\mathbf{e_y}$ are unit vectors in the $x$ and $y$ directions respectively. 
+
+
+The combined effect of the $\mathbf{B}_0$ and $\mathbf{B}_1$ fields can be seen from Eq.\ \ref{eq:dMdt} to get \cite{DeGraaf2007}
+\begin{align}
+	\frac{d\mathbf{M}_x(t)}{dt} &= \gamma \left(\mathbf{M}_y(t)\mathbf{B}_0 - \mathbf{M}_z(t)\mathbf{B}_1\sin(\omega t)\right)\,,\label{eq:bloch_norelx}\\
+	\frac{d\mathbf{M}_y(t)}{dt} &= \gamma \left(\mathbf{M}_z(t)\mathbf{B}_1\cos(\omega t) - \mathbf{M}_x(t)\mathbf{B}_0\right)\,,\label{eq:bloch_norely}\\
+	\frac{d\mathbf{M}_z(t)}{dt} &= \gamma \left(\mathbf{M}_x(t)\mathbf{B}_1\sin(\omega t) - \mathbf{M}_y(t)\mathbf{B}_1\cos(\omega t) \right)\,.\label{eq:bloch_norelz}
+\end{align}
+
+These are the equations of motion of the magnetisation in the laboratory frame under the influence of the $\mathbf{B}_0$ and $\mathbf{B}_1$ and describe the kind of motion seen in Fig.\ \ref{fig:nutation}. 
+
+\subsubsection{Relaxation}
+In order to get to the full Bloch Equations - the empirical set of equations describing the evolution of magnetisation - the concept of relaxation must be introduced. 
+Relaxation is a term used to describe the way in which a spin system will return to equilibrium. The components of $\mathbf{M}$ that are parallel to the $\mathrm{B_0}$ magnetic field relax differently to those perpendicular to the magnetic field leading to two relaxation terms being introduced into Eq.\ \ref{eq:bloch_norelx} -\ref{eq:bloch_norelz}. 
+
+
+The relaxation processes are exponential and described by two time constants, $\mathrm{T}_1$ and $\mathrm{T}_2$. $\mathrm{T}_1$ is the longitudinal relaxation time and describes the rate at which longitudinal magnetisation regrows after a perturbation. 
+$\mathrm{T}_2$ is the transverse relaxation time and describes the rate at which transverse magnetisation decays after a perturbation. 
+$\mathrm{T}_2$ is always shorter than $\mathrm{T}_1$ since all the effects which contribute to $\mathrm{T}_1$ contribute to $\mathrm{T}_2$ relaxation, however $\mathrm{T}_2$ relaxation is also affected by the spins going out of phase with one another.
+The relaxation process can be written as \cite{DeGraaf2007}
+\begin{align}
+	\frac{d\mathbf{M}_x(t)}{dt} &= -\frac{\mathbf{M}_x(t)}{\mathrm{T}_2}\,,\label{eq:bloch_rel1}\\
+	\frac{d\mathbf{M}_y(t)}{dt} &= -\frac{\mathbf{M}_y(t)}{\mathrm{T}_2}\,,\label{eq:bloch_rel2}\\
+	\frac{d\mathbf{M}_z(t)}{dt} &= -\frac{\mathbf{M}_z(t) - \mathbf{M}_0}{T1}\,.\label{eq:bloch_rel3}
+\end{align}
+		
+Combining Eq.\ \ref{eq:bloch_norelx} - \ref{eq:bloch_norelz} and Eq.\ \ref{eq:bloch_rel1} - \ref{eq:bloch_rel3} gives the full Bloch equations
+\begin{align}
+	\frac{d\mathbf{M}_x(t)}{dt} &= \gamma\left(\mathbf{M}_y(t)\mathbf{B}_0 - \mathbf{M}_z(t)\mathbf{B}_1\sin(\omega t)\right) - \frac{\mathbf{M}_x(t)}{\mathrm{T}_2}\,,\label{eq:bloch_labx}\\
+	\frac{d\mathbf{M}_y(t)}{dt} &= \gamma\left(\mathbf{M}_z(t)\mathbf{B}_1\cos(\omega t) - \mathbf{M}_x(t)\mathbf{B}_0\right) - \frac{\mathbf{M}_y(t)}{\mathrm{T}_2}\,,\label{eq:bloch_laby}\\
+	\frac{d\mathbf{M}_z(t)}{dt} &= \gamma \left(\mathbf{M}_x(t)\mathbf{B}_1\sin(\omega t) - \mathbf{M}_y(t)\mathbf{B}_1\cos(\omega t) \right) - \frac{\mathbf{M}_z(t) - \mathbf{M}_0}{\mathrm{T}_1}\,. \label{eq:bloch_labz}
+\end{align}
+
+\subsubsection{The Rotating Frame}
+To this point, everything has been described in a static Cartesian frame known as the laboratory frame. 
+The lab frame is not the most convenient reference frame to analyse the NMR experiment in, however.
+Moving to a frame which is rotating about $\mathbf{B}_0$ (i.e.\ the $z$-axis) at a frequency $\omega$ matching the $\mathbf{B}_1$ field oscillation simplifies the maths of the system. 
+The axes of this frame will be referred to as $x', y'$ and $z'$. 
+
+The components of the magnetisation in the rotating frame can be calculated from the lab frame components as \cite{DeGraaf2007}
+\begin{align}
+	\mathbf{M}_x' &= \mathbf{M}_x\cos(\omega t) - \mathbf{M}_y\sin(\omega t)\,,\\
+	\mathbf{M}_y' &= \mathbf{M}_x\sin(\omega t) - \mathbf{M}_x\cos(\omega t)\,,\\
+	\mathbf{M}_z' &= \mathbf{M}_z\,.
+\end{align}
+
+The rotating frame Bloch equations can be calculated by combining these rotating frame magnetisation components with the lab frame Bloch equations\cite{DeGraaf2007}
+\begin{align}
+	\frac{d\mathbf{M}_x'(t)}{dt} &= \Omega\mathbf{M}_y'(t) - \frac{\mathbf{M}_x'(t)}{\mathrm{T}_2}\,,\label{eq:blochx}\\
+	\frac{d\mathbf{M}_y'(t)}{dt} &= -\Omega\mathbf{M}_x'(t) + \gamma\mathbf{B}_1\mathbf{M}_z'(t) - \frac{\mathbf{M}_y'(t)}{\mathrm{T}_2}\,,\label{eq:blochy}\\
+	\frac{d\mathbf{M}_z'(t)}{dt} &= -\gamma\mathbf{B}_1\mathbf{M}_y'(t) - \frac{\mathbf{M}_z'(t) - \mathbf{M}_0}{\mathrm{T}_1}\,,\label{eq:blochz}
+\end{align} 
+where $\Omega = \omega_0 - \omega$ is the offset frequency between the $\mathbf{B}_1$ field frequency and the Larmor frequency. 
+
+Since the frame is rotating with a frequency $\omega$, the $\mathbf{B}_1$ field appears static in the rotating frame. 
+The precessional motion that is seen in the lab frame ($\omega_0 = \gamma\mathbf{B}_0$) is reduced to a frequency $\Omega$ in the rotating frame. 
+When $\Omega = 0$, meaning that $\mathbf{B}_1$ oscillates at the Larmor frequency, the magnetisation simply precesses about the $\mathbf{B}_1$ field towards the transverse plane as illustrated in Fig.\ \ref{fig:onres}. 
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{figures/background/nutation_onres.eps}
+	\caption{Motion of a spin in the presence of a $B_1$ RF field in the rotating frame. This is identical to the nutation in Fig.\ \ref{fig:nutation}, however viewing from the rotating frame simplifies the motion. }
+	\label{fig:onres}
+\end{figure}
+
+This situation is known as resonance - the frequency of the RF pulse matches the Larmor frequency, tipping the magnetisation away from the $z'$ axis and into the transverse plane. 
+
+In the off-resonance case, an additional component of magnetic field with magnitude $\Omega/\gamma$ is produced in the $z$-direction.
+This results in an effective magnetic field, $\mathbf{B}_e$, with a magnitude \cite{DeGraaf2007}
+\begin{equation}
+	B_e = |B_e| = \sqrt{B_1^2 + \left(\frac{\Omega}{\gamma}\right)^2}\,.
+	\label{eq:Beff}
+\end{equation}
+The effective field is illustrated in Fig.\ \ref{fig:B_e} with the additional component of $\Omega/\gamma$ resulting in an effective field that is no longer aligned with $x'$.
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{figures/background/B_e.eps}
+	\caption{The effective field, $B_e$, produced due to an off-resonance frequency $\Omega$. The off-resonance effects produce an additional component of magnetic field along the $z'$ axis.}
+	\label{fig:B_e}	
+\end{figure}
+Off-resonance effects can produce unwanted results meaning the spin does not get flipped as much as expected under an RF pulse which can result in signal losses. 
+Methods for designing RF pulses to deal with off-resonance effects will be discussed in Section \ref{sec:RF_pulses}. 
+
+
+\subsection{Detecting the NMR Signal}
+The detection and processing of NMR signals is a deep topic which could be the subject of its own book, however some very basic details of how a signal is formed are useful to go on from here.
+ 
+The reason for flipping the magnetisation into the transverse plane using $\mathbf{B}_1$ fields is to make the magnetisation detectable. 
+Transverse magnetisation precesses about $\mathbf{B}_0$ at the Larmor frequency, sweeping its magnetic field around the rotation. 
+A coil of wire placed near this precessing field will feel an electromotive force induced in it according to Faraday's Law of Induction\cite{Haacke1999}.
+
+Following a pulse that flips the magnetisation from $\mathbf{M}_0$ aligned with $z$ through an angle $\beta$ towards $x'$, the $x'$-component of the magnetisation will be $M_0\sin\beta$ and (ignoring relaxation) will then precess at the offset frequency, $\Omega$, in the rotating frame. This will give the components of the magnetisation in the transverse plane over time as 
+\begin{equation}
+M_x = M_0\sin(\beta)\cos(\Omega t) \qquad M_y = M_0\sin(\beta)\sin(\Omega t)\,.\label{eq:MxMy}
+\end{equation}
+
+The signal induced into the receiver coils is proportional to $M_x$ and $M_y$ and so the signal will also have an oscillating form similar to Eq.\ \ref{eq:MxMy}.
+From the $\sin\beta$ term, it is clear that the maximum signal will arise when $\beta = 90$\degree, meaning all the magnetisation is flipped into the transverse plane. 
+Additionally, in a realistic experiment, there will be T2 relaxation so including this, the general form of the signal following a 90\degree\ pulse will be\cite{DeGraaf2007} 
+\begin{equation}
+S_x = S_0\cos(\Omega t)\exp\left(-R_2t\right) \qquad S_y = S_0\sin(\Omega t)\exp\left(-R_2t\right)\,,
+\end{equation}
+where $R_2 = 1/\mathrm{T}_2$.
+Generally NMR systems use something known as quadrature detection, meaning that both the $x'$ and $y'$ components of the magnetisation are measured simultaneously\cite{Levitt2008}, giving the signal as a function of time as 
+\begin{align}
+	S(t) &= S_x + iS_y\,,\nonumber\\
+		 &= S_0\exp((i\Omega - R_2)t)\,.\label{eq:fid}
+\end{align}  
+
+
+This time-domain signal is known as a free induction decay (FID) and has a typical form shown in the top plot of Fig.\ \ref{fig:fft}. 
+The FID holds all of the relevant information about the spin system needed for NMR, however it is seldom used on its own since the information is difficult to interpret in this form.
+NMR spectroscopy uses a mathematical procedure known as the Fourier transform which is used as a transformation between the time and frequency domains. 
+\begin{figure}
+	\centering
+	\begin{subfigure}{\textwidth}
+		\includegraphics[width=\textwidth]{figures/background/FID.eps}
+	\end{subfigure}
+
+	\begin{subfigure}{\textwidth}
+		\includegraphics[width=\textwidth]{figures/background/fftFID.eps}
+	\end{subfigure}
+	\caption{An example of the Fourier transform. The time domain signal (top) is transformed into a frequency domain (bottom) by the Fourier transform. }
+	\label{fig:fft}
+
+      \end{figure}
+      
+Many books cover the Fourier transform in great detail \cite{Keeler2010, Haacke1999}, however for this report, it is sufficient to simply know its results.
+The Fourier transform will take an FID signal of the form in Eq. \ref{eq:fid} and produce a frequency domain signal that has a mathematical form known as a Lorentzian, given by 
+\begin{equation}
+	S_0\exp((i\Omega - R_2)t) \quad\overset{\mathrm{FT}}{\rightarrow}\quad \frac{S_0R_2}{R_2^2 + (\omega - \Omega)^2} + i\frac{S_0(\omega - \Omega)}{R_2^2 + (\omega - \Omega)^2}\,,
+\end{equation}    
+where $\omega$ is the frequency domain of the spectrum. 
+The real part of this term is known as the absorption mode and the imaginary part is known as the dispersion mode.
+The absorption mode Lorentzian is shown in the bottom plot in Fig.\ \ref{fig:fft}. 
+Peaks like this form the basis of all spectra used in NMR spectroscopy. 
+
+
+\section{Diffusion MRI Simulation}
+\label{sec:bg_diffusion_simulation}
+
+
+\section{Diffusion Physics}
+\label{sec:diffusion_physics}
+% Diffusion MRI simulations attempt to synthesise dMRI signals through models of our understanding of the underlying diffusion processes.
+% These simulations broadly fall into two categories: solutions of the diffusion equation and Monte-Carlo simulations of the diffusion dynamics.
+
+% The diffusion equation relates the rate of change of concentration to the spatial variation in concentration according to
+% \begin{equation}
+%   \frac{\partial c(\vec{r}, t)}{\partial t} = D\nabla^2 c(\vec{r}, t)\,.
+% \end{equation}
+Diffusion MRI simulations are ultimately trying to synthesise the dMRI signal through models of our understanding of the underlying diffusion processes.
+This section briefly covers the physics that gives rise to the dMRI signal. 
+
+The diffusion process is driven by the Brownian motion of particles in fluids.
+The thermal kinetic energy of particles causes them to move around rapidly, however particles frequently collide with each other (for instance, molecules in water at room temperature experience around 60 billion collisions per second \cite{Denny1993}) creating a very torturous, random path.
+
+Diffusion MRI sensitises the MR signal to this motion by exploiting the dephasing of spins as a result of magnetic field gradients.
+The incremental phase, $d\phi$, accrued for a single spin in an infinitesimal time, $dt$, % assuming a gradient in the $z$ direction
+is given by
+\begin{equation}
+  % \phi(t, \mathbf{g}(\mathbf{r}(t), t)) = \gamma B_0 t + \gamma \int_0^t \mathbf{g}(\mathbf{r}(t'), t')\cdot\mathbf{r}(t')dt'\,,
+  % \label{eq:phase_singlespin}
+  d\phi = \gamma B(\mathbf{r}(t), t) dt\,,
+  \label{eq:dphi}
+\end{equation}
+% where $\gamma$ is the gyromagnetic ratio, $B_0$ is the main field strength, $\mathbf{r}(t')$ is the position of the particle and $\mathbf{g}(\mathbf{r}(t'), t')$ is the (potentially spatially varying and time-dependent) magnetic field gradient.
+where $\gamma$ is the gyromagnetic ratio,  $\mathbf{r}(t)$ is the position of the particle and $B(\mathbf{r}(t), t)$ is the magnitude of the magnetic field at position $\mathbf{r}(t)$ and time $t$.
+
+The magnetic field will generally have a uniform component from the main $B_0$ field, and spatially and/or time varying components due to deliberate magnetic field gradients or typically unwanted effects such as magnetic susceptibility inhomogeneities and concomitant fields \cite{Haacke1999}. In general, $B(\mathbf{r}(t), t)$ is given by
+\begin{equation}
+  B(\mathbf{r}(t), t) = |\mathbf{B}| = |B_0\mathbf{\hat{z}} + \mathbf{\Delta B}(\mathbf{r}(t), t)|\,,
+  \label{eq:mod_B}
+\end{equation}
+where $\mathbf{\Delta B}(\mathbf{r}(t), t)$ accounts for all of the variation in the magnetic field away from $B_0$. Note that $\mathbf{\Delta B}(\mathbf{r}(t), t)$ is a vector quantity which may have components in the $\mathbf{\hat{x}}$ and $\mathbf{\hat{y}}$ directions. 
+
+An idealised expression for $\mathbf{\Delta B}(\mathbf{r}(t), t)$ often applied to MRI assumes that all of the change in the magnetic field is due to an applied magnetic field gradient, $\mathbf{g}(\mathbf{r}(t), t)$, which only has a significant $\mathbf{\hat{z}}$ component. This means that Eq.\ \ref{eq:mod_B} can be written as
+\begin{align}
+  B(\mathbf{r}(t), t) &= \left|B_0\mathbf{\hat{z}} + \left(\mathbf{g}(\mathbf{r}(t), t)\cdot\mathbf{r}(t)\right) \mathbf{\hat{z}}\right|\,,\nonumber \\
+                      &= B_0 + \mathbf{g}(\mathbf{r}(t), t)\cdot\mathbf{r}(t)\,.
+                        \label{eq:mod_B_ideal}
+\end{align}
+
+Putting Eq.\ \ref{eq:mod_B_ideal} into Eq.\ \ref{eq:dphi} and integrating over the time of the diffusion experiment will give the total phase accrued for a single spin:
+\begin{equation}
+  \phi(t, \mathbf{g}(\mathbf{r}(t), t)) = \gamma B_0 t + \gamma \int_0^t \mathbf{g}(\mathbf{r}(t'), t')\cdot\mathbf{r}(t')dt'\,,
+  \label{eq:phase_singlespin}
+\end{equation}
+
+
+The first term in this equation is the phase accrued due to the main magnetic field which will be the same for all spins in the system.
+The second term is the phased accrued due to the gradient, which will be dependent on the motion of each individual spin.
+The dot product here indicates that only displacement projected onto the gradient direction affects the phase, allowing the gradient direction to be used to probe the diffusion in different directions. 
+
+The total MR signal comes from an ensemble of spins, each with their own random Brownian motion and thus, from  Eq. \ref{eq:phase_singlespin}, their own phase. This gives the total dMRI signal, $S(t, \mathbf{g})$ as
+\begin{equation}
+  S(t, \mathbf{g}) = S(t, \mathbf{0}) \int_{-\infty}^{\infty} P(\phi, t) e^{i\phi} d\phi\,,
+  \label{eq:sig_phi_complex}
+\end{equation}
+where $S(t, \mathbf{0})$ is the signal with no gradients applied. $P(\phi, t)$ is the probability density function of the phase distribution after a time $t$.
+From Eq. \ref{eq:phase_singlespin}, we see that the individual phases, and thus the phase distribution, depend on the motion of the particles as well as the description of the diffusion sensitising gradient (in the case of standard pulsed gradient experiment that is the timing, strength, duration and orientation of the gradient) \cite{Price1997}.
+% Taking only the real component gives 
+% \begin{equation}
+%   S(t, \mathbf{g}) = S(t, \mathbf{0}) \int_{-\infty}^{\infty} P(\phi, t) \cos(\phi) d\phi\,.
+%   \label{eq:sig_phi_real}
+% \end{equation}
+
+% It is this quantity which diffusion MRI simulations are ultimately trying to generate, by simulation of the diffusive process to get the displacements and, thus, the phase distribution of the spins. These simulations broadly fall into three categories: analytical solutions of the diffusion equation, numerical solutions of the diffusion equation and Monte-Carlo (MC) simulations of the diffusion dynamics.
+
+\section{Diffusion Simulation}
+\label{sec:diffusion_simulation}
+Diffusion simulations attempt to evaluate Eq.\ \ref{eq:sig_phi_complex} computationally. Simulation approaches broadly fall into two categories: numerical solutions of the diffusion equation and Monte-Carlo (MC) simulations of the diffusion dynamics. This section introduces these techniques, highlighting the some of the similarities and differences between them. 
+
+
+At a high level, all diffusion simulations have three common components: the substrate, the diffusion dynamics and the measurement.
+The substrate describes the environment in which the diffusion is taking place. A common example of this is parallel cylinders representing axons in white matter.
+The diffusion dynamics describe our understanding of the processes underlying the diffusive motion of molecules and the measurement describes how this diffusive motion results in a synthetic dMRI signal.
+\subsection{Numerical Solutions}
+\label{sec:numerical_solutions}
+Numerical solution approaches generally attempt to solve the Bloch-Torrey (BT) equation \cite{Torrey1956}.
+% In solving for the magnetisation directly, the diffusion dynamics and measurement components of the diffusion simulation  are combined in numerical solutions.
+The Bloch-Torrey equation describing the evolution of the (complex) transverse magnetisation, $m = m(\mathbf{r}(t), t)$, including diffusion effects is
+\begin{equation}
+  \frac{\partial m}{\partial t} = \nabla\cdot D(\mathbf{r}(t))\nabla m -i \gamma \mathbf{g}(\mathbf{r}(t), t)\cdot \mathbf{r}(t) m  - \frac{m}{T_2} - \mathbf{v}(\mathbf{r}(t), t) \cdot \nabla m\,.
+  \label{eq:bloch_torrey}
+\end{equation}
+
+The first term here describes the evolution of the magnetisation due to diffusion, with a potentially spatially dependent diffusivity $D(\mathbf{r}(t))$. The second term describes the encoding of this diffusion through the applied gradient. The third term describes the $T_2$ relaxation and the final term describes the evolution due to a flow given by the velocity field $\mathbf{v}(\mathbf{r}, t)$.
+In literature, the BT equation excluding the relaxation and flow terms is sometimes referred to as the standard BT equation and the full BT equation in Eq.\ \ref{eq:bloch_torrey} is referred to as the generalised BT equation \cite{Beltrachini2016}. 
+
+Numerical solution approaches combine both the dynamics and the measurement components of the diffusion simulation by solving for the magnetisation in  Eq.\ \ref{eq:bloch_torrey}.
+The third component, the substrate, defines boundary conditions required for the solution of the equation. 
+
+There are two typical methods for solving the partial differential equation (PDE) in Eq.\ \ref{eq:bloch_torrey}, finite difference methods (FDMs) and finite element methods (FEMs).
+Finite difference methods evaluate the PDE using a local Taylor expansion at discrete points which are generally uniformly separated in each spatial as well as the temporal dimension \cite{Grossmann2007}.
+FDMs are an efficient method for solving PDEs when the problem can fit into a rectangular grid, however they are less effective when applied to complex geometries \cite{Hagslatt2003, Grossmann2007}.
+
+Finite element methods subdivide the domain into small elements which are simple geometric shapes, though unlike the FDMs, they do not have to form a regular grid, but rather an arbitrary mesh.
+In each element, the PDE solution is approximated by simple functions such as a linear combination of polynomials.
+The combination of all of these local approximations can be solved to give a numerical solution of the PDE across the whole domain \cite{Logan2007}.
+FEMs are generally more complex to formulate and implement than FDMs, however the added complexity can be worth the effort for more difficult problems in which FDMs may be ineffective \cite{Iserles2009}.
+
+\subsection{Monte-Carlo Simulations}
+\label{sec:montecarlo}
+Monte-Carlo methods take a different approach to the simulation of the dMRI signal. Monte-Carlo methods simulate the Brownian motion of a large number of particles, simulating the motion of each particle individually, along with the MR acquisition to generate the dMRI signal.
+
+There exist many different implementations of the Monte-Carlo simulation of dMRI \cite{Yeh2013,Nilsson2012,Landman2010,Balls2009,Hall2009,Ford1997,Szafer1995}, however the underlying principles are similar for all of them. The following is a general description of the MC simulation process, however the specifics for each different implementation may vary. 
+
+% There are three main components of an MC diffusion simulation: (1) the environment in which particles are diffusing (often called the substrate), (2) the dynamics of the Brownian motion and (3) the MR pulse sequence used to acquire the signal. 
+
+
+Most early MC studies used simple, easy-to-parametrise substrates like regularly packed cuboids \cite{Szafer1995} or cylinders \cite{Ford1997}.
+As computational power has increased, so too has the capacity for more and more complex substrates.
+This includes cylinders with randomly distributed radii \cite{Hall2009}, undulating  cylinders \cite{Nilsson2012}, beading cylinders \cite{Budde2010} and meshes generated from high resolution microscopy of tissue \cite{Panagiotaki2010}.
+
+The Brownian motion of particles is typically simulated as a random walk of many independent particles. The time domain is discretised into many time points and at each time point each particle takes a random step through the substrate.  
+One step of the random walk can be briefly summarised as shown in Algorithm \ref{alg:MC_random_walk}.
+\begin{algorithm}
+\begin{algorithmic}
+  \State generate randomly oriented step vector
+  \State check if step crosses a barrier 
+  \While{step crosses barrier}
+  \State amend step according to barrier interaction (e.g. elastic reflection)
+  \State repeat barrier checking on amended step
+  \EndWhile
+  \State update the particle position 
+   \end{algorithmic}
+   \caption{Basic algorithm for taking a step in the random walk.}
+   \label{alg:MC_random_walk}
+ \end{algorithm}
+ 
+Following the Brownian motion, each particle in the simulation will have taken many steps giving each particle a unique trajectory that it has traversed.
+The incremental phase, $\Delta \phi$, accrued at each step can be calculated from a discrete version of Eq.\ \ref{eq:phase_singlespin}. Under the assumption of uniform $B_0$, only the gradient term matters, giving
+\begin{equation}
+  \Delta \phi = \gamma \mathbf{g}(\mathbf{r}(t), t) \cdot \mathbf{r}(t)\, \Delta t \,,
+  \label{eq:deltaPhi}
+\end{equation}
+where $\Delta t$ is the duration of the step and $\mathbf{g}(\mathbf{r}(t), t)$ and $\mathbf{r}(t)$ are the gradient and particle position during that step respectively.
+
+The phase accumulation in Eq. \ref{eq:deltaPhi} for each spin in the simulation can be combined with Eq.\ \ref{eq:sig_phi_complex} to approximate the total signal for the dMRI acquisition as
+\begin{equation}
+  S = \sum_j e^{i\Phi_j}\,,
+  \label{eq:MCsignal}
+\end{equation}
+where $\Phi_j$ is the total phase accrued for each spin. 
+
+Monte-Carlo simulations are a powerful tool for dMRI simulation due to their ability to handle any arbitrary substrate and MR pulse sequence.
+Additionally, MC simulations can be modified to account for effects that are more difficult to formulate for analytical and numerical solutions of the diffusion equation such as semi-permeable membranes, membrane-particle interactions and spatially and/or temporally varying $\mathrm{T_1, T_2}$ and diffusivities.
+
+A drawback of MC simulation, particularly for complex substrates is the need to simulate enough spins to mimic the ensemble behaviour of spins \emph{in vivo} as well as enough discrete time points to adequately capture the dynamics through the pulse sequence.
+The huge number of calculations required to handle large simulations can be alleviated by exploiting the inherent parallel nature of the problem to run simulations in parallel on a CPU cluster or, even more effectively, a GPU cluster.
+
+
+

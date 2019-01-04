@@ -151,28 +151,29 @@
   \begin{tikzpicture}[remember picture,overlay]
     \node[yshift=-9cm] at (current page.north west){
       \begin{tikzpicture}[remember picture, overlay]
-        \draw[fill=LightGrey] (-1,0) rectangle (\paperwidth,10cm);
+        \draw[fill=LightGray] (-1,0) rectangle (\paperwidth,9.5cm);
+        %
+        \ifx\finalversion\undefined
+        \else
+        \node[opacity=0.05] (gofl) at (0.5\paperwidth,5.25cm) {
+          \ifthenelse{\equal{\LifeChapter}{}}{}{
+            \includegraphics[width=\paperwidth]{figures/myelin_bw3.eps}
+          }
+        };
+        %
+        \node[opacity=0.1, align=center, text width=0.9\linewidth, font=\ttfamily\footnotesize,below=0cm of gofl](bf) {
+          \ifthenelse{\equal{\BrainFuckChapter}{}}{}{
+            \begin{center}
+              \color{DarkGray}
+              \BrainFuckChapter{}
+            \end{center}
+          }
+        };
+        \fi
         %
         \node[xshift=0.5\paperwidth,anchor=east, rectangle, rounded corners=20pt, inner sep=11pt,fill=black] at (0.5\linewidth,0)
         {\color{white}\Huge\bfseries\chapterlabel#1};
         %
-        \ifx\finalversion\undefined
-        \else
-        \node (gofl) at (0.5\paperwidth,6cm) {
-          \ifthenelse{\equal{\LifeChapter}{}}{}{
-            \includegraphics[page=\thechapter,height=10cm]{figures/myelin_bw}
-          }
-        };
-        %
-%        \node[align=center, text width=0.9\linewidth, font=\ttfamily\footnotesize,below=0cm of gofl](bf) {
-%          \ifthenelse{\equal{\BrainFuckChapter}{}}{}{
-%            \begin{center}
-%              \color{DarkGray}
-%              \BrainFuckChapter{}
-%            \end{center}
-%          }
-%        };
-        \fi
       \end{tikzpicture}
     };
   \end{tikzpicture}

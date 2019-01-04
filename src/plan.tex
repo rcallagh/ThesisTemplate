@@ -3,4 +3,42 @@
 
 \section{General idea}
 Summary of work done so far in PhD. That is, GPU diffusion simulations and fibre growth algorithm. 
-The general 
+The work will either be highlighted in the context of diffusion MRI or diffusion MRS but I'm not certain which may be the best choice yet. 
+
+\section{Rough Structure}
+\begin{itemize}
+	\item Introduction
+	\begin{itemize}
+		\item General introduction to the context of the project. Why do this work, set the scene for the coming sections
+	\end{itemize}
+	\item Background
+	\begin{itemize}
+		\item Basic physics of MRI/MRS and diffusion
+		\item Description of how diffusion simulation works 
+		\item Description of GPU architecture, why it has potential
+		\item Perhaps description of what we know about growth of fibres
+	\end{itemize}
+	\item Literature Review
+	\begin{itemize}
+		\item Simulation review that I've already done
+		\item GPU simulations, there's a couple out there (the one from 2011, and this year)
+		\item Some review of growth things, probably discuss previous white matter substrates, maybe mention space colonisation for contextual growth.
+	\end{itemize}
+	\item Method
+	\begin{itemize}
+		\item Describing how the GPU code is structured
+		\item How the diffusion simulations happen on the GPU
+		\item Describing the growth algorithm 
+	\end{itemize}
+	\item Results
+	\begin{itemize}
+		\item Some GPU vs CPU speed, signal accuracy tests
+		\item Essentially what we submit to ISMRM for the fibre stuff 
+	\end{itemize}
+	\item Discussion and Conclusions
+\end{itemize}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:
