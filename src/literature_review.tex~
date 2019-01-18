@@ -1,0 +1,110 @@
+\chapter{Literature Review}
+\label{sec:literature_review}
+Numerical phantoms have been used extensively throughout the development of diffusion MRI due to their unique ability to provide a controlled and flexible ground truth. This section presents some examples of the use of numerical phantoms from literature.
+
+
+% \subsection*{Analytical Solutions}
+% As mentioned in Section \ref{sec:analytical}, analytical approaches are limited in terms of the geometrical complexity that they can capture.
+% The hybrid method of Rensonnet et al.\ is an approach that takes advantage of the convenience of analytical solutions in simple geometries and the flexibility of MC simulations in more complex geometries.
+ 
+
+\section{Numerical Solutions}
+\label{sec:app_numerical_solutions}
+Many of the studies presenting a numerical solution are focused on the validation of the technique and improvements to various algorithms rather than the direct use of the technique involving numerical phantoms.
+
+One application of FDM solutions of the Bloch-Torrey equations is in the simulation of dMRI signals from histological images.
+For example, Chin et al.\ \cite{Chin2002} simulate the signal from segmented histological images of mouse spinal cord white matter, showing that the fast and slow components of a biexponential decay of diffusion attenuation do not arise from a contribution from each of the intra and extracellular components.
+Hwang et al.\ \cite{Hwang2003} extend this technique to 3D, showing that their FDM solutions agree well with analytical solutions for hexagonally packed cylinders. 
+
+Xu et al.\ \cite{Xu2007} develop a matrix based FDM, also testing their solution on hexagonally packed cylinders, showing a reduction in error compared to a conventional FDM.
+This FDM is used by the same group to investigate the sensitivity of dMRI to intracellular structure \cite{Xu2009}.
+A numerical phantom of cells represented as densely packed spheres with spherical nuclei at the centre of each sphere.
+The FDM is used to show that an oscillating gradient spin echo (OGSE) sequence is more sensitive to changes in the nucleus size than a pulsed gradient spin echo (PGSE) sequence.
+Similarly, Xu et al.\ \cite{Xu2014} use histology based FDM simulations to investigate the efficacy of an axon diameter technique based on an OGSE sequence. They show that the OGSE technique is able to distinguish axons of a lower diameter than traditional pulsed gradient spin echo PGSE techniques. 
+
+% Most studies presenting an FEM solution are focused on the validation of the technique rather than the application of the technique and its use in numerical phantoms.
+% Hagsl\"att et al. \cite{Hagslatt2003}, Moroney et al. \cite{Moroney2013}, and Beltrachnini et al. \cite{Beltrachini2016} all show an effective implementation of an FEM solution with various improvements in the stability and accuracy of the solutions.
+% Van Nguyen et al.\ \cite{Nguyen2014} implement a 3D FEM solution of the Bloch-Torrey equation and apply it to three example questions in dMRI.
+% \todo{add more on numerical solutions}
+The first example of an FEM solution known to the author is presented by Hagsl\"att et al.\ \cite{Hagslatt2003}.
+In this study, rather than solving the BT equation, the FEM is used to solve for the diffusion propagator \cite{Callaghan1991,Price1997}. From the diffusion propagator, the diffusion attenuated signal calculated from this based on an assumption of infinitely narrow gradient pulses.
+A good agreement is shown between simulation and theoretical solutions for a range of simple geometries (parallel plates, a lamellar system and  hexagonally packed cylinders).
+
+More studies have recently begun investigating diffusion simulation using FEMs.
+Moroney et al.\ \cite{Moroney2013} present an FEM solution of the standard BT equation (\Cref{eq:bloch_torrey} without the relaxtion and flow terms) for numerical analysis of dMRI experiments in the short gradient pulse limit. FEM results are compared to analytical solutions and MC simulations in simple geometries, showing that the FEM is more accurate than MC simulations, whilst taking less time to run.
+
+Nguyen et al.\ \cite{Nguyen2014} also present an FEM solution of the standard BT equation, showing its application to diffusion simulation with more general gradient waveforms.
+The FEM solution is shown to be more accurate in some simple geometries than a finite volume method, with second order accuracy in both the spatial and temporal domains.
+Three example applications to questions in dMRI are demonstrated using this FEM
+\cite{Nguyen2014}.
+One shows than an infinitely thin membrane can be used to approximate a thick membrane. The second shows that the apparent diffusion coefficient (ADC) approaches the value predicted by mathematical homegenisation for long diffusion times. Finally, a model of a neuron is presented as a spherical body, with cylindrical axons and dendrites potruding. The ADC is shown to approach a steady state faster with a smaller neuronal body.
+
+Beltrachini et al.\ \cite{Beltrachini2016} present a solution of the generalised BT equation, extending the FEM of Nguyen et al.\ \cite{Nguyen2014} to include the relaxation and flow terms. This FEM improves on some of the restrictions in the FEM, making the simulations more stable through the use of an implicit scheme that is stable for coarser discretisations without compromising the validity of the result. 
+
+
+\section{Monte-Carlo - Packages}
+\label{sec:app_monte_carlo_packages}
+Historically, most studies utilising MC simulation used in-house developed MC simulation software \cite{Lipinski1990, Szafer1995,Stanisz1997, Duh2001}, however in more recent years and as the complexity of situations possible to simulate has grown, a range of MC simulation packages have been released for public use.
+
+Hall and Alexander \cite{Hall2009} introduced MC simulation as part of the Camino diffusion MRI toolkit \cite{Cook2006} in the context of simulating swelling cylinders as a model of the effect of ischaemic stroke, however the MC framework is very general and can be used to simulate any arbitrary from a 3D mesh. 
+
+Balls and Frank \cite{Balls2009} present DiffSim, a dMRI simulation framework which embeds the MCell \cite{Stiles1996,Stiles2001, Kerr2008} cellular microphysiology simulator within an MRI simulator for synthesising the dMRI signal.
+DiffSim is used to simulate myelinated white matter \cite{Baxter2013}, showing that an analytical solution model by Sen and Basser \cite{Sen2005} holds for a SPG approximation or long diffusion time, however with more realistic pulse sequence parameters, the numerical simulations show lower anisotropy than the analytical model. 
+
+Landman et al.\ \cite{Landman2010} developed the DW-MRI Random Walk Simulator (RWS) showing, as an example of its flexibility and reproducibility, a range of geometrical models for white matter damage, including healthy straight cylinders, bulging cylinders, crimped cylinders and broken cylinders.
+
+Yeh et al.\ \cite{Yeh2013} present Diffusion Microscopist Simulator (DMS), showing a range of diffusion substrates ranging from simple parallel uniform cylinders to more complex undulating, beading or crossing arrangements of fibres.
+A recent extension of DMS shows more complex white matter numerical phantom including angular dispersion, tortuosity, beading and nodes of Ranvier \cite{Ginsburger2018}.
+As of the writing of this review, the DMS software package has not been publicly released. 
+
+\section{Monte-Carlo - Numerical Phantoms}
+\label{sec:app_monte_carlo_numerical_phantoms}
+The above packages, as well as dMRI simulation software developed in-house in various research groups, have been used to investigate the diffusion signal in many different numerical phantoms. 
+
+A common target of microstructure imaging is the estimation of axonal diameter density.
+As mentioned above, FDM approaches have been used to investigate this \cite{Chin2002,Xu2014}, whilst this has been the subject of MC simulation studies as well.
+Alexander et al.\ \cite{Alexander2010} use Camino to simulate a series of numerical phantoms of parallel cylinders with radii drawn from a Gamma distribution for the validation of a technique for orientationally invariant indices of axon diameter and density.
+
+Recently Nilsson et al.\ \cite{Nilsson2017}, investigated the theoretical resolution limit for cylinder diameter estimation using diffusion MRI. Analytic expressions based on the Gaussian phase distribution approximation \cite{Price1997} were used for the intracellular signal and validated with MC simulations to determine a $d_{min}$, the diameter below which a cylinder cannot be differentiated from a cylinder with diameter approaching zero. The resolution limit for clinical scanners was found to be between 4 - 8 $\mu$m.
+This suggests a limitation on the level of microstructural detail that can be estimated using current clinical MRI machines.
+
+% Zhang et al.\ \cite{Zhang2011} extend this technique to include orientation dispersion, and then refine the technique to only estimate neurite orientation dispersion and density (NODDI) \cite{Zhang2012}. All of these techniques are validated using MC simulations on numerical phantoms of cylinders with varying densities and orientation dispersion introduced.\todo{make sure this actually true} 
+
+Another problem commonly investigated using numerical phantoms is that of exchange between the intra and extracellular compartments of tissues.
+Permeability is difficult to control and vary in physical or biological phantoms, so numerical phantoms offer a unique tool with which to explore permeability and exchange models.
+
+Nilsson et al.\ \cite{Nilsson2009, Nilsson2010} and Fieremans et al.\ \cite{Fieremans2010} investigate the K\"arger model \cite{KARGER1988}, a model for exchange between two signal bearing compartments.
+These three studies all use similar numerical phantoms made of straight cylinders in which there is some probability that on encountering a barrier, the spin will pass through the barrier, exchanging spins between the compartments.
+
+In their first study, Nilsson et al.\ \cite{Nilsson2009} use simulations and experimental data to draw the conclusion that it is necessary to include exchange in a model containing two compartments, one of which is restricted. 
+Fieremans et al.\ \cite{Fieremans2010} show that the K\"arger model is able to describe the signal for long diffusion times and sufficiently impermeable membranes, however at larger permeabilities, the K\"arger model underestimates the value of the permeability.
+Nilsson et al.\ also investigate the effectiveness of the K\"arger model at estimating the intracellular water fraction, showing that the K\"arger model has a negative bias, underestimating the intracellular water fraction by up to 25\% when there is high permeabilty \cite{Nilsson2010}.
+% These studies suggest that the simple K\"arger model is sufficient to explain the dMRI signal in certain situations, however in general it is in sufficient.
+
+Nilsson et al.\ \cite{Nilsson2012} also investigate the importance of axonal undulation on diffusion MRI measurements.
+In this experiment, numerical phantoms consisting of axons with either sinusoidal or helical undulations were used in MC simulations to investigate the impact on a range of dMRI measured parameters.
+Nilsson et al.\ show that undulation affects essentially all of the parameters they tested derived from dMRI, for instance, undulation results in an overestimation of axonal diameter when using models that assume axons are straight \cite{Nilsson2012}. 
+
+Budde et al.\ \cite{Budde2010} use MC simulations to investigate the effect of neurite beading, showing that beading is sufficient to explain the decrease in apparent diffusion coefficient (ADC) after ischaemic stroke. Numerical phantoms consisting of straight cylinders with increasing amounts of beading introduced are simulated, showing a decrease in ADC in both the intra and extracellular spaces with increased beading. 
+
+Lin et al.\ \cite{Lin2016} investigate the effect of traumatic brain injury (TBI) on diffusion tensor imaging (DTI) parameters.
+Using a numerical phantom consisting of straight cylinders representing axons, ellipsoids representing glial cells and the extracellular space, the effects of TBI are investigated by varying various parameters such as the size of the glial cells, the permeability of the cylinders and the spacing of the cylinders \cite{Lin2016}. 
+Using this technique, Lin et al.\ conclude that the inconsistencies amongst previous DTI based TBI studies \cite{Huisman2004,Bazarian2007,Rutgers2008} are due to differences in the timing between the onset of TBI and the diffusion measurement, arguing that different processes drive the TBI at different timings, leading to different DTI characteristics. 
+
+Lam et al.\ \cite{Lam2015} produce an empirical model of the extra axonal space using a series of MC simulations based on both regularly and randomly packed cylinders. The model is based on the diffusion spectrum \cite{Stepisnik1993}, modelling diffusion in densely packed cylinders as diffusion in a series of pores with a small chance of exchange between the pores.
+The empirical model agrees closely with MC simulated data.
+
+Some studies combine analytical solutions of the Bloch-Torrey equation and MC simulations.
+Rensonnet et al.\ \cite{Rensonnet2015} used this combined simulation to synthesise signals for parallel and crossing cylinders.
+The intracellular component is modelled using an analytical solution for diffusion within a cylinder based on Grebenkov's multiple correlation function approach \cite{Grebenkov2008}.
+The extracellular compartment, which is much more complex geometrically, is simulated using Monte-Carlo simulations.
+This hybrid approach yields simulation results which are indistinguishable from pure MC simulation whilst being quicker and more precise than a purely MC approach \cite{Rensonnet2015}. 
+
+In a further study, Rensonnet et al.\ \cite{Rensonnet2017} use this approach to assess the validity of the superposition approximation of crossing fascicles (i.e. that the total signal from crossing fascicles is the sum of the signal from each fascicle independently).
+They are able to show that the signal differences between the superposition approximation and a full simulation of interwoven fascicles is small enough compared to typical noise levels in clinical dMRI data, that the superposition approximation is sufficient to describe the signal.
+A drawback to this hybrid approach is that the intra and extracellular compartments are treated as distinct, non-interacting compartments, meaning that membrane permeability is not accounted for.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

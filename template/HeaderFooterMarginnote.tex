@@ -149,9 +149,9 @@
 {\gdef\chapterlabel{\thechapter\hspace{0.5cm}}}{0pt}
 {
   \begin{tikzpicture}[remember picture,overlay]
-    \node[yshift=-9cm] at (current page.north west){
+    \node[yshift=-7cm] at (current page.north west){
       \begin{tikzpicture}[remember picture, overlay]
-        \draw[fill=LightGray] (-1,0) rectangle (\paperwidth,9.5cm);
+        \draw[fill=LightGray] (-1,0) rectangle (\paperwidth,7.5cm);
         %
         \ifx\finalversion\undefined
         \else
@@ -186,3 +186,8 @@
   \chapter*{#2}
   \markboth{#2}{#2}
 }
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

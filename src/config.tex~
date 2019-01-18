@@ -1,0 +1,292 @@
+\chapter{Contextual Fibre Growth (ConFiG)}
+\label{sec:config}
+
+
+
+
+\section{ConFiG: Contextual Fibre Growth}
+\label{sec:fibre_growth_algorithm}
+In this section we describe ConFiG  which grows fibres one-by-one avoiding intersection between fibres whilst attempting to ensure that the resulting substrate has desired morphological properties such as orientation dispersion, diameter distribution and packing density.
+The algorithm is broken into a few stages:
+\begin{itemize}
+\item the definition of inputs to the algorithm
+\item the generation of the network on which fibres grow
+\item the method by which each fibre grows
+\item the meshing procedure to create 3D meshes
+\end{itemize}
+Pseudocode for the first three of these points is shown in \Cref{alg:main_algorithm}. The rest of this section details each of the above stages.
+
+\begin{algorithm}
+  \centering
+  \begin{algorithmic}
+    \Procedure{fibreGrowth}{OD, $\rho$, $d_0$, numNodes}
+    \State [startPoints, targets] $\leftarrow$ \Call{getInitialPoints}{OD, $\rho$, $d_0$} \Comment{\Cref{sec:input}}
+    \State [DT, D] $\leftarrow$ \Call{intialiseNetwork}{numNodes, startPoints, targets}\Comment{\Cref{sec:creation_of_the_growth_network}}
+    \State numFibre $\leftarrow$ number of entries in startPoints
+    \For{i in 1:numFibre} \Comment{Initialise the fibre structures}
+    \State fibres(i).node(0) = startPoints(i)
+    \EndFor
+    \For{i in 1:numFibre} \Comment{Main growth loop (\Cref{sec:growth_of_a_fibre})}
+    \State terminated $\leftarrow$ false
+    \State j $\leftarrow$ 0
+    \While{not terminated}
+    \State\Call{getCandidates}{fibres(i).node(j), DT} \Comment{\Cref{fig:method}a}
+    \State \hspace{1em} $\bullet$ candiates $\leftarrow$ DT.nodes sharing edge with fibres(i).node(j)
+    \State\Call{getBestStep}{candidates, D, targets}    \Comment{\Cref{fig:method}b}
+    \State \hspace{1em} $\bullet$ costs $\leftarrow$ costs for candiates from Eq. (1) given targets, D
+    \State \hspace{1em} $\bullet$ bestStep $\leftarrow$ candidate with minimum cost
+    \State\Call{takeStep}{fibres(i), bestStep}       \Comment{\Cref{fig:method}c}
+    \State \hspace{1em} $\bullet$ fibres(i).node(j+1) $\leftarrow$ bestStep
+    \State\Call{updateTriangulation}{fibres(i), DT, D} \Comment{\Cref{fig:method}d}
+    \State \hspace{1em} $\bullet$ segment $\leftarrow$ vector from fibre(i).node(j) to fibre(i).node(j+1)
+    \State \hspace{1em} $\bullet$ D$_\mathrm{new} \leftarrow$ distance from DT.nodes to segment
+    \State \hspace{1em} $\bullet$ D $\leftarrow$ min(D, D$_\mathrm{new}$)
+    \State\Call{isTerminated}{fibres(i), targets}
+    \State \hspace{1em} $\bullet$ \textbf{if} fibre(i) has reached target:
+    \State \hspace{3em} terminated $\leftarrow$ true
+    \State \hspace{1em} $\bullet$ \textbf{elseif} fibre(i) has no possible node to move to:
+    \State \hspace{3em} terminated $\leftarrow$ true
+    \State \hspace{1em} $\bullet$ \textbf{else}:
+    \State \hspace{3em} terminated $\leftarrow$ false
+    \State \hspace{3em} j $\leftarrow$ j + 1
+    \EndWhile
+    \EndFor
+    \EndProcedure
+  \end{algorithmic}
+  \caption{Fibre growing algorithm. Takes desired morphological priors (OD, $\rho$ and $d_0$) as well as desired number of nodes in the growth network. From these initial fibre positions, targets and the growth network are generated before the main loop of the algorithm in which each fibre grows one-by-one.}
+  \label{alg:main_algorithm}
+\end{algorithm}
+
+\subsection{Input to the algorithm}
+\label{sec:config_input}
+The morphology of the final substrate will depend on the inputs to the algorithm which can be split into two general categories: parameters defining the fibre population(s), and parameters defining the space in which fibres grow.
+
+\paragraph*{Fibre parameters}
+Fibre parameters include the desired orientation dispersion (OD), packing density ($\rho$) and diameter distribution ($P(d_0)$).
+These three parameters determine the initial settings for each individual fibre. 
+Each fibre is defined by a starting point and a target point towards which it will grow as well as an initial fibre diameter, $d_0$.
+These parameters for each fibre are determined from OD, $\rho$ and $P(d_0)$ by packing circles with the diameters drawn from $P(d_0)$ up to a density of $\rho$ in 2 dimensions. Orientation dispersion is introduced by moving the target points of fibres relative to the starting points. For instance, planar dispersion can be introduced by splitting the substrate into planes and rotating these relative to one another.
+
+Each fibre is allowed to shrink its diameter if it is necessary to fit into spaces close to other fibres.
+The maximum amount of shrinkage permitted is a controllable parameter, specified as a percentage of the initial fibre diameter.
+
+Due to the stochastic nature of the algorithm, the final substrate is not guaranteed to have the exact morphological properties as input in the priors, however these inputs give the target morphology that ConFiG will attempt to produce.
+
+Additionally, if the user wishes, the starting point, target point and diameter for each fibre can be directly input, rather than allowing ConFiG to generate them, in order to specify particular fibre configurations such as crossing fibre bundles.
+
+\paragraph*{Space defining parameters}
+Parameters defining the space in which the fibres grow are used to define a discretisation of the space which is necessary to make the algorithm run in a practically feasible time.
+Ideally, the space in which the fibres can grow is a continuous space, so there are an infinite number of positions a fibre can occupy. Practically, this is intractable, so in ConFiG the space is discretised into a set of points which define nodes that the fibres can occupy.
+
+Naturally, the choice of the density and arrangement of node points will have an impact on the substrate that is produced. Too few nodes will result in fibres that have very long, straight segments and may introduce intersections between fibres. Using more nodes will reduce overlap between fibres at the cost of more memory usage and slower growth of the fibres.
+
+The arrangement of the nodes will also affect the morphology of the final substrate. For instance, placing nodes on a uniform grid may produce fibres with unnaturally angular paths. If the density of points on a uniform grid becomes sufficiently high, these angular bends are insignificant compared to the diameter and the fibres will have more natural shapes. For large substrates however, the number of nodes required to satisfy this condition becomes intractably large. For this reason, the nodes used are typically pseudo-randomly distributed to ensure broadly uniform coverage of the space, whilst keeping the number of nodes required lower. 
+The impact of the choice of node points is investigated in \Cref{sec:config_choice_of_network}.
+
+\subsection{Creation of the Growth Network}
+\label{sec:creation_of_the_growth_network}
+In order to embed information about the local environment at each node, the first step of the algorithm is generating the paths that fibres can take between the nodes as well as defining a maximum diameter that can be sustained at each node to avoid intersection which will be denoted by $d_i$, for a node, $i$. These paths define a network along which the fibres may grow.
+
+The paths between nodes are defined by the Delaunay triangulation\cite{Delaunay1934} of the nodes which creates a fully connected network.
+This triangulation creates edges between nearby nodes, encoding information about the local connectivity at each node.
+Nodes that become occupied by a fibre will be inaccessible to any future fibres, which is one way in which intersection is minimised between fibres.  
+
+The maximum diameter, $d_i$, at each node encodes information on the amount of space available at each node.
+Where $d_i$ is small, that node is close to an existing fibre, so any subsequent fibre passing through that node will have to shrink its diameter to $d_i$ in order to prevent intersections.
+Allowing fibres to contextually shrink their diameter allows fibres to occupy spaces which would otherwise be unavailable.
+
+\subsection{Growth of a Fibre}
+\label{sec:growth_of_a_fibre}
+\begin{figure}
+	\centering
+	\includegraphics[width = \textwidth]{figures/config/newMethod_v1.eps}
+	\caption{\small Schematic overview of the fibre growth algorithm. A fibre grows sequentially, moving from one node to the next, starting from the start point (top left, green node) toward the target (top left, blue node) along the edges defined by the Delaunay triangulation. Inset: The algorithm determining which node a fibre steps to at any given iteration. a) The possible nodes to step to are those which share an edge with the current node. b) From the edges available costs are calculated using \cref{eq:l_t,eq:l_D}. c) The fibre will grow along the edge with the lowest cost. d) From this new segment, the maximum diameter sustainable at a given node is calculated, giving each node a cost based on the maximum sustainable diameter. This cost will then be used in the calculation of edge weights (b) for future fibres. Note that although this figure illustrates the algorithm in 2D, in practice the algorithm grows fibres in 3D.} 
+	\label{fig:config_method}
+\end{figure}
+Each individual  fibre grows by moving the head of the fibre from node to node according to a cost function which attempts to ensure that the fibre moves towards its target whilst avoiding intersection.
+The main steps in the growth of a single fibre are shown in \Cref{fig:config_method}. 
+
+The first step in the growth of a fibre is determining which nodes are the possible next nodes can step to, referred to as candidate nodes.
+From a given starting node, $s$, the candidate nodes are any of the nodes which share an edge with $s$.
+
+The choice of which candidate node a fibre steps to from the current node is determined by a cost function. 
+The cost function consists of two terms, one which penalises moving away from the target point, $t$, and one which penalises moving to a position where $d_i$ is low, meaning the fibre diameter would have to shrink. The cost function for a fibre at a position, $s$, to move to an candidate node, $c$, given a target point, $t$, is $l = l_t + fl_d$,
+% \begin{equation}
+% l = l_t + f l_d\,,
+% \label{eq:costfunction}
+% \end{equation}
+where 
+\begin{align}
+l_t &= \frac{1}{2} \cdot \frac{\|s - c\|}{1 + \|s - c\|} \cdot \left(1 - \frac{(c -s)\cdot(t - s)}{\|c-s\|\|t-s\|}\right)\,,\label{eq:l_t}\\
+l_d &= \max\left(0,\, \frac{1}{d_{0}} (d_0 - d_i)\right)\,,\label{eq:l_D}
+\end{align}
+$d_0$ is the desired radius of the fibre and $f$ is a weighting factor between the two terms. In this work, $f$ is fixed to 0.2 to more strongly weight growth toward the target.
+
+\Cref{eq:l_t} is the term penalising moving away from the target. The dot product between the vector to the candidate and the vector to the target ensures that the minimum cost occurs when the candidate is directly aligned with the target. 
+\Cref{eq:l_D} is the term penalising moving to a position where the radius of the fibre must shrink. 
+For radii lower than the desired radius of the fibre, $d_0$, \Cref{eq:l_D} grows linearly with distance from $d_0$. 
+For radii greater than or equal to $d_0$, \Cref{eq:l_D} is zero, meaning that regions of empty space are equally weighted.
+
+The next node for a fibre will be the candidate node which has the lowest cost according to \Cref{eq:l_t,eq:l_D}.
+This method of finding a path through the triangulation by choosing the lowest cost node at each position amounts to a greedy best-first pathfinding approach with a heuristic given by \Cref{eq:l_t,eq:l_D}. 
+
+With the next node chosen, the value of $d_i$ needs to be updated for other nearby nodes. 
+All nodes have $d_i$ set to the Euclidean distance between the node and the surface of the new section of fibre if that distance is less than the current value of $d_i$. This is illustrated in \Cref{fig:config_method}d.
+
+Any nodes which now lie within the fibre have $d_i$ set to zero. 
+Nodes with $d_i = 0$ are disallowed from future steps, meaning that once a fibre has grown, no future fibres can connect to any nodes within the fibre. 
+This, in addition to shrinking the radius of future fibres according to $d_i$ at each node means that the fibres grow in an almost completely  non-intersecting manner.
+Since the value of $d_i$ is set based on fibre-to-point distances, there can be cases in which the fibres would intersect when the closest point between two fibre sections is not at one of the fibre nodes.
+In order to account for this, a meshing process developed which can deform fibres around one another. This is described in \Cref{sec:creation_of_fibre_meshses}.
+
+
+The fibre growth algorithm will output a set of fibres which are defined by a series of nodes and the diameter of the fibre at each node.
+These are written into the Stockley-Wheal-Cole (SWC) format\cite{Stockley1993}, a format commonly used to store cellular morphology information.   
+\vspace{-1em}
+\subsection{Creation of Fibre Meshes}
+\label{sec:creation_of_fibre_meshses}
+% \vspace{-0.5em}
+In order to create 3D meshes to be used in dMRI simulations, a meshing process was developed using 3D modelling software Blender (https://blender.org).
+Fibres are meshed one-by-one using the Blender “SWC Mesher” add-on  (https://\\github.com/mcellteam/swc\_mesher) which uses Blender metaballs to make a mesh.
+
+In Blender, a metaball is an implicit surface defined as the isosurface of a so-called directing structure. 
+This directing structure can be seen the source of a static field. For instance a spherical isosurface can be formed with a directing structure which mimics the electric field a point charge.
+When multiple metaballs come close to one another, the fields will combine to form a surface that merges the two spheres together.
+An example of metaball interactions is shown in \Cref{fig:metaballs}.
+
+By placing metaballs along the skeleton of each fibre, with the path and diameters given from the fibre growth algorithm, a smooth surface is formed for each fibre.
+It is this implicit surface, created using metaballs that the SWC mesher add-on creates. 
+This implicit surface can be turned into an explicit surface (i.e. a mesh of vertices and faces) in Blender, which can then be refined by progressively smoothing and reducing the number of faces in the mesh to create a mesh which can be used in dMRI simulations. 
+
+This process can be used to mesh each fibre individually, however issues can arise with intersection of fibres, as mentioned in \Cref{sec:growth_of_a_fibre}.
+In order to account for this, a contextual meshing algorithm was developed.
+The metaball surface for one fibre is created using the SWC Mesher.
+This surface is then turned into a mesh as described above, however the metaballs are retained.
+The metaball potential is then turned negative, meaning that rather than attracting any future nearby metaball surfaces, it will repel them, as shown in \Cref{fig:metaballs}b.
+This means that subsequent fibres which are meshed very close to, or overlapping with existing fibres will deform organically to resolve the intersection, thus creating a series of completely non-intersecting fibre meshes which can be used by the dMRI simulator.
+
+The deformation introduced by the contextual meshing process has two effects.
+As well as helping to prevent intersection between fibres, the deformation produces fibres with more organic non-circular cross sections, better mimicking realistic mythologies.
+This is vastly different to the majority of previous WM numerical phantoms which model fibres as circular or elliptic cylinders.
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/metaballs.png}
+  \caption{\small Simple example of metaball interactions. a) With two positive metaballs, the fields combine to attract the surfaces together. This is used to join individual segments into a continuous fibre. b) With one negative metaball (indicated by the flat grey circle) the surface of the metaball is repelled from the negative metaball. This is used to deform nearby fibres around one another.}
+  \label{fig:metaballs}
+\end{figure}
+
+
+
+\section{Experiments and Results}
+\label{sec:experiments_and_results}
+
+\subsection{Effect of Choice of Growth Network}
+\label{sec:config_choice_of_network}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/config/uniform_vs_rand.png}
+  \caption{Fibres generated using uniform grid (orange) and pseudo-random (blue) network nodes for increasing numbers of nodes.}
+  \label{fig:config_uniform_vs_rand}
+\end{figure}
+As mentioned in \Cref{sec:config_input}, the choice of the node points in the network will affect the morphology of the resulting substrate.
+In order to investigate this, a qualitative experiment was performed in which a single fibre was grown on a network either a) nodes on a uniform grid or b) pseudorandom nodes.
+In each case, the number of nodes was increased and the resulting fibre investigated.
+
+The fibre was defined by a start point (20, 0, 0) $\mu$m,  target point (0, 0, 50) $\mu$m and diameter 1 $\mu$m.
+This configuration was chosen so that the fibre would not have a path that directly followed one of the 90\degree\ or 45\degree\ lines in the uniform grid.
+Node points were initialised in either a uniform grid or pseudorandomly within the space [-5, -5, -5] to [25, 5, 55] to ensure coverage of the space in which the fibre would grow.
+The number of source points used was $N \approx 1000, 10000, 100000, 1000000, 5000000$. 
+
+The resulting fibres can be seen in \Cref{fig:config_uniform_vs_rand}, where orange fibres are grown using the uniform grid and blue fibres using pseudorandom points.
+In both cases, as the number of nodes increases, the resulting fibre has more of a smooth, straight path between start and target.
+The uniform grid fibres, have a much more angular, structured path due to being forced to grow on the grid, while the pseudorandom fibres more irregular paths, which could be considered more `organic' looking. 
+
+
+\subsection{Demonstration of ConFiG}
+\label{sec:method_demonstration}
+To demonstrate the potential of ConFiG, three substrates at different (dispersion, packing density) conditions were generated: (0\degree, 60\%), (15\degree, 30\%) and (35\degree, 25\%), shown in \Cref{fig:substrates}a.
+Each substrate is grown using $5 \times 10^6$ pseudo-randomly placed source nodes for the growth network, giving a network with $3.88\times10^7$  edges and a mean distance between any given node and its neighbours of 0.29 $\mu$m.
+The packing densities chosen represent the highest densities achievable using ConFiG for each dispersion condition.
+
+
+For the 0\degree\ dispersed substrate, initial diameters were drawn from a gamma distribution with mean $d_0 = 2\ \mu$m and standard deviation $\sigma_d = 0.2\ \mu$m. The 15\degree\ and 35\degree\ substrates were generated with $d_0 = 1.2\ \mu$m and $\sigma_d = 0.2\ \mu$m in order to show the flexibility of ConFiG to generate substrates with different diameter distributions as well as orientation dispersion and packing density. Diameters were limited to be permitted to shrink to 25\% of the original fibre diameter in order to fit into space. 
+
+For each substrate, the Pulsed-Gradient-Spin-Echo (PGSE) signal was simulated in Camino\cite{Cook2006} using $5\times 10^5$ diffusing spins and $5\times 10^3$ discrete time steps, uniformly distributed with bulk-diffusivity D$_0$=2 $\mu$m$^2$/ms. To show the range of simulation possibilities available, three different membrane permeabilities ($\kappa$=0, 0.0025, 0.0050 $\mu$m/ms) were also imposed.
+The simulated PGSE measurement parameters were: $\delta/\Delta=1/40$ ms and 50 b-values from 0 to 9 ms/$\mu$m$^2$ along x-, y- and z-directions.
+
+The corresponding direction-averaged simulated PGSE signals at different permeabilities are shown with SNR = $\infty$ in \Cref{fig:substrates}b and SNR = 20 in \Cref{fig:substrates}c.
+The signal decays to a lower value as the dispersion increases and density decreases, as expected. 
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/substrates_and_signals_otherlabels.png}
+  \caption{\small a) Example substrates (cut into 30x30x30 $\mu$m$^3$ cube) from the fibre growth algorithm, left to right:  Zero macroscopic dispersion (60\% density), 15\degree\ of macroscopic dispersion (30\% density), 35\degree\ dispersed (25\% density). b) Simulations for each substrate for varying permeabilities with SNR = $\infty$  and c) SNR = 20. Units of $\kappa$ are $\mu$m/ms.}
+  \label{fig:substrates}
+\end{figure}
+
+\subsection{Comparison with Brute-Force Approach}
+\label{sec:method_bruteforce}
+ConFiG was compared against the na\"ive brute-force approach to fibre growth.
+The brute-force approach grows fibres one segment at a time and checks for collisions between the new segment and all existing fibres.
+Each new segment is chosen from one of 128 candidate directions on a cone aligned with the previous segment, with each direction being weighted according to \Cref{eq:l_t}.
+%In the case of collisions between the proposed new section and an existing fibre, each direction is tested in order of the weight of the direction until a non-colliding direction is found, or all directions have been tested and the fibre is stuck.
+
+Substrates were grown with both the brute-force approach and ConFiG using the same starting and target points and initial diameters.
+These initial parameters were determined by packing circles with gamma distributed radii (mean $d_0 = 2\ \mu$m, standard deviation $\sigma = 0.6\ \mu$m) into a 40 $\mu$m x 40 $\mu$m square up to a packing density of 60\%. Target points were set as 40 $\mu$m directly above the starting points to define a substrate with 0\degree\ macroscopic orientation dispersion.
+This resulted in a substrate with a total of 54 initial fibres. 
+
+The fibre growth algorithm used $1\times 10^6$ randomly distributed points for the Delaunaty triangulation giving a mean distance between points of 0.5 $\mu$m, matching the brute force approach which used a segment length of 0.5 $\mu$m for each new fibre segment. 
+
+From these initial parameters, fibres were grown using a subset of $n = 1, 5, 10, 15, 20, 25, 30, 40$ fibres and the growth was timed. Each value of $n$ was timed 5 times with and the mean taken to reduce single-run timing fluctuations.
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/config/brute_force_vs_algo_2.eps}
+  \caption{\small Timing of brute force growth vs.\ the fibre growth algorithm along with a quadratic fit (brute-force) and linear fit (fibre growth algorithm). The fibre growth algorithm is clearly linear in the number of fibres, while brute force growth fits an order $n^2$ well. }
+  \label{fig:brute_force_vs_algo}
+\end{figure}
+
+\Cref{fig:brute_force_vs_algo} shows the timing results of the brute-force approach versus the fibre growth algorithm.
+The fibre growth algorithm  has approximately $\mathcal{O}(n)$ complexity with $n$ being the number of fibres.
+Conversely, the brute-force algorithm shows $\mathcal{O}(n^2)$ complexity owing to the fact that every new segment has to check for collisions with all existing fibres.
+
+The fibre growth algorithm has a higher $n=0$ offset which is caused by the overhead in calculating the Delaunay triangulation for the growth network.
+This causes the brute-force approach to have better performance at low $n$, while at higher $n$ (approaching the $>100$ fibres needed for a realistic dMRI voxel) the linearity of the fibre growth algorithm gives it much faster performance. 
+
+
+
+\section{Discussion and Conclusion}
+\label{sec:config_discussion}
+ConFiG shifts perspective from previous works attempting to pack together fibres, by trying to mimic natural fibre genesis. 
+This approach represents a major step towards very high fibre packing, enabling us to reach the highest dispersion at the highest packing density reached so far, to our knowledge. Our (15\degree, 30\%) and (35\degree, 25\%) represent an average \mytilde50\% and \mytilde200\% improvement, respectively, over the best previously reported results of (10\degree, 20\%)\cite{Ginsburger2018}.
+
+One limitation of the ConFiG approach is that the resulting substrate will depend on the choice of the growth network.
+This is briefly investigated in \Cref{fig:config_uniform_vs_rand}, showing that choosing a uniform grid can introduce regularities in the substrate which could be considered unrealistic.
+The dependence of the final substrate on the number and arrangement of network nodes should be investigated further, to gain a better understanding of which arrangement of nodes will be necessary to produce a desired substrate. 
+
+
+The substrates presented in \Cref{fig:substrates} are just a few examples of the kinds of substrates that can be produced using our ConFiG method.
+By varying the setup of the morphological controls and start and target points, many different fibre configurations can be produced.
+Currently, fibres will attempt to grow in a straight line between the start and target points, meaning that certain configurations such as kissing bundles cannot be represented.
+However, the algorithm can in principle be extended to allow for series of target points, allowing the definition of a desired 'path' of a fibre.
+Another alternative approach would be to adjust the cost function so that rather than maximising a dot product, it would minimise the distance to desired path which could allow any arbitrary path to be specified.
+
+Additionally, some input parameter settings cannot be achieved.
+For instance, trying to grow a substrate with both very high density and very high dispersion will result in a final substrate that does not reach the density required.
+The reason for this could be a combination of limitations of the algorithm in restricting growth to a discrete network and also the fact that some morphological settings are practically infeasible.
+This limitation, however, also applies to the fibre packing and  brute force growth approaches.  
+
+One weakness of the fibre-growth algorithm is that since the fibre diameters are calculated from a fibre-to-point distance, there can still be some small amount of overlap between fibres.
+This is solved using the meshing process in Blender to deform the regions of slight overlap between neighbouring fibres. 
+
+To conclude, the proposed ConFiG approach, using the fully connected growth network, is shown to be more efficient than a `brute-force' growth approach.
+The fact that ConFiG is linear with the number of fibres makes it far more efficient for high numbers of fibres. For instance, a realistic voxel will need hundreds or thousands of fibres which will become impractically slow for the `brute-force' approach, whilst remaining manageable for our algorithm.
+This efficiency, along with the high density and orientation dispersion achieved means that ConFiG represents a promising step forward in the construction of ultra-realistic numerical phantoms of WM.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

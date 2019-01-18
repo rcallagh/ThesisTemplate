@@ -62,9 +62,10 @@
 
 \def\maketitle{%
   \newbox\@crestbox
-
+  
   %% Title page
   \begin{titlepage}
+  	\begin{center}
     \includegraphics[width=0.66\columnwidth]{template/logos/UCL_logo.eps}
     \vfill%
 
@@ -92,81 +93,82 @@
     \vskip 30mm
     \vfill
 
-    \@thesisdate % Date
-
+    \@thesisdate % Date\
+  \end{center}
   \end{titlepage}
-
+ 
+}
 
   %%%%%%%%%%%%%%%%%%%%%%%%% Copyright Page %%%%%%%%%%%%%%%%%%%%%%%%%
 
-  % copyright page
-  \thispagestyle{empty}
-
-  \ifx\@copyrightnotice\@empty
-  \relax
-  \else
-  \vspace*{\fill}
-  \par
-  \begin{center}
-    \@copyrightnotice
-  \end{center}
-  \fi
-  \committeepage
-  \funding
-} % maketitle
+%  % copyright page
+%  \thispagestyle{empty}
+%
+%  \ifx\@copyrightnotice\@empty
+%  \relax
+%  \else
+%  \vspace*{\fill}
+%  \par
+%  \begin{center}
+%    \@copyrightnotice
+%  \end{center}
+%  \fi
+%  \committeepage
+%  \funding
+%} % maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%% Second Page %%%%%%%%%%%%%%%%%%%%%%%%%
 % \newpage
-\def\committeepage
-{%
-  \cleardoublepage
-  \thispagestyle{empty}
-  \begin{center}%
-    \null\vskip 12mm
-    {\Large\@school}\\[16mm]
-    {\LARGE\bfseries \@title}\\[16mm]
-    {\Large\bfseries \@author}\\[16mm]
-    % {\Large \@degree}%
-  \end{center}
-  \vspace*{\fill}
-
-  \begin{center}
-    Dissertation submitted to University College London\\ to obtain the degree of
-    \vskip 3mm
-    \large{\textbf{\@degree}}
-
-  {\large
-    \begin{description}
-      \centering
-      \@supervisorstext
-    \end{description}
-  }
-  \end{center}
-  \vspace*{\fill}
-
-  {
-    \begin{description}
-      \@vivatext
-    \end{description}
-  }
-
-
-  \begin{center}
-    \@thesisdate
-  \end{center}
-}
-
-%% Second Title Page Grooming
-\def\titlepage
-{
-  \cleardoublepage\centering
-  \thispagestyle{empty}
-  \parindent 0pt \parskip 10pt plus 1fil minus 1fil
-  \def\baselinestretch{1}\@normalsize\vbox to \vsize\bgroup\vbox to 9in\bgroup
-}
-
-%% The \kern0pt pushes any depth into the height.  Thanks to Richard Stone.
-\def\endtitlepage{\par\kern 0pt\egroup\vss\egroup\clearpage}
+%\def\committeepage
+%{%
+%  \cleardoublepage
+%  \thispagestyle{empty}
+%  \begin{center}%
+%    \null\vskip 12mm
+%    {\Large\@school}\\[16mm]
+%    {\LARGE\bfseries \@title}\\[16mm]
+%    {\Large\bfseries \@author}\\[16mm]
+%    % {\Large \@degree}%
+%  \end{center}
+%  \vspace*{\fill}
+%
+%  \begin{center}
+%    Dissertation submitted to University College London\\ to obtain the degree of
+%    \vskip 3mm
+%    \large{\textbf{\@degree}}
+%
+%  {\large
+%    \begin{description}
+%      \centering
+%      \@supervisorstext
+%    \end{description}
+%  }
+%  \end{center}
+%  \vspace*{\fill}
+%
+%  {
+%    \begin{description}
+%      \@vivatext
+%    \end{description}
+%  }
+%
+%
+%  \begin{center}
+%    \@thesisdate
+%  \end{center}
+%}
+%
+%%% Second Title Page Grooming
+%\def\titlepage
+%{
+%  \cleardoublepage\centering
+%  \thispagestyle{empty}
+%  \parindent 0pt \parskip 10pt plus 1fil minus 1fil
+%  \def\baselinestretch{1}\@normalsize\vbox to \vsize\bgroup\vbox to 9in\bgroup
+%}
+%
+%%% The \kern0pt pushes any depth into the height.  Thanks to Richard Stone.
+%\def\endtitlepage{\par\kern 0pt\egroup\vss\egroup\clearpage}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%% Third Page %%%%%%%%%%%%%%%%%%%%%%%%%

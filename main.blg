@@ -2,56 +2,64 @@ This is BibTeX, Version 0.99d (TeX Live 2017)
 Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: main.aux
 A level-1 auxiliary file: src/acronyms.aux
-A level-1 auxiliary file: src/plan.aux
 A level-1 auxiliary file: src/introduction.aux
 A level-1 auxiliary file: src/background.aux
+A level-1 auxiliary file: src/literature_review.aux
+A level-1 auxiliary file: src/config.aux
+A level-1 auxiliary file: src/cudamino.aux
+A level-1 auxiliary file: src/future.aux
 The style file: ieeetr.bst
 Database file #1: references.bib
+Warning--can't use both author and editor fields in NAP1785
 Warning--empty publisher in Levitt2008
 Warning--empty publisher in Barker2009
 Warning--empty publisher in DeGraaf2007
+Warning--empty publisher in Callaghan1991
+Warning--empty publisher in Price2009
 Warning--can't use both volume and number fields in Logan2007
 Warning--empty publisher in Logan2007
 Warning--empty publisher in Iserles2009
-You've used 23 entries,
+Warning--empty publisher in Stiles2001
+Warning--can't use both volume and number fields in Rensonnet2015
+You've used 84 entries,
             1876 wiz_defined-function locations,
-            646 strings with 8166 characters,
-and the built_in function-call counts, 6297 in all, are:
-= -- 628
-> -- 258
+            1056 strings with 21557 characters,
+and the built_in function-call counts, 25340 in all, are:
+= -- 2520
+> -- 1114
 < -- 0
-+ -- 96
-- -- 73
-* -- 436
-:= -- 884
-add.period$ -- 32
-call.type$ -- 23
-change.case$ -- 14
++ -- 405
+- -- 321
+* -- 1890
+:= -- 3571
+add.period$ -- 96
+call.type$ -- 84
+change.case$ -- 72
 chr.to.int$ -- 0
-cite$ -- 29
-duplicate$ -- 320
-empty$ -- 588
-format.name$ -- 73
-if$ -- 1535
+cite$ -- 95
+duplicate$ -- 1251
+empty$ -- 2245
+format.name$ -- 321
+if$ -- 6124
 int.to.chr$ -- 0
-int.to.str$ -- 23
-missing$ -- 32
-newline$ -- 81
-num.names$ -- 23
-pop$ -- 81
+int.to.str$ -- 84
+missing$ -- 94
+newline$ -- 267
+num.names$ -- 84
+pop$ -- 229
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 208
+skip$ -- 896
 stack$ -- 0
-substring$ -- 407
-swap$ -- 134
+substring$ -- 1810
+swap$ -- 569
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 6
-while$ -- 60
-width$ -- 25
-write$ -- 227
-(There were 6 warnings)
+warning$ -- 11
+while$ -- 254
+width$ -- 86
+write$ -- 846
+(There were 11 warnings)

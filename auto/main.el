@@ -5,10 +5,12 @@
     "template/template"
     "src/abstract"
     "src/acronyms"
-    "src/plan"
     "src/introduction"
     "src/background"
-    "src/acks")
+    "src/literature_review"
+    "src/config"
+    "src/cudamino"
+    "src/future")
    (TeX-add-symbols
     '("van" 3)
     "titleinfo")

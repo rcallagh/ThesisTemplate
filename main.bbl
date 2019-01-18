@@ -1,5 +1,48 @@
 \begin{thebibliography}{10}
 
+\bibitem{NAP1785}
+S.~Ackerman, {\em {Discovering the Brain}}.
+\newblock Washington, DC: Institute of Medicine and National Academy of
+  Sciences, The National Academies Press, 1992.
+
+\bibitem{Crick1993}
+F.~Crick and E.~Jones, ``{Backwardness of human neuroanatomy},'' {\em Nature},
+  vol.~361, pp.~109--110, 1993.
+
+\bibitem{Basser1994}
+P.~J. Basser, J.~Mattiello, and D.~Lebihan, ``{Estimation of the Effective
+  Self-Diffusion Tensor from the NMR Spin Echo},'' {\em Journal of Magnetic
+  Resonance, Series B}, vol.~103, no.~3, pp.~247--254, 1994.
+
+\bibitem{Hall2009}
+M.~G. Hall and D.~C. Alexander, ``{Convergence and Parameter Choice for
+  Monte-Carlo Simulations of Diffusion MRI},'' {\em IEEE Transactions on
+  Medical Imaging}, vol.~28, no.~9, pp.~1354--1364, 2009.
+
+\bibitem{Leemans2005}
+A.~Leemans, J.~Sijbers, M.~Verhoye, A.~{Van Der Linden}, and D.~{Van Dyck},
+  ``{Mathematical framework for simulating diffusion tensor MR neural fiber
+  bundles},'' {\em Magnetic Resonance in Medicine}, vol.~53, no.~4,
+  pp.~944--953, 2005.
+
+\bibitem{Nilsson2013}
+M.~Nilsson, D.~V. Westen, F.~Sta, and J.~La, ``{The role of tissue
+  microstructure and water exchange in biophysical modelling of diffusion in
+  white matter},'' {\em Magnetic Resonance Materials in Physics, Biology and
+  Medicine}, vol.~26, no.~3, pp.~345--370, 2013.
+
+\bibitem{Lee2018a}
+H.-H. Lee, K.~Yaros, J.~Veraart, J.~Pathan, F.-X. Liang, S.~G. Kim, D.~S.
+  Novikov, and E.~Fieremans, ``{Electron microscopy 3-dimensional segmentation
+  and quantification of axonal dispersion and diameter distribution in mouse
+  brain corpus callosum},'' {\em bioRxiv}, vol.~357491, 2018.
+
+\bibitem{Cook2006}
+P.~a. Cook, Y.~Bai, K.~K. Seunarine, M.~G. Hall, G.~J. Parker, and D.~C.
+  Alexander, ``{Camino: Open-Source Diffusion-MRI Reconstruction and
+  Processing},'' {\em 14th Scientific Meeting of the International Society for
+  Magnetic Resonance in Medicine}, vol.~14, p.~2759, 2006.
+
 \bibitem{Levitt2008}
 M.~H. Levitt, {\em {Spin Dynamics: Basics of Nuclear Magnetic Resonance}}.
 \newblock 2008.
@@ -9,38 +52,80 @@ P.~B. Barker, A.~Bizzi, N.~{De Stefano}, R.~Gullapalli, and D.~D.~M. Lin, {\em
   {Clinical MR Spectroscopy}}.
 \newblock 2009.
 
+\bibitem{Bloch1946}
+F.~Bloch, ``{Nuclear Induction},'' {\em Physical Review}, vol.~652, no.~1938,
+  pp.~460--474, 1946.
+
+\bibitem{Purcell1946}
+E.~M. Purcell, H.~C. Torrey, and R.~V. Pound, ``{Resonance Absorption by
+  Nuclear Magnetic Moments in a Solid},'' {\em Physical Review}, vol.~69,
+  no.~1-2, 1946.
+
 \bibitem{Salibi1998}
 N.~M. Salibi and M.~A. Brown, {\em {Clinical MR spectroscopy : first
   principles}}.
 \newblock Wiley-Liss, 1998.
-
-\bibitem{DeGraaf2007}
-R.~A. de~Graaf, {\em {In Vivo NMR Spectroscopy: Principles and Techniques: 2nd
-  Edition}}.
-\newblock 2007.
 
 \bibitem{Haacke1999}
 E.~Haacke, R.~Brown, M.~Thompson, and R.~Venkatesan, ``{Magnetic resonance
   imaging: physical principles and sequence design. 1999},'' {\em New York: A
   John Wiley and Sons}, 1999.
 
-\bibitem{Keeler2010}
-J.~Keeler, {\em {Understanding NMR spectroscopy}}.
-\newblock John Wiley and Sons, 2010.
+\bibitem{DeGraaf2007}
+R.~A. de~Graaf, {\em {In Vivo NMR Spectroscopy: Principles and Techniques: 2nd
+  Edition}}.
+\newblock 2007.
+
+\bibitem{Hahn1950}
+E.~L. Hahn, ``{Spin Echoes},'' {\em Physical Review}, vol.~80, no.~4,
+  pp.~580--594, 1950.
 
 \bibitem{Denny1993}
 M.~W. Denny, {\em {Air and Water: The Biology and Physics of Life's Media}}.
 \newblock Air and Water: The Biology and Physics of Life's Media, Princeton
   University Press, 1993.
 
+\bibitem{Stejskal1965}
+E.~O. Stejskal and J.~E. Tanner, ``{Spin diffusion measurements: Spin echoes in
+  the presence of a time-dependent field gradient},'' {\em The Journal of
+  Chemical Physics}, vol.~42, no.~1, pp.~288--292, 1965.
+
 \bibitem{Price1997}
 W.~Price, ``{Pulsed-field gradient nuclear magnetic resonance as a tool for
   studying translational diffusion: Part 1. Basic theory},'' {\em Concepts
   Magn. Reson.}, vol.~9, pp.~299--336, 1997.
 
+\bibitem{Kuchel2012}
+P.~W. Kuchel, G.~Pages, K.~Nagashima, V.~Sendhil, V.~Vijayaragavan,
+  V.~Nagarajan, and K.~H. Chuang, ``{Stejskal–Tanner Equation Derived in
+  Full},'' {\em Concepts in Magnetic Resonance}, vol.~40, no.~5, pp.~205--214,
+  2012.
+
+\bibitem{Neuman1974}
+C.~H. Neuman, ``{Spin echo of spins diffusing in a bounded medium},'' {\em The
+  Journal of Chemical Physics}, vol.~60, no.~11, pp.~4508--4511, 1974.
+
+\bibitem{Balinov1993}
+B.~Balinov, B.~J{\"{o}}nsson, P.~Linse, and O.~S{\"{o}}derman, ``{The NMR
+  self-diffusion method applied to restricted diffusion. simulation of echo
+  attenuation from molecules in spheres and between planes},'' 1993.
+
+\bibitem{Callaghan1995}
+P.~T. Callaghan, ``{Pulsed-Gradient Spin-Echo NMR for Planar, Cylindrical, and
+  Spherical Pores under Conditions of Wall Relaxation},'' 1995.
+
 \bibitem{Torrey1956}
 H.~C. Torrey, ``{Bloch equations with diffusion terms},'' {\em Physical
   Review}, vol.~104, no.~3, pp.~563--565, 1956.
+
+\bibitem{Callaghan1991}
+P.~T. Callaghan, {\em {Principles of Nuclear Magnetic Resonance Microscopy}},
+  vol.~19.
+\newblock 1991.
+
+\bibitem{Price2009}
+W.~S. Price, {\em {NMR studies of translational motion}}.
+\newblock 2009.
 
 \bibitem{Beltrachini2016}
 L.~Beltrachini, Z.~A. Taylor, and A.~F. Frangi, ``{An efficient finite element
@@ -93,11 +178,6 @@ G.~T. Balls and L.~R. Frank, ``{A simulation environment for diffusion weighted
   MR experiments in complex media},'' {\em Magnetic Resonance in Medicine},
   vol.~62, no.~3, pp.~771--778, 2009.
 
-\bibitem{Hall2009}
-M.~G. Hall and D.~C. Alexander, ``{Convergence and Parameter Choice for
-  Monte-Carlo Simulations of Diffusion MRI},'' {\em IEEE Transactions on
-  Medical Imaging}, vol.~28, no.~9, pp.~1354--1364, 2009.
-
 \bibitem{Ford1997}
 J.~C. Ford and D.~B. Hackney, ``{Numerical model for calculation of apparent
   diffusion coefficients (ADC) in permeable cylinders - Comparison with
@@ -119,5 +199,251 @@ M.~D. Budde and J.~A. Frank, ``{Neurite beading is sufficient to decrease the
 E.~Panagiotaki, M.~G. Hall, H.~Zhang, B.~Siow, M.~F. Lythgoe, and D.~C.
   Alexander, ``{High-Fidelity Meshes from Tissue Samples for Diffusion MRI
   Simulations},'' in {\em MICCAI}, pp.~404--411, 2010.
+
+\bibitem{Nickolls2008}
+J.~Nickolls, I.~A.~N. Buck, and M.~Garland, ``{Scalable Parallel with CUDA},''
+  {\em Queue}, vol.~6, no.~April, 2008.
+
+\bibitem{Stone2010}
+J.~E. Stone, D.~Gohara, and G.~Shi, ``{OpenCL: A Parallel Programming Standard
+  for Heterogeneous Computing Systems},'' {\em Computing in Science {\&}
+  Engineering}, vol.~12, pp.~66--73, 2010.
+
+\bibitem{Chin2002}
+C.~L. Chin, F.~W. Wehrli, S.~N. Hwang, M.~Takahashi, and D.~B. Hackney,
+  ``{Biexponential diffusion attenuation in the rat spinal cord: Computer
+  simulations based on anatomic images of axonal architecture},'' {\em Magnetic
+  Resonance in Medicine}, vol.~47, no.~3, pp.~455--460, 2002.
+
+\bibitem{Hwang2003}
+S.~N. Hwang, C.~L. Chin, F.~W. Wehrli, and D.~B. Hackney, ``{An image-based
+  finite difference model for simulating restricted diffusion},'' {\em Magnetic
+  Resonance in Medicine}, vol.~50, no.~2, pp.~373--382, 2003.
+
+\bibitem{Xu2007}
+J.~Xu, M.~D. Does, and J.~C. Gore, ``{Numerical study of water diffusion in
+  biological tissues using an improved finite difference method Numerical study
+  of water diffusion in biological tissues},'' {\em Physics in medicine and
+  biology}, vol.~52, pp.~N111--N126, 2007.
+
+\bibitem{Xu2009}
+J.~Xu, M.~D. Does, and J.~C. Gore, ``{Sensitivity of MR diffusion measurements
+  to variations in intracellular structure: Effects of nuclear size},'' {\em
+  Magnetic Resonance in Medicine}, vol.~61, no.~4, pp.~828--833, 2009.
+
+\bibitem{Xu2014}
+J.~Xu, H.~Li, K.~D. Harkins, X.~Jiang, J.~Xie, H.~Kang, M.~D. Does, and J.~C.
+  Gore, ``{Mapping mean axon diameter and axonal volume fraction by MRI using
+  temporal diffusion spectroscopy},'' {\em NeuroImage}, vol.~103, pp.~10--19,
+  2014.
+
+\bibitem{Moroney2013}
+B.~F. Moroney, T.~Stait-Gardner, B.~Ghadirian, N.~N. Yadav, and W.~S. Price,
+  ``{Numerical analysis of NMR diffusion measurements in the short gradient
+  pulse limit},'' {\em Journal of Magnetic Resonance}, vol.~234, pp.~165--175,
+  2013.
+
+\bibitem{Nguyen2014}
+D.~V. Nguyen, J.~R. Li, D.~Grebenkov, and D.~{Le Bihan}, ``{A finite elements
+  method to solve the Bloch-Torrey equation applied to diffusion magnetic
+  resonance imaging},'' {\em Journal of Computational Physics}, vol.~263,
+  no.~FEM, pp.~283--302, 2014.
+
+\bibitem{Lipinski1990}
+H.-g. Lipinski, ``{Monte Carlo simulation of extracellular diffusion in brain
+  tissues Monte Carlo simulation of extracellular diffusion in brain
+  tissues},'' {\em Physics in medicine and biology}, vol.~35, p.~441, 1990.
+
+\bibitem{Stanisz1997}
+G.~J. Stanisz, A.~Szafer, G.~A. Wright, and R.~M. Henkelman, ``{An Analytical
+  Model of Restricted Diffusion in Bovine Optic-Nerve},'' {\em Magnetic
+  Resonance in Medicine}, vol.~37, pp.~103--111, 1997.
+
+\bibitem{Duh2001}
+A.~Duh, A.~Mohori{\v{c}}, and J.~Stepi{\v{s}}nik, ``{Computer simulation of the
+  spin-echo spatial distribution in the case of restricted self-diffusion},''
+  {\em Journal of Magnetic Resonance}, vol.~148, no.~2, pp.~257--266, 2001.
+
+\bibitem{Stiles1996}
+J.~R. Stiles, D.~{Van Helden}, T.~M. Bartol, E.~E. Salpeter, and M.~M.
+  Salpeter, ``{Miniature endplate current rise times less than 100 microseconds
+  from improved dual recordings can be modeled with passive acetylcholine
+  diffusion from a synaptic vesicle.},'' {\em Proceedings of the National
+  Academy of Sciences}, vol.~93, no.~12, pp.~5747--5752, 1996.
+
+\bibitem{Stiles2001}
+J.~R. Stiles and T.~M. Bartol, {\em {Monte Carlo Methods for Simulating
+  Realistic Synaptic Microphysiology using MCELL}}.
+\newblock 2001.
+
+\bibitem{Kerr2008}
+R.~A. Kerr, T.~M. Bartol, B.~Kaminsky, M.~Dittrich, J.-C.~J. Chang, S.~B.
+  Baden, T.~J. Sejnowski, and J.~R. Stiles, ``{Fast Monte Carlo Simulation
+  Methods for Biological Reaction-Diffusion Systems in Solution and on
+  Surfaces.},'' {\em SIAM J Sci Comput}, vol.~30, no.~6, p.~3126, 2008.
+
+\bibitem{Baxter2013}
+G.~T. Baxter and L.~R. Frank, ``{A computational model for diffusion weighted
+  imaging of myelinated white matter},'' {\em NeuroImage}, vol.~75,
+  pp.~212--220, 2013.
+
+\bibitem{Sen2005}
+P.~N. Sen and P.~J. Basser, ``{A model for diffusion in white matter in the
+  brain},'' {\em Biophysical Journal}, vol.~89, no.~5, pp.~2927--2938, 2005.
+
+\bibitem{Ginsburger2018}
+K.~Ginsburger, F.~Poupon, J.~Beaujoin, D.~Estournet, F.~Matuschke, J.-F.
+  Mangin, M.~Axer, and C.~Poupon, ``{Improving the realism of white matter
+  numerical phantoms: A step toward a better understanding of the influence of
+  structural disorders in diffusion MRI},'' {\em Frontiers in Physics}, vol.~5,
+  no.~FEB, pp.~1--18, 2018.
+
+\bibitem{Alexander2010}
+D.~C. Alexander, P.~L. Hubbard, M.~G. Hall, E.~A. Moore, M.~Ptito, G.~J.
+  Parker, and T.~B. Dyrby, ``{Orientationally invariant indices of axon
+  diameter and density from diffusion MRI},'' {\em NeuroImage}, vol.~52, no.~4,
+  pp.~1374--1389, 2010.
+
+\bibitem{Nilsson2017}
+M.~Nilsson, S.~Lasi{\v{c}}, I.~Drobnjak, D.~Topgaard, and C.~F. Westin,
+  ``{Resolution limit of cylinder diameter estimation by diffusion MRI: The
+  impact of gradient waveform and orientation dispersion},'' {\em NMR in
+  Biomedicine}, vol.~30, no.~7, pp.~1--13, 2017.
+
+\bibitem{Nilsson2009}
+M.~Nilsson, J.~L{\"{a}}tt, E.~Nordh, R.~Wirestam, F.~St{\aa}hlberg, and
+  S.~Brockstedt, ``{On the effects of a varied diffusion time in vivo: is the
+  diffusion in white matter restricted?},'' {\em Magnetic Resonance Imaging},
+  vol.~27, no.~2, pp.~176--187, 2009.
+
+\bibitem{Nilsson2010}
+M.~Nilsson, E.~Alerstam, R.~Wirestam, F.~St{\aa}hlberg, S.~Brockstedt, and
+  J.~L{\"{a}}tt, ``{Evaluating the accuracy and precision of a two-compartment
+  Karger model using Monte Carlo simulations},'' {\em Journal of Magnetic
+  Resonance}, vol.~206, no.~1, pp.~59--67, 2010.
+
+\bibitem{Fieremans2010}
+E.~Fieremans, D.~S. Novikov, J.~H. Jensen, and J.~A. Helpern, ``{Monte Carlo
+  study of a two-compartment exchange model of diffusion},'' {\em NMR in
+  Biomedicine}, vol.~23, no.~7, pp.~711--724, 2010.
+
+\bibitem{KARGER1988}
+J.~K{\"{a}}rger, H.~Pfeifer, and W.~Heink, ``{Principles and Application of
+  Self-Diffusion Measurements by Nuclear Magnetic Resonance},'' {\em Advances
+  in Magnetic and Optical Resonance}, vol.~12, no.~C, pp.~1--89, 1988.
+
+\bibitem{Lin2016}
+M.~Lin, H.~He, G.~Schifitto, and J.~Zhong, ``{Simulation of changes in
+  diffusion related to different pathologies at cellular level after traumatic
+  brain injury},'' {\em Magnetic Resonance in Medicine}, vol.~76, no.~1,
+  pp.~290--300, 2016.
+
+\bibitem{Huisman2004}
+T.~A. G.~M. Huisman, L.~H. Schwamm, P.~W. Schaefer, W.~J. Koroshetz,
+  N.~Shetty-Alva, Y.~Ozsunar, O.~Wu, and A.~G. Sorensen, ``{Diffusion Tensor
+  Imaging as Potential Biomarker of White Matter Injury in Diffuse Axonal
+  Injury},'' {\em American Journal of Neuroradiology}, vol.~25, no.~3,
+  pp.~370--376, 2004.
+
+\bibitem{Bazarian2007}
+J.~J. Bazarian, J.~Zhong, B.~Blyth, T.~Zhu, V.~Kavcic, and D.~Peterson,
+  ``{Diffusion Tensor Imaging Detects Clinically Important Axonal Damage after
+  Mild Traumatic Brain Injury: A Pilot Study},'' {\em Journal of Neurotrauma},
+  vol.~24, no.~9, pp.~1447--1459, 2007.
+
+\bibitem{Rutgers2008}
+D.~R. Rutgers, P.~Fillard, G.~Paradot, M.~Tadi{\'{e}}, P.~Lasjaunias, and
+  D.~Ducreux, ``{Diffusion tensor imaging characteristics of the corpus
+  callosum in mild, moderate, and severe traumatic brain injury},'' {\em
+  American Journal of Neuroradiology}, vol.~29, no.~9, pp.~1730--1735, 2008.
+
+\bibitem{Lam2015}
+W.~W. Lam, S.~Jbabdi, and K.~L. Miller, ``{A model for extra-axonal diffusion
+  spectra with frequency-dependent restriction},'' {\em Magnetic Resonance in
+  Medicine}, vol.~73, no.~6, pp.~2306--2320, 2015.
+
+\bibitem{Stepisnik1993}
+J.~Stepi{\v{s}}nik, ``{Time-dependent self-diffusion by NMR spin-echo},'' {\em
+  Physica B: Physics of Condensed Matter}, vol.~183, no.~4, pp.~343--350, 1993.
+
+\bibitem{Rensonnet2015}
+G.~Rensonnet, D.~Jacobs, B.~Macq, and M.~Taquet, ``{A hybrid method for
+  efficient and accurate simulations of diffusion compartment imaging
+  signals},'' in {\em Proc. of SPIE}, vol.~9681, p.~968107, 2015.
+
+\bibitem{Grebenkov2008}
+D.~Grebenkov, ``{Laplacian Eigenfunctions in NMR. I. A Numerical Tool},'' {\em
+  Concepts in Magnetic Resonance Part A}, vol.~32, no.~4, pp.~277--301, 2008.
+
+\bibitem{Rensonnet2017}
+G.~Rensonnet, B.~Scherrer, S.~K. Warfield, B.~Macq, and M.~Taquet, ``{Assessing
+  the validity of the approximation of diffusion-weighted-MRI signals from
+  crossing fascicles by sums of signals from single fascicles},'' {\em Magnetic
+  Resonance in Medicine}, vol.~2345, pp.~2332--2345, 2017.
+
+\bibitem{Waudby2011}
+C.~A. Waudby and J.~Christodoulou, ``{GPU accelerated Monte Carlo simulation of
+  pulsed-field gradient NMR experiments},'' {\em Journal of Magnetic
+  Resonance}, vol.~211, no.~1, pp.~67--73, 2011.
+
+\bibitem{Nguyen2018}
+K.-v. Nguyen, E.~Hern{\'{a}}ndez-garz{\'{o}}n, and J.~Valette, ``{Efficient
+  GPU-based Monte-Carlo simulation of diffusion in real astrocytes
+  reconstructed from confocal microscopy},'' {\em Journal of Magnetic
+  Resonance}, vol.~296, pp.~188--199, 2018.
+
+\bibitem{Delaunay1934}
+P.~B. Delaunay, ``{Sur la sphere vide},'' {\em Bulletin of Academy of Sciences
+  of the USSR}, 1934.
+
+\bibitem{Stockley1993}
+E.~Stockley, H.~Cole, A.~Brown, and H.~Wheal, ``{A system for quantitative
+  morphological measurement and electronic modelling of neurons:
+  three-dimensional reconstruction},'' {\em J Neurosci Methods}, vol.~47,
+  no.~1-2, pp.~39--51, 1993.
+
+\bibitem{Johannesson1996}
+H.~J{\'{o}}hannesson and B.~Halle, ``{Solvent diffusion in ordered macrofluids:
+  A stochastic simulation study of the obstruction effect},'' {\em Journal of
+  Chemical Physics}, vol.~104, no.~17, pp.~6807--6817, 1996.
+
+\bibitem{Fujimoto1986}
+A.~Fujimoto, T.~Tanaka, and K.~Iwata, ``{Arts: Accelerated Ray-Tracing
+  System},'' {\em IEEE Computer Graphics and Applications}, 1986.
+
+\bibitem{Amanatides1987}
+J.~Amanatides and A.~Woo, ``{A fast voxel traversal algorithm for ray
+  tracing},'' in {\em Eurographics '87}, 1987.
+
+\bibitem{Kay1986}
+T.~L. Kay and J.~T. Kajiya, ``{Ray tracing complex scenes},'' {\em ACM SIGGRAPH
+  Computer Graphics}, 1986.
+
+\bibitem{Chajdas2014}
+M.~G. Chajdas and R.~Westermann, ``{Quantitative Analysis of Voxel Raytracing
+  Acceleration Structures},'' in {\em Pacific Graphics Short Papers},
+  pp.~85--90, 2014.
+
+\bibitem{Hill2018}
+I.~Hill, M.~Palombo, M.~Santin, F.~Branzoli, A.-C. Philippe, D.~Wassermann,
+  M.-S. Aigrot, B.~Stankoff, H.~Zhang, S.~Lehericy, A.~Petiet, D.~C. Alexander,
+  O.~Ciccarelli, and I.~Drobnjak, ``{Deep neural network based framework for
+  in-vivo axonal permeability estimation},'' in {\em 26th Annual Meeting of the
+  International Society for Magnetic Resonance in Medicine (ISMRM)}, 2018.
+
+\bibitem{Palombo2018a}
+M.~Palombo, I.~Hill, M.~D. Santin, F.~Branzoli, A.-C. Philippe, D.~Wassermann,
+  M.-S. Aigrot, B.~Stankoff, H.~Zhang, S.~Lehericy, A.~Petiet, D.~C. Alexander,
+  and I.~Drobnjak, ``{Machine learning based estimation of axonal permeability:
+  validation on cuprizone treated in-vivo mouse model of axonal
+  demyelination},'' in {\em Proc. Joint Annual Meeting ISMRM-ESMRMB, Paris,
+  France}, 2018.
+
+\bibitem{Rensonnet2018}
+G.~Rensonnet, B.~Scherrer, G.~Girard, A.~Jankovski, S.~K. Warfield, B.~Macq,
+  J.-P. Thiran, and M.~Taquet, ``{Towards microstructure fingerprinting:
+  Estimation of tissue properties from a dictionary of Monte Carlo diffusion
+  MRI simulations},'' {\em NeuroImage}, vol.~184, no.~May 2018, pp.~964--980,
+  2018.
 
 \end{thebibliography}

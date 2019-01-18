@@ -1,0 +1,101 @@
+\chapter{Future Plan}
+\label{sec:future}
+
+The aim of this report was to present work towards improving the realism of diffusion MRI simulations.
+\Cref{sec:config,sec:cudamino} present \ac{ConFiG} and CUDAmino, two parallel works towards this aim with \ac{ConFiG} improving the realism of \ac{WM} substrates for diffusion and CUDAmino providing \ac{GPU} accelerated simulations.
+There are however, many aspects of both methods which could be improved.
+This section addresses some of the planned future adjustments to both methods as well as some potential applications. 
+
+\section{Improving ConFiG}
+\label{sec:future_config}
+
+As mentioned in \ref{sec:config_discussion}, the dependence of \ac{ConFiG} substrates on the growth network requires more thorough investigation.
+One planned experiment to investigate this will be to grow substrates initialised in a simple manner in which we know the optimal packing, such as a simple square packing of parallel cylinders.
+We can then grow substrates with varying setups of the growth network and compare the result to the parallel cylinder case.
+This will give an understanding of how the density and arrangement of network nodes impacts the packing density achievable in the resulting substrate.
+
+
+A potential improvement to \ac{ConFiG} is to use more clever generation of the network nodes. Currently, nodes are generated throughout the entire space in which the fibres will grow.
+This is not necessary, however, since only the area immediately surrounding the fibres will matter for growth.
+For this reason, it should be possible to generate the network only in the immediate area in which the fibres are growing, allowing for a more dense sampling of the space.
+
+A further potential improvement to network generation could be to generate the nodes based on the desired path of the fibre.
+For instance, it may be possible to generate a dense cloud of nodes around the desired path of each fibre and sparsely fill the remaining space to prevent oversampling of space where fibres are unlikely to grow.
+
+There are also potential avenues for improvement in the process of finding the best step among the neighbours at any give node.
+Essentially, this boils down to adding/removing/adjusting terms in the cost function.
+One potential improvement, mentioned in \Cref{sec:config_discussion}, is to adjust the target following term to minimise the distance to a desired path.
+This will allow for any arbitrary target path, rather than simply the straight line between start and target that is currently used, allowing undulation control to be more easily added.
+
+Additionally, it may be possible to incorporate connectivity information from the network to optimise growth.
+Since a node becomes inaccessible when it is within a fibre, the number of neighbours at any given node contains information about how many of its neighbours are within existing fibres.
+This may be used to penalise moving to areas with low connectivity, since the likelihood of becoming stuck is higher.
+Furthermore, connectivity from second neighbours may be incorporated to give some information more than just one step ahead. 
+
+One additional improvement would be to allow the nodes in the network to move slightly.
+For instance, when a fibre grows very close to a node, it may be possible to move that node away from the fibre, so that future fibres will not have to shrink as much when they access that node.
+One drawback of this approach is that by adjusting the physical position of the node, but not its connectivity, you may introduce intersections between fibres.
+It may be possible that any intersection can be solved using the Blender meshing procedure, however this should be investigated if dynamic adjustment of the node positions is to be implemented. 
+
+\begin{comment}
+\begin{itemize}
+\item Test dependence on initialisation of points properly
+  \begin{itemize}
+    \item Dependence on number of points
+    \item Dependence on arrangement of points
+    \item Dependence on definition of connectivity
+  \end{itemize}
+\item Better methods for generation of points
+  \begin{itemize}
+    \item Generate points only in the neighbourhood of actual growth area
+    \item Maybe generate cloud around the desired path of the fibre. 
+  \end{itemize}
+\item Finding best step
+  \begin{itemize}
+    \item Add distance to desired path (maybe replace dot-product)
+    \item Allow non-straight paths
+    \item Add information from second neighbours (maybe connectivity of second neighbours - prefer moving towards places with high connectivity, meaning fewer occupied nodes).
+  \end{itemize}
+\item Updating network
+  \begin{itemize}
+  \item Nudge nodes which are close to the surface of the fibre toward free space
+  \end{itemize}
+\end{itemize}
+\end{comment}
+
+\section{Extending CUDAmino}
+\label{sec:future_cudamino}
+
+As it stands, CUDAmino lacks some of the features of the diffusion MRI simulator in Camino.
+One feature which is yet to be added is support for simulation of permeable membranes.
+This can be added so that when there is a collision between a step and a face, there is a probability that the step will go through the face.
+
+The performance of CUDAmino relative to Camino should be investigated further, characterising the exact differences between the two in more simple cases and assessing the performance on more complex substrates, such as those produced by ConFiG too. 
+
+Another feature would be to support reflections as the interaction between a step and a barrier as an alternative to rejection sampling.
+Although this may cause branch divergence as mentioned in \Cref{sec:cudamino_design}, the impact of this is not yet quantified and may be outweighed by requiring a larger number of steps for rejection sampling.
+
+As discussed in \Cref{sec:cudamino_design}, there are many acceleration possible for ray tracing-like problems.
+For instance, the octree structure may be used to further accelerate CUDAmino since the space partitioning is adaptive to the mesh, meaning that the space is more finely discretised in regions where the mesh is complex.
+Another alternative, the \acl{BVH} and its variants, similarly subdivide the space, but have been shown to be more efficient than octrees for GPU ray traced rendering\cite{Chajdas2014}.
+
+A comparison of the various space partitioning schemes for \ac{dMRI} simulation, both in terms of computational time and memory usage, could be very informative. 
+
+
+\section{Future Applications}
+\label{sec:future_applications}
+
+As mentioned in \Cref{sec:introduction}, realistic \ac{WM} substrates could have applications in validation of novel microstructural models of \ac{WM}.
+To this end, \ac{ConFiG} is planned to be used as part of the ISBI 2019/2020 \textbf{M}RI Whit\textbf{e M}atter R\textbf{e}co\textbf{n}struc\textbf{t}i\textbf{o}n Challenge (MEMENTO: For more information see \url{https://my.vanderbilt.edu/memento/}).
+The MEMENTO challenge aims to test the state of the art microstructure imaging techniques, evaluating participants' ability to estimate microstructural parameters, predict unseen signal and evaluate sensitivity and specificity of potential biomarkers.
+The MEMENTO challenge presents an opportunity for ConFiG to make an important contribution to the advancement of the microstructure imaging field. 
+
+Additionally, \ac{ConFiG} may be used to train a machine learning tool directly for the estimation of parameters, in a similar manner to Hill et al.\ and Palombo et al.\ \cite{Hill2018,Palombo2018a} for estimating permeability and the fingerprinting approach of Rensonnet et al.\ \cite{Rensonnet2018}.
+The basic idea would be to generate a range of \ac{WM} substrates covering a realistic range of microstructure parameters.
+Simulated \ac{dMRI} signals could then be generated using Camino or CUDAmino to generate microstructure-signal pairs.
+These could then be used to train a machine learning tool to infer the microstructure directly from the signal. 
+
+%%%Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

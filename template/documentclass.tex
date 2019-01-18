@@ -1,10 +1,9 @@
-\newcommand{\finalversion}{}
+%\newcommand{\finalversion}{}    
 \documentclass%
 [%
 paper=a4
-,fontsize=11pt % common are 10, 11 or 12
+,fontsize=12pt % common are 10, 11 or 12
 ,headings=big
-,parskip
 ,cleardoublepage=current
 ,numbers=noendperiod % 2.3.1 vs 2.3.1. (no dot after the last chapter number)
 ,twoside=true
@@ -14,9 +13,14 @@ paper=a4
 ]%
 {scrbook}
 
-\renewcommand*{\familydefault}{\sfdefault}
-  \def\tt{\normalfont\ttfamily}
+%\renewcommand*{\familydefault}{\sfdefault}
+%  \def\tt{\normalfont\ttfamily}
 
 \ifx\finalversion\undefined
 \overfullrule=2cm
 \fi
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:
