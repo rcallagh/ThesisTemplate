@@ -14,6 +14,8 @@
     '("myMarginnote" 1)
     "chapterlabel"
     "chapterWHeading")
+   (LaTeX-add-environments
+    "chapterabstract")
    (LaTeX-add-lengths
     "myLenghthFootAbstand"
     "myLenghthTemp"

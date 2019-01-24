@@ -9,6 +9,11 @@ S.~Ackerman, {\em {Discovering the Brain}}.
 F.~Crick and E.~Jones, ``{Backwardness of human neuroanatomy},'' {\em Nature},
   vol.~361, pp.~109--110, 1993.
 
+\bibitem{Johansen-Berg2013}
+H.~Johansen-Berg and T.~E.~J. Behrens, {\em {Diffusion MRI: From Quantitative
+  Measurement to In vivo Neuroanatomy: Second Edition}}.
+\newblock 2013.
+
 \bibitem{Basser1994}
 P.~J. Basser, J.~Mattiello, and D.~Lebihan, ``{Estimation of the Effective
   Self-Diffusion Tensor from the NMR Spin Echo},'' {\em Journal of Magnetic
@@ -37,11 +42,43 @@ H.-H. Lee, K.~Yaros, J.~Veraart, J.~Pathan, F.-X. Liang, S.~G. Kim, D.~S.
   and quantification of axonal dispersion and diameter distribution in mouse
   brain corpus callosum},'' {\em bioRxiv}, vol.~357491, 2018.
 
+\bibitem{Rensonnet2018}
+G.~Rensonnet, B.~Scherrer, G.~Girard, A.~Jankovski, S.~K. Warfield, B.~Macq,
+  J.-P. Thiran, and M.~Taquet, ``{Towards microstructure fingerprinting:
+  Estimation of tissue properties from a dictionary of Monte Carlo diffusion
+  MRI simulations},'' {\em NeuroImage}, vol.~184, no.~May 2018, pp.~964--980,
+  2018.
+
+\bibitem{Hill2018}
+I.~Hill, M.~Palombo, M.~Santin, F.~Branzoli, A.-C. Philippe, D.~Wassermann,
+  M.-S. Aigrot, B.~Stankoff, H.~Zhang, S.~Lehericy, A.~Petiet, D.~C. Alexander,
+  O.~Ciccarelli, and I.~Drobnjak, ``{Deep neural network based framework for
+  in-vivo axonal permeability estimation},'' in {\em 26th Annual Meeting of the
+  International Society for Magnetic Resonance in Medicine (ISMRM)}, 2018.
+
+\bibitem{Palombo2018a}
+M.~Palombo, I.~Hill, M.~D. Santin, F.~Branzoli, A.-C. Philippe, D.~Wassermann,
+  M.-S. Aigrot, B.~Stankoff, H.~Zhang, S.~Lehericy, A.~Petiet, D.~C. Alexander,
+  and I.~Drobnjak, ``{Machine learning based estimation of axonal permeability:
+  validation on cuprizone treated in-vivo mouse model of axonal
+  demyelination},'' in {\em Proc. Joint Annual Meeting ISMRM-ESMRMB, Paris,
+  France}, 2018.
+
+\bibitem{Nedjati-Gilani2017}
+G.~L. Nedjati-Gilani, T.~Schneider, M.~G. Hall, N.~Cawley, I.~Hill,
+  O.~Ciccarelli, I.~Drobnjak, C.~A. Wheeler-Kingshott, and D.~C. Alexander,
+  ``{Machine learning based compartment models with permeability for white
+  matter microstructure imaging},'' {\em NeuroImage}, 2017.
+
 \bibitem{Cook2006}
 P.~a. Cook, Y.~Bai, K.~K. Seunarine, M.~G. Hall, G.~J. Parker, and D.~C.
   Alexander, ``{Camino: Open-Source Diffusion-MRI Reconstruction and
   Processing},'' {\em 14th Scientific Meeting of the International Society for
   Magnetic Resonance in Medicine}, vol.~14, p.~2759, 2006.
+
+\bibitem{Nickolls2008}
+J.~Nickolls, I.~A.~N. Buck, and M.~Garland, ``{Scalable Parallel with CUDA},''
+  {\em Queue}, vol.~6, no.~April, 2008.
 
 \bibitem{Levitt2008}
 M.~H. Levitt, {\em {Spin Dynamics: Basics of Nuclear Magnetic Resonance}}.
@@ -127,6 +164,11 @@ P.~T. Callaghan, {\em {Principles of Nuclear Magnetic Resonance Microscopy}},
 W.~S. Price, {\em {NMR studies of translational motion}}.
 \newblock 2009.
 
+\bibitem{Jeener2002}
+J.~Jeener, ``{Macroscopic molecular diffusion in liquid NMR, revisited},'' {\em
+  Concepts in Magnetic Resonance Part B: Magnetic Resonance Engineering},
+  vol.~14, no.~2, pp.~79--88, 2002.
+
 \bibitem{Beltrachini2016}
 L.~Beltrachini, Z.~A. Taylor, and A.~F. Frangi, ``{An efficient finite element
   solution of the generalised Bloch-Torrey equation for arbitrary domains},''
@@ -199,10 +241,6 @@ M.~D. Budde and J.~A. Frank, ``{Neurite beading is sufficient to decrease the
 E.~Panagiotaki, M.~G. Hall, H.~Zhang, B.~Siow, M.~F. Lythgoe, and D.~C.
   Alexander, ``{High-Fidelity Meshes from Tissue Samples for Diffusion MRI
   Simulations},'' in {\em MICCAI}, pp.~404--411, 2010.
-
-\bibitem{Nickolls2008}
-J.~Nickolls, I.~A.~N. Buck, and M.~Garland, ``{Scalable Parallel with CUDA},''
-  {\em Queue}, vol.~6, no.~April, 2008.
 
 \bibitem{Stone2010}
 J.~E. Stone, D.~Gohara, and G.~Shi, ``{OpenCL: A Parallel Programming Standard
@@ -357,6 +395,12 @@ D.~R. Rutgers, P.~Fillard, G.~Paradot, M.~Tadi{\'{e}}, P.~Lasjaunias, and
   callosum in mild, moderate, and severe traumatic brain injury},'' {\em
   American Journal of Neuroradiology}, vol.~29, no.~9, pp.~1730--1735, 2008.
 
+\bibitem{Lin2017}
+M.~Lin, H.~He, Q.~Tong, Q.~Ding, X.~Yan, T.~Feiweier, and J.~Zhong, ``{Effect
+  of myelin water exchange on DTI-derived parameters in diffusion MRI:
+  Elucidation of TE dependence},'' {\em Magnetic Resonance in Medicine},
+  vol.~1660, pp.~1650--1660, 2017.
+
 \bibitem{Lam2015}
 W.~W. Lam, S.~Jbabdi, and K.~L. Miller, ``{A model for extra-axonal diffusion
   spectra with frequency-dependent restriction},'' {\em Magnetic Resonance in
@@ -396,6 +440,21 @@ K.-v. Nguyen, E.~Hern{\'{a}}ndez-garz{\'{o}}n, and J.~Valette, ``{Efficient
 P.~B. Delaunay, ``{Sur la sphere vide},'' {\em Bulletin of Academy of Sciences
   of the USSR}, 1934.
 
+\bibitem{Bicho2012}
+A.~D.~L. Bicho, R.~A. Rodrigues, S.~R. Musse, C.~R. Jung, M.~Paravisi, and
+  L.~P. Magalh{\~{a}}es, ``{Simulating crowds based on a space colonization
+  algorithm},'' {\em Computers and Graphics (Pergamon)}, vol.~36, no.~2,
+  pp.~70--79, 2012.
+
+\bibitem{Runions2005}
+A.~Runions, M.~Fuhrer, B.~Lane, P.~Federl, A.-G. Rolland-Lagan, and
+  P.~Prusinkiewicz, ``{Modeling and visualization of leaf venation patterns},''
+  {\em ACM Transactions on Graphics}, vol.~24, no.~3, pp.~702--711, 2005.
+
+\bibitem{Runions2007}
+A.~Runions, B.~Lane, and P.~Prusinkiewicz, ``{Modeling trees with a space
+  colonization algorithm},'' {\em Natural Phenomena}, pp.~63--70, 2007.
+
 \bibitem{Stockley1993}
 E.~Stockley, H.~Cole, A.~Brown, and H.~Wheal, ``{A system for quantitative
   morphological measurement and electronic modelling of neurons:
@@ -419,31 +478,15 @@ J.~Amanatides and A.~Woo, ``{A fast voxel traversal algorithm for ray
 T.~L. Kay and J.~T. Kajiya, ``{Ray tracing complex scenes},'' {\em ACM SIGGRAPH
   Computer Graphics}, 1986.
 
+\bibitem{Linse1995}
+P.~Linse and O.~S{\"{o}}derman, ``{The Validity of the Short-Gradient-Pulse
+  Approximation in NMR Studies of Restricted Diffusion. Simulations of
+  Molecules Diffusing between Planes, in Cylinders and Spheres},'' {\em Journal
+  of Magnetic Resonance}, vol.~116, pp.~77--86, 1995.
+
 \bibitem{Chajdas2014}
 M.~G. Chajdas and R.~Westermann, ``{Quantitative Analysis of Voxel Raytracing
   Acceleration Structures},'' in {\em Pacific Graphics Short Papers},
   pp.~85--90, 2014.
-
-\bibitem{Hill2018}
-I.~Hill, M.~Palombo, M.~Santin, F.~Branzoli, A.-C. Philippe, D.~Wassermann,
-  M.-S. Aigrot, B.~Stankoff, H.~Zhang, S.~Lehericy, A.~Petiet, D.~C. Alexander,
-  O.~Ciccarelli, and I.~Drobnjak, ``{Deep neural network based framework for
-  in-vivo axonal permeability estimation},'' in {\em 26th Annual Meeting of the
-  International Society for Magnetic Resonance in Medicine (ISMRM)}, 2018.
-
-\bibitem{Palombo2018a}
-M.~Palombo, I.~Hill, M.~D. Santin, F.~Branzoli, A.-C. Philippe, D.~Wassermann,
-  M.-S. Aigrot, B.~Stankoff, H.~Zhang, S.~Lehericy, A.~Petiet, D.~C. Alexander,
-  and I.~Drobnjak, ``{Machine learning based estimation of axonal permeability:
-  validation on cuprizone treated in-vivo mouse model of axonal
-  demyelination},'' in {\em Proc. Joint Annual Meeting ISMRM-ESMRMB, Paris,
-  France}, 2018.
-
-\bibitem{Rensonnet2018}
-G.~Rensonnet, B.~Scherrer, G.~Girard, A.~Jankovski, S.~K. Warfield, B.~Macq,
-  J.-P. Thiran, and M.~Taquet, ``{Towards microstructure fingerprinting:
-  Estimation of tissue properties from a dictionary of Monte Carlo diffusion
-  MRI simulations},'' {\em NeuroImage}, vol.~184, no.~May 2018, pp.~964--980,
-  2018.
 
 \end{thebibliography}

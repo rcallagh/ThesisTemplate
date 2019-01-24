@@ -1,0 +1,19 @@
+
+
+\begin{figure}
+  \centering
+  \begin{ganttchart}[
+    x unit = 0.02cm,
+    time slot format = isodate-yearmonth,
+    time slot unit=month
+    ]{2019-1}{2020-10}
+    \gantttitlecalendar{year,month}\\
+    \ganttbar{}{2019-1}{2019-3}
+  \end{ganttchart}
+
+\end{figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

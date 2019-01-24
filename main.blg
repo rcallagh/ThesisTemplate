@@ -8,9 +8,11 @@ A level-1 auxiliary file: src/literature_review.aux
 A level-1 auxiliary file: src/config.aux
 A level-1 auxiliary file: src/cudamino.aux
 A level-1 auxiliary file: src/future.aux
+A level-1 auxiliary file: src/publications.aux
 The style file: ieeetr.bst
 Database file #1: references.bib
 Warning--can't use both author and editor fields in NAP1785
+Warning--empty publisher in Johansen-Berg2013
 Warning--empty publisher in Levitt2008
 Warning--empty publisher in Barker2009
 Warning--empty publisher in DeGraaf2007
@@ -21,45 +23,45 @@ Warning--empty publisher in Logan2007
 Warning--empty publisher in Iserles2009
 Warning--empty publisher in Stiles2001
 Warning--can't use both volume and number fields in Rensonnet2015
-You've used 84 entries,
+You've used 92 entries,
             1876 wiz_defined-function locations,
-            1056 strings with 21557 characters,
-and the built_in function-call counts, 25340 in all, are:
-= -- 2520
-> -- 1114
+            1103 strings with 23502 characters,
+and the built_in function-call counts, 27764 in all, are:
+= -- 2754
+> -- 1237
 < -- 0
-+ -- 405
-- -- 321
-* -- 1890
-:= -- 3571
-add.period$ -- 96
-call.type$ -- 84
-change.case$ -- 72
++ -- 449
+- -- 357
+* -- 2076
+:= -- 3924
+add.period$ -- 105
+call.type$ -- 92
+change.case$ -- 79
 chr.to.int$ -- 0
-cite$ -- 95
-duplicate$ -- 1251
-empty$ -- 2245
-format.name$ -- 321
-if$ -- 6124
+cite$ -- 104
+duplicate$ -- 1365
+empty$ -- 2452
+format.name$ -- 357
+if$ -- 6701
 int.to.chr$ -- 0
-int.to.str$ -- 84
-missing$ -- 94
-newline$ -- 267
-num.names$ -- 84
-pop$ -- 229
+int.to.str$ -- 92
+missing$ -- 103
+newline$ -- 292
+num.names$ -- 92
+pop$ -- 250
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 896
+skip$ -- 975
 stack$ -- 0
-substring$ -- 1810
-swap$ -- 569
+substring$ -- 1978
+swap$ -- 619
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 11
-while$ -- 254
-width$ -- 86
-write$ -- 846
-(There were 11 warnings)
+warning$ -- 12
+while$ -- 280
+width$ -- 94
+write$ -- 924
+(There were 12 warnings)

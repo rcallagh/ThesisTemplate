@@ -2,6 +2,14 @@
 \renewcommand{\LifeChapter}{y}
 \chapter{Background}
 \label{sec:background}
+\chaptertoc{}
+
+\begin{chapterabstract}
+  This chapter introduces the physics behind \ac{dMRI} as well as some techniques used for the simulation of \ac{dMRI}.
+  Firstly, general MR physics is introduced building up from a single proton to the generation of the spin echo signal.
+  The second section discusses how the diffusion of water molecules impacts the MR signal, leading to the diffusion signal attenuation.
+  The third section introduces some simulation approaches which can be used to generate synthetic \ac{dMRI} data and the final section discusses the \ac{GPU} and how it may be used to accelerate \ac{dMRI} simulations. 
+\end{chapterabstract}
 
 \section{MR Physics}
 \label{sec:bg_mri_physics}
@@ -179,7 +187,8 @@ The interaction between the magnetisation and magnetic fields is described by th
 
 The magnetisation arises from a sum of independent magnetic moments, meaning that we could represent the magnetisation as 
 \begin{equation}
-	\mathbf{M} = \sum_i \mu_i \,,
+	\mathbf{M} = \sum_i \boldsymbol{\mu}_i \,,
+        \label{eq:net_magnetisation}
 \end{equation}
 with $i$ indicating a sum over all the spins in the sample.
 This definition for $\mathbf{M}$ can be combined with the equation of motion for a single spin, \Cref{eq:dmudt}, to give \cite{Haacke1999}
@@ -239,7 +248,7 @@ Combining \Cref{eq:bloch_norelx,eq:bloch_norely,eq:bloch_norelz} and \Cref{eq:bl
 	\frac{d\mathbf{M}_z(t)}{dt} &= \gamma \left(\mathbf{M}_x(t)\mathbf{B}_1\sin(\omega t) - \mathbf{M}_y(t)\mathbf{B}_1\cos(\omega t) \right) - \frac{\mathbf{M}_z(t) - \mathbf{M}_0}{\mathrm{T}_1}\,. \label{eq:bloch_labz}
 \end{align}
 
-$\mathrm{T}_2$ is used to refer to relaxation due to intrinsic spin-spin interactions which cause spins to accrue phase relative to one another and thus the magnitude of the net transverse magnetisation is reduced.
+$\mathrm{T}_2$ is used to refer to relaxation due to intrinsic spin-spin interactions which cause spins to accrue phase relative to one another and thus the magnitude of the net transverse magnetisation is reduced when taking the sum in \Cref{eq:net_magnetisation} .
 Other effects can also contribute to the loss of transverse magnetisation, such as magnetic field inhomogeneities which can add to the $\mathrm{T}_2$ relaxation.
 This is referred to as $\mathrm{T}_2^*$, with
 \begin{equation}
@@ -410,7 +419,7 @@ After a time equal to the time between the 90\degree\ and 180\degree\ pulses, at
 
 The signal at point 4 will still be lower in magnitude than that at point 1 since the $\mathrm{T}_2$ relaxation will still occur as it is an inherent property of the matter. 
 The spin echo does, however, refocus the $\mathbf{B}_0$ inhomogeneities. 
-The time between the 90\degree\ pulse and the formation of the echo is known as the echo time (TE). 
+The time between the 90\degree\ pulse and the formation of the echo is known as the \ac{TE}. 
 
 The spin echo sequence shown in \Cref{fig:spinecho} forms the basis of the standard \ac{PGSE} diffusion MRI sequence which is introduced in the following section, along with a description of the physics behind diffusion MRI. 
 
@@ -434,37 +443,38 @@ The thermal kinetic energy of particles causes them to move around rapidly, howe
 Diffusion \ac{MRI} sensitises the MR signal to this motion by exploiting the dephasing of spins as a result of magnetic field gradients.
 
 
-The magnetic field will generally have a uniform component from the main $B_0$ field, and spatially and/or time varying components due to deliberate magnetic field gradients or typically unwanted effects such as magnetic susceptibility inhomogeneities and concomitant fields \cite{Haacke1999}. In general, $B(\mathbf{r}(t), t)$, the magnitude of the magnitude of the magnetic field at a position $\mathbf{r}(t)$ at time $t$ is given by
+The magnetic field will generally have a uniform component from the main $B_0$ field, and spatially and/or time varying components due to deliberate magnetic field gradients or typically unwanted effects such as magnetic susceptibility inhomogeneities and concomitant fields \cite{Haacke1999}. In general, $B(\mathbf{r}, t)$, the magnitude of the magnitude of the magnetic field at a position $\mathbf{r}$ at time $t$ is given by
 \begin{equation}
-  B(\mathbf{r}(t), t) = |\mathbf{B}| = |B_0\mathbf{\hat{z}} + \mathbf{\Delta B}(\mathbf{r}(t), t)|\,,
+  B(\mathbf{r}, t) = |\mathbf{B}| = |B_0\mathbf{\hat{z}} + \mathbf{\Delta B}(\mathbf{r}, t)|\,,
   \label{eq:mod_B}
 \end{equation}
-where $\mathbf{\Delta B}(\mathbf{r}(t), t)$ accounts for all of the variation in the magnetic field away from $B_0$. Note that $\mathbf{\Delta B}(\mathbf{r}(t), t)$ is a vector quantity which may have components in the $\mathbf{\hat{x}}$ and $\mathbf{\hat{y}}$ directions. 
+where $\mathbf{\Delta B}(\mathbf{r}, t)$ accounts for all of the variation in the magnetic field away from $B_0$. Note that $\mathbf{\Delta B}(\mathbf{r}, t)$ is a vector quantity which may have components in the $\mathbf{\hat{x}}$ and $\mathbf{\hat{y}}$ directions. 
 
-An idealised expression for $\mathbf{\Delta B}(\mathbf{r}(t), t)$ often applied to \ac{MRI} assumes that all of the change in the magnetic field is due to an applied magnetic field gradient, $\mathbf{g}(\mathbf{r}(t), t)$, which only has a significant $\mathbf{\hat{z}}$ component. This means that \Cref{eq:mod_B} can be written as
+An idealised expression for $\mathbf{\Delta B}(\mathbf{r}, t)$ often applied to \ac{MRI} assumes that all of the change in the magnetic field is due to an applied magnetic field gradient, $\mathbf{g}(\mathbf{r}, t)$, which only has a significant $\mathbf{\hat{z}}$ component. This means that \Cref{eq:mod_B} can be written as
 \begin{align}
-  B(\mathbf{r}(t), t) &= \left|B_0\mathbf{\hat{z}} + \left(\mathbf{g}(\mathbf{r}(t), t)\cdot\mathbf{r}(t)\right) \mathbf{\hat{z}}\right|\,,\nonumber \\
-                      &= B_0 + \mathbf{g}(\mathbf{r}(t), t)\cdot\mathbf{r}(t)\,.
+  B(\mathbf{r}, t) &= \left|B_0\mathbf{\hat{z}} + \left(\mathbf{g}(\mathbf{r}, t)\cdot\mathbf{r}\right) \mathbf{\hat{z}}\right|\,,\nonumber \\
+                      &= B_0 + \mathbf{g}(\mathbf{r}, t)\cdot\mathbf{r}(t)\,.
                         \label{eq:mod_B_ideal}
 \end{align}
 
 Magnetic field gradients introduce a deliberate variation in the magnetic field which, according to \Cref{eq:LarmorFreq}, causes the Larmor frequency to vary spatially as well temporally.
 
 Since the Larmor frequency varies spatially, spins in different locations will precess at different frequencies and accrue a phase shift relative to spins in different locations. 
-The incremental phase, $d\phi$, accrued for a single spin in an infinitesimal time, $dt$, % assuming a gradient in the $z$ direction
+The incremental phase, $d\phi$, accrued for a single spin, $i$, in an infinitesimal time, $dt$, % assuming a gradient in the $z$ direction
 is given by
 \begin{equation}
   % \phi(t, \mathbf{g}(\mathbf{r}(t), t)) = \gamma B_0 t + \gamma \int_0^t \mathbf{g}(\mathbf{r}(t'), t')\cdot\mathbf{r}(t')dt'\,,
   % \label{eq:phase_singlespin}
-  d\phi = \gamma B(\mathbf{r}(t), t) dt\,,
+  d\phi_i = \gamma B(\mathbf{R}_i(t), t) dt\,,
   \label{eq:dphi}
 \end{equation}
 % where $\gamma$ is the gyromagnetic ratio, $B_0$ is the main field strength, $\mathbf{r}(t')$ is the position of the particle and $\mathbf{g}(\mathbf{r}(t'), t')$ is the (potentially spatially varying and time-dependent) magnetic field gradient.
-where $\gamma$ is the gyromagnetic ratio and  $\mathbf{r}(t)$ is the position of the particle. %and $B(\mathbf{r}(t), t)$ is the magnitude of the magnetic field at position $\mathbf{r}(t)$ and time $t$.
+where $\gamma$ is the gyromagnetic ratio and  $\mathbf{R}_i(t)$ is the position of the particle at time $t$. %and $B(\mathbf{r}(t), t)$ is the magnitude of the magnetic field at position $\mathbf{r}(t)$ and time $t$.
 
 Putting \Cref{eq:mod_B_ideal} into \Cref{eq:dphi} and integrating over the time of the diffusion experiment will give the total phase accrued for a single spin:
 \begin{equation}
-  \phi(t, \mathbf{g}(\mathbf{r}(t), t)) = \gamma B_0 t + \gamma \int_0^t \mathbf{g}(\mathbf{r}(t'), t')\cdot\mathbf{r}(t')dt'\,,
+  % \phi(t, \mathbf{g}(\mathbf{R}_i(t), t)) = \gamma B_0 t + \gamma \int_0^t \mathbf{g}(\mathbf{R}_i(t'), t')\cdot\mathbf{R}_i(t')dt'\,,
+  \phi(\mathbf{R}_i(t)) = \gamma B_0t + \gamma\int_0^t\mathbf{g}(\mathbf{R}_i(t'), t')\cdot\mathbf{R}_i(t')dt'\,,
   \label{eq:phase_singlespin}
 \end{equation}
 
@@ -486,31 +496,37 @@ In the ideal case, each pulse is rectangular with a gradient strength, $G$, and 
 
 The effect of this pulse sequence can be simplified by considering the case when $\delta \ll \Delta$. This is known as the \ac{SGP} approximation and means that the motion of spins during the pulses can be ignored. 
 
-Under the \ac{SGP} approximation, the phase accrued by a spin at a position $\mathbf{r}$ during a pulse, ignoring the effect of the $B_0$ field,  will be
+Under the \ac{SGP} approximation, the phase accrued by a spin at a position $\mathbf{R}_0$ during a pulse at a time $t_0$ will be
 \begin{equation}
-  \phi(\mathbf{r}) = \gamma \delta \mathbf{g(r)}\cdot\mathbf{r}\,.
+  \phi(\mathbf{R}_0) = \gamma B_0\delta +  \gamma \delta \mathbf{g(R_0)}\cdot\mathbf{R_0}\,.
   \label{eq:phi_single_SGP}
 \end{equation}
+Here, $\mathbf{R}_0$ refers to the spin position at time $t=t_0$ and is not time-dependent, because under the SGP approximation the motion of spins during the pulse is assumed to be negligible. 
 
-A spin which is at a position $\mathbf{r}_0$ during the first pulse and then diffuses to a position $\mathbf{r}_1$ during the second pulse will therefore have a phase shift of
+The 180\degree\ pulse in the \ac{PGSE} sequence is crucial, since it flips the orientation of the spins' magnetic moments as in the spin echo sequence in \Cref{fig:spinecho}.
+Not only does this refocus $\mathrm{T}_2^*$ effects as outlined in \Cref{sec:spin_echoes}, but it means that the phase accrued during the second gradient pulse has opposite sign to the phase accrued during the first spin. 
+
+A spin which is at a position $\mathbf{R}_0$ during the first pulse and then diffuses to a position $\mathbf{R}_1$ during the second pulse will therefore have a phase shift of 
 \begin{equation}
-  \phi(\mathbf{r}_1 - \mathbf{r}_0) = \gamma\delta\mathbf{g} \cdot \left(\mathbf{r}_1 - \mathbf{r}_0\right)\,.
+  \Delta\phi(\mathbf{R}_1 - \mathbf{R}_0) = \gamma\delta\mathbf{g} \cdot \left(\mathbf{R}_1 - \mathbf{R}_0\right)\,.
   \label{eq:delta_phi}
 \end{equation}
 
-The total MR signal comes from an ensemble of spins, each with their own random Brownian motion and thus, from \Cref{eq:delta_phi}, their own phase.
-To get to the total MR signal, we need to consider the probability that a particle starts at position $\mathbf{r}_0$ (i.e. the initial spin density, $\rho(\mathbf{r}_0)$) and the probability that a particle which starts at $\mathbf{r}_0$ moves to $\mathbf{r}_1$ during the time $\Delta$, $P(\mathbf{r}_0, \mathbf{r}_1, \Delta)$.
+The $B_0$ term from \Cref{eq:phi_single_SGP} is the same for both gradient pulses, meaning that during the subtraction in \Cref{eq:delta_phi} it cancels and the only phase shift comes from the diffusive motion.
+
+The total MR signal comes from an ensemble of spins, each with their own random Brownian motion and thus, from \Cref{eq:delta_phi}, their own relative phase shift.
+To get to the total MR signal, we need to consider the probability that a particle starts at position $\mathbf{R}_0$ (i.e. the initial spin density, $\rho(\mathbf{R}_0)$) and the probability that a particle which starts at $\mathbf{R}_0$ moves to $\mathbf{R}_1$ during the time $\Delta$, $P(\mathbf{R}_0, \mathbf{R}_1, \Delta)$.
 Putting these together, gives an expression for the total MR signal\cite{Price1997,Stejskal1965}:
 \begin{equation}
-  S(\mathbf{g}, \Delta) = S(\mathbf{0}, \Delta)\int\int \rho(\mathbf{r}_0)P(\mathbf{r}_0, \mathbf{r}_1, \Delta) e^{i\gamma\delta\mathbf{g} \cdot (\mathbf{r}_1 - \mathbf{r}_0)}  d\mathbf{r}_0d\mathbf{r}_1\,.
+  S(\mathbf{g}, \Delta) = S(\mathbf{0}, \Delta)\int\int \rho(\mathbf{R}_0)P(\mathbf{R}_0, \mathbf{R}_1, \Delta) e^{i\gamma\delta\mathbf{g} \cdot (\mathbf{R}_1 - \mathbf{R}_0)}  d\mathbf{R}_0d\mathbf{R}_1\,.
   \label{eq:total_signal_sgp}
 \end{equation}
 
-This quantity, $P(\mathbf{r}_0, \mathbf{r}_1, t)$, is known as the diffusion propagator and is of great interest for diffusion MRI.
-$P(\mathbf{r}_0, \mathbf{r}_1, t)$ encodes the information about the environment in which the spins are diffusing. 
+This quantity, $P(\mathbf{R}_0, \mathbf{R}_1, \Delta)$, is known as the diffusion propagator and is of great interest for diffusion MRI.
+$P(\mathbf{R}_0, \mathbf{R}_1, \Delta)$ encodes the information about the environment in which the spins are diffusing. 
 For diffusion in an isotropic, homogeneous medium, the diffusion propagator is a Gaussian distribution \cite{Price1997}:
 \begin{equation}
-  P(\mathbf{r}_0, \mathbf{r}_1, t) = \left(4\pi Dt\right)^{-\sfrac{3}{2}}\exp\left(-\frac{(\mathbf{r}_1 - \mathbf{r}_0)^2}{4Dt}\right)\,.
+  P(\mathbf{R}_0, \mathbf{R}_1, t) = \left(4\pi Dt\right)^{-\sfrac{3}{2}}\exp\left(-\frac{(\mathbf{R}_1 - \mathbf{R}_0)^2}{4Dt}\right)\,.
   \label{eq:propagator_diffusion}
 \end{equation}
 
@@ -546,10 +562,10 @@ where $S(t, \mathbf{0})$ is the signal with no gradients applied. $P(\phi, t)$ i
 
 From \Cref{eq:phase_singlespin}, we see that the individual phases, and thus the phase distribution, depend on the motion of the particles as well as the description of the diffusion sensitising gradient (in the case of standard pulsed gradient experiment that is the timing, strength, duration and orientation of the gradient) \cite{Price1997}.
 
-This quantity, $P(\phi, t)$, is closely related to another property of great interest for diffusion MRI known as the diffusion propagator, $P(\mathbf{r}_0, \mathbf{r}_1, t)$. $P(\mathbf{r}_0, \mathbf{r}_1, t)$ is the probability that a particle initially at a position $\mathbf{r}_0$ moves to $\mathbf{r}_1$ in a time $t$.
+This quantity, $P(\phi, t)$, is closely related to another property of great interest for diffusion MRI known as the diffusion propagator, $P(\mathbf{R}_0, \mathbf{R}_1, t)$. $P(\mathbf{R}_0, \mathbf{R}_1, t)$ is the probability that a particle initially at a position $\mathbf{R}_0$ moves to $\mathbf{R}_1$ in a time $t$.
 For diffusion in an isotropic, homogeneous medium, the diffusion propagator is a Gaussian distribution \cite{Price1997}:
 \begin{equation}
-  P(\mathbf{r}_0, \mathbf{r}_1, t) = \left(4\pi Dt\right)^{-\sfrac{3}{2}}\exp\left(-\frac{(\mathbf{r}_1 - \mathbf{r}_0)^2}{4Dt}\right)\,.
+  P(\mathbf{R}_0, \mathbf{R}_1, t) = \left(4\pi Dt\right)^{-\sfrac{3}{2}}\exp\left(-\frac{(\mathbf{R}_1 - \mathbf{R}_0)^2}{4Dt}\right)\,.
   \label{eq:propagator_diffusion}
 \end{equation}
 
@@ -560,11 +576,11 @@ For diffusion in an isotropic, homogeneous medium, the diffusion propagator is a
 As well as describing the \ac{dMRI} signal considering the microscopic diffusion of spins, a macroscopic formulation can be derived considering Fick's laws of diffusion. The combination of the Bloch equations (\Cref{eq:blochx,eq:blochy,eq:blochz}) with Fick's second law of diffusion leads to the \ac{BT} equations, proposed by H.\ C.\ Torrey in 1956\cite{Torrey1956,Callaghan1991,Price2009}:
 
 \begin{equation}
-  \frac{\partial\mathbf{M(r},t)}{\partial t} = \gamma \mathbf{M \times B(r}, t) - \frac{M_x\mathbf{\hat{x}} + M_y\mathbf{\hat{y}}}{\mathrm{T}_2} - \frac{(M_z - M_0)\mathbf{\hat{z}}}{\mathrm{T}_1} + \nabla \cdot \mathbf{D} \cdot \nabla \mathbf{M} - \nabla \cdot \mathbf{vM}\,.
+  \frac{\partial\mathbf{M(r},t)}{\partial t} = \gamma \mathbf{M \times B(r}, t) - \frac{M_x\mathbf{\hat{x}} + M_y\mathbf{\hat{y}}}{\mathrm{T}_2} - \frac{(M_z - M_0)\mathbf{\hat{z}}}{\mathrm{T}_1} + \nabla \cdot \left(\mathbf{D} \nabla \mathbf{M}\right)\,.
   \label{eq:bloch_torrey}
 \end{equation}
 
-Here, the final term describes the evolution of the magnetisation due to a flow, described by a velocity field $\mathbf{v}$. This term is often dropped, assuming no net flow, in the application to \ac{dMRI}. 
+This version of the \ac{BT} equation is sometimes referred to as the standard \ac{BT} equation. An additional term can be added to account for the evolution of the magnetisation due to a flow, described by a velocity field $\mathbf{v}$ to get the generalised \ac{BT} equation \cite{Jeener2002}. This flow term is often dropped, assuming no net flow, in the application to \ac{dMRI}, leaving \Cref{eq:bloch_torrey}. 
 $\mathbf{D}$ is the diffusion tensor, a generalisation of the diffusion coefficient, $D$, to allow for anisotropic diffusion. In short, this means that diffusion happens at a different rate in different directions.
 It is the $\mathbf{D}$ term which encodes the evolution of the magnetisation when there is diffusion.
 
@@ -577,7 +593,7 @@ For complex geometries, as with the case above, we must rely on computational me
 
 \section{Diffusion Simulation}
 \label{sec:diffusion_simulation}
-Diffusion simulations attempt to evaluate \Cref{eq:sig_phi_complex} computationally. Simulation approaches broadly fall into two categories: numerical solutions of the \ac{BT} and \ac{MC} simulations of the diffusion dynamics. This section introduces these techniques, highlighting the some of the similarities and differences between them. 
+Diffusion simulations attempt to evaluate \Cref{eq:sig_phi_complex} or \Cref{eq:sig_phi_complex} computationally. Simulation approaches broadly fall into two categories: numerical solutions of the \ac{BT} equation and \ac{MC} simulations of the diffusion dynamics. This section introduces these techniques, highlighting the some of the similarities and differences between them. 
 
 
 At a high level, all diffusion simulations have three common components: the substrate, the diffusion dynamics and the measurement.

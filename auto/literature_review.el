@@ -6,6 +6,7 @@
     "sec:app_numerical_solutions"
     "sec:app_monte_carlo_packages"
     "sec:app_monte_carlo_numerical_phantoms"
-    "sec:review_gpu"))
+    "sec:review_gpu"
+    "sec:review_conclusions"))
  :latex)
 

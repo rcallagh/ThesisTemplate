@@ -4,15 +4,12 @@
    (LaTeX-add-labels
     "sec:cudamino"
     "sec:cudamino_design"
-    "fig:cudamino_cyl"
-    "fig:cyl_tmax_sig"
-    "fig:cyl_tmax_diff"
-    "fig:cyl_tmax"
-    "fig:cyl_nspin_sig"
-    "fig:cyl_nspin_diff"
-    "fig:cyl_nspin"
-    "tab:cyl_tmax_time"
-    "tab:cyl_nspin_time"
+    "fig:cudamino_cuboid"
+    "sec:cudamino_experiments"
+    "fig:cuboid_cudamino_tmax"
+    "fig:cuboid_cudamino_nspin"
+    "tab:cuboid_results"
+    "tab:cuboid_timing"
     "sec:cudamino_discussion"))
  :latex)
 

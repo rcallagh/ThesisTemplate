@@ -95,9 +95,31 @@
 
     \@thesisdate % Date\
   \end{center}
-  \end{titlepage}
+\end{titlepage}
+\funding
  
 }
+
+% \newpage
+\def\funding
+{%
+	\cleardoublepage
+	\thispagestyle{empty}
+	\begin{center}
+		\Large \sffamily
+		
+		This work is supported by the EPSRC-funded UCL Centre for Doctoral Training in Medical Imaging (EP/L016478/1) and the Department of Health's NIHR-funded Biomedical Research Centre at UCLH  %\vspace*{\fill}
+		\\[2em]
+		%\hspace{2em}\includegraphics[height=2cm]{template/logos/epsrc.eps}
+		\\[2em]
+		\hfill\includegraphics[height=2cm]{template/logos/epsrc.eps}
+		\hfill\includegraphics[height=2cm]{template/logos/cdt.png}
+		\hfill\\[2em]
+	\end{center}
+	\vspace*{\fill}
+}
+
+\makeatother
 
   %%%%%%%%%%%%%%%%%%%%%%%%% Copyright Page %%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -172,23 +194,9 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%% Third Page %%%%%%%%%%%%%%%%%%%%%%%%%
-% \newpage
-\def\funding
-{%
-  \cleardoublepage
-  \thispagestyle{empty}
-  \begin{center}
-    \Large \sffamily
 
-    This work is supported by the EPSRC-funded UCL Centre for Doctoral Training in Medical Imaging (EP/L016478/1) and the Department of Health's NIHR-funded Biomedical Research Centre at UCLH This work is supported by the EPSRC-funded UCL Centre for Doctoral Training in Medical Imaging (EP/L016478/1) and the Department of Health's NIHR-funded Biomedical Research Centre at UCLH  %\vspace*{\fill}
-    \\[2em]
-    \hspace{2em}\includegraphics[height=3cm]{template/logos/epsrc.eps}
-    \\[2em]
-    \hfill\includegraphics[height=2.75cm]{template/logos/cdt.png}
-    \hfill\includegraphics[height=2.75cm]{template/logos/cmic.png}
-    \hfill\\[2em]
-  \end{center}
-  \vspace*{\fill}
-}
 
-\makeatother
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

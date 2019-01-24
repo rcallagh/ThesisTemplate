@@ -1,10 +1,18 @@
 \chapter{Future Plan}
 \label{sec:future}
 
-The aim of this report was to present work towards improving the realism of diffusion MRI simulations.
-\Cref{sec:config,sec:cudamino} present \ac{ConFiG} and CUDAmino, two parallel works towards this aim with \ac{ConFiG} improving the realism of \ac{WM} substrates for diffusion and CUDAmino providing \ac{GPU} accelerated simulations.
-There are however, many aspects of both methods which could be improved.
-This section addresses some of the planned future adjustments to both methods as well as some potential applications. 
+\chaptertoc{}
+
+\begin{chapterabstract}
+  This chapter lays out the future plan for the remainder of the PhD.
+  \Cref{sec:future_config,sec:future_cudamino,sec:future_applications} outline various avenues for improvement for both \ac{ConFiG} and CUDAmino as well as some potential applications for them.
+  \Cref{sec:future_plan_of_action} brings these potential ideas for improvement together into a concrete plan of future work for this project. 
+\end{chapterabstract}
+
+% The aim of this report was to present work towards improving the realism of diffusion MRI simulations.
+% \Cref{sec:config,sec:cudamino} present \ac{ConFiG} and CUDAmino, two parallel works towards this aim with \ac{ConFiG} improving the realism of \ac{WM} substrates for diffusion and CUDAmino providing \ac{GPU} accelerated simulations.
+% There are however, many aspects of both methods which could be improved.
+% This section addresses some of the planned future adjustments to both methods as well as some potential applications. 
 
 \section{Improving ConFiG}
 \label{sec:future_config}
@@ -93,7 +101,24 @@ The MEMENTO challenge presents an opportunity for ConFiG to make an important co
 Additionally, \ac{ConFiG} may be used to train a machine learning tool directly for the estimation of parameters, in a similar manner to Hill et al.\ and Palombo et al.\ \cite{Hill2018,Palombo2018a} for estimating permeability and the fingerprinting approach of Rensonnet et al.\ \cite{Rensonnet2018}.
 The basic idea would be to generate a range of \ac{WM} substrates covering a realistic range of microstructure parameters.
 Simulated \ac{dMRI} signals could then be generated using Camino or CUDAmino to generate microstructure-signal pairs.
-These could then be used to train a machine learning tool to infer the microstructure directly from the signal. 
+These could then be used to train a machine learning tool to infer the microstructure directly from the signal.
+This approach could yield better estimations of microstructural parameters than the previous studies due to \ac{ConFiG}'s ability to produce more realistic \ac{WM} substrates.
+Rather than simple straight cylinders, \ac{ConFiG} will be able to incorporate complex features such as orientation dispersion and diameter variations. 
+
+
+\section{Plan of Action}
+\label{sec:future_plan_of_action}
+An expected timeline for the remainder of the PhD is shown in \Cref{fig:future_gantt}. The main work moving forward in this project will be to improve and apply \ac{ConFiG} for the generation of realistic \ac{WM} substrates. Three papers are planned to be completed by the end of the PhD:
+\begin{enumerate}
+\item A presentation of \ac{ConFiG} in its current state, including the experiments shown in this report and the planned experiment mentioned in \Cref{sec:future_config}.
+\item The extension of \ac{ConFiG} to incorporate the concurrent growth of fibres.
+\item The application of \ac{ConFiG} to train a machine learning tool for microstructural parameter estimation including the complex morphological features that can be generated with \ac{ConFiG}
+\end{enumerate}
+
+Paper 1 should be completed relatively soon after the MPhil Upgrade, since a lot of the work has already been presented in this report and conference submissions (see Publications appendix).
+The other two papers are expected to require 6-8 months each for the development of the methods, experiments and writing up. Around four months at the end of the PhD is set aside for writing the thesis.
+
+\input{src/future_gantt}
 
 %%%Local Variables:
 %%% mode: latex

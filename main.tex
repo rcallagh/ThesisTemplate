@@ -13,11 +13,12 @@
    src/cudamino,
    src/conclusions,
    src/future,
+   src/publications,
  }
 
 
 
-\newcommand{\titleinfo}{Improving the realism of diffusion MRI simulations}
+\newcommand{\titleinfo}{Generation of realistic white matter substrates with controllable morphology for diffusion MRI simulations}
 
 \pagenumbering{Alph}
 \begin{document}
@@ -95,7 +96,8 @@
 
 \phantomsection
 \addcontentsline{toc}{chapter}{Contents}
-{\tableofcontents}
+
+\tableofcontents
 
 \renewcommand{\BrainFuckChapter}{
 }
@@ -117,7 +119,7 @@
 
 \pagestyle{scrheadings}
 \pagenumbering{arabic}
-%\include{src/plan}
+% \include{src/plan}
 \include{src/introduction}
 \include{src/background}
 \include{src/literature_review}
@@ -125,7 +127,9 @@
 \include{src/cudamino}
 %\include{src/conclusions}
 \include{src/future}
- 
+\begin{appendix}
+\include{src/publications}
+\end{appendix}
 \DeclareRobustCommand{\van}[3]{#2 #1}
 
 \renewcommand{\bibname}{References}
@@ -135,9 +139,9 @@
 \ifx\finalversion\undefined
 \listoftodos
 \fi
-% \appendix
+\appendix
 % \printindex
-% \input{src/acks}
+\input{src/acks}
 \end{document}
 
 %%% Local Variables:

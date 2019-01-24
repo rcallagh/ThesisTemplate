@@ -20,6 +20,7 @@
     "fig:energylevels"
     "fig:nutation"
     "sec:bg_bloch"
+    "eq:net_magnetisation"
     "eq:dMdt"
     "eq:circB1"
     "eq:bloch_norelx"

@@ -10,7 +10,9 @@
     "src/literature_review"
     "src/config"
     "src/cudamino"
-    "src/future")
+    "src/future"
+    "src/publications"
+    "src/acks")
    (TeX-add-symbols
     '("van" 3)
     "titleinfo")

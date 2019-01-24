@@ -1,7 +1,15 @@
 \chapter{Contextual Fibre Growth (ConFiG)}
 \label{sec:config}
 
+\chaptertoc{}
 
+\begin{chapterabstract}
+  This chapter introduces \ac{ConFiG}, a method for generating white matter (WM) numerical phantoms with more realistic orientation dispersion and packing density.
+  The algorithm behind \ac{ConFiG} is introduced, describing how each white matter fibre is grown individually to generate a densely packed substrate.
+  
+  Some experiments are presented, one of which explores how different inputs to \ac{ConFiG} impacts of the shape of resulting fibres. 
+  An application of the method to dMRI is demonstrated with simulations of diffusion-weighted MR signal in three example substrates with differing orientation-dispersions, packing-densities and permeabilities.
+\end{chapterabstract}
 
 
 \section{ConFiG: Contextual Fibre Growth}
@@ -122,7 +130,9 @@ l_d &= \max\left(0,\, \frac{1}{d_{0}} (d_0 - d_i)\right)\,,\label{eq:l_D}
 \end{align}
 $d_0$ is the desired radius of the fibre and $f$ is a weighting factor between the two terms. In this work, $f$ is fixed to 0.2 to more strongly weight growth toward the target.
 
-\Cref{eq:l_t} is the term penalising moving away from the target. The dot product between the vector to the candidate and the vector to the target ensures that the minimum cost occurs when the candidate is directly aligned with the target. 
+\Cref{eq:l_t} is the term penalising moving away from the target. The dot product between the vector to the candidate and the vector to the target ensures that the minimum cost occurs when the candidate is directly aligned with the target.
+This term of the cost function is inspired by the work of Bicho et al.\ \cite{Bicho2012} who use the space colonisation algorithm \cite{Runions2005,Runions2007} to simulate crowds.
+
 \Cref{eq:l_D} is the term penalising moving to a position where the radius of the fibre must shrink. 
 For radii lower than the desired radius of the fibre, $d_0$, \Cref{eq:l_D} grows linearly with distance from $d_0$. 
 For radii greater than or equal to $d_0$, \Cref{eq:l_D} is zero, meaning that regions of empty space are equally weighted.
@@ -270,8 +280,11 @@ The dependence of the final substrate on the number and arrangement of network n
 The substrates presented in \Cref{fig:substrates} are just a few examples of the kinds of substrates that can be produced using our ConFiG method.
 By varying the setup of the morphological controls and start and target points, many different fibre configurations can be produced.
 Currently, fibres will attempt to grow in a straight line between the start and target points, meaning that certain configurations such as kissing bundles cannot be represented.
-However, the algorithm can in principle be extended to allow for series of target points, allowing the definition of a desired 'path' of a fibre.
-Another alternative approach would be to adjust the cost function so that rather than maximising a dot product, it would minimise the distance to desired path which could allow any arbitrary path to be specified.
+However, the algorithm can in principle be extended to allow for series of target points, allowing the definition of a desired `path' of a fibre.
+
+This behaviour of attempting to grow in a straight line from start to target is due to the dot product term in the cost function which was inspired by Bicho et al.\ \cite{Bicho2012}.
+This method may not be ideal however, since the dot product is very local measure, so at any point you only know the direction towards the target, but have no information about any `desired' path. 
+An alternative approach would be to adjust the cost function so that rather than maximising a dot product, it would minimise the distance to desired path which could allow any arbitrary path to be specified.
 
 Additionally, some input parameter settings cannot be achieved.
 For instance, trying to grow a substrate with both very high density and very high dispersion will result in a final substrate that does not reach the density required.

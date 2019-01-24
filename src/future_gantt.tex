@@ -1,0 +1,39 @@
+
+% Gantt chart timetabling future work
+\begin{figure}
+  %\centering
+  \begin{ganttchart}[
+    hgrid,
+    vgrid,
+    %x unit = 0.75cm,
+    y unit title = 0.75cm,
+    y unit chart = 0.5cm
+    ]{1}{22}
+    \gantttitle{2019}{12}\gantttitle{2020}{10}\\
+    \gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,10}{1}\\
+    \ganttbar{MPhil Upgrade}{1}{1}\ganttmilestone{}{2}\\
+    %ConFiG Paper
+    \ganttgroup{Paper 1}{2}{4}\\
+    \ganttbar{Experiments}{2}{3}\\
+    \ganttbar{Writing}{3}{4}\\
+    %Concurrent Growth Paper
+    \ganttgroup{Paper 2}{5}{11}\\
+    \ganttbar{Development}{5}{7}\\
+    \ganttbar{Experiments}{7}{9}\\
+    \ganttbar{Writing}{9}{11}\\
+    % Applications Paper
+    \ganttgroup{Paper 3}{11}{18}\\
+    \ganttbar{Development}{11}{13}\\
+    \ganttbar{Experiments}{14}{16}\\
+    \ganttbar{Writing}{16}{18}\\
+    % Thesis
+    \ganttgroup{Thesis}{19}{22}
+  \end{ganttchart}
+  \caption{Timetable of planned future work}
+  \label{fig:future_gantt}
+\end{figure}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:
