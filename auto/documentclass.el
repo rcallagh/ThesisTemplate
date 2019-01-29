@@ -2,6 +2,6 @@
  "documentclass"
  (lambda ()
    (TeX-add-symbols
-    "tt"))
+    "finalversion"))
  :latex)
 

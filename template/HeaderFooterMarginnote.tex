@@ -86,12 +86,12 @@
   \llap{\pagemark~}%
 }
 
-% Right (odd page numbers) footer
+%Right (odd page numbers) footer
 \rofoot[%
-  \PageNumDecor{0.1,0}{rb}{\cantorDecoration[\IfInteger{\thepage}{\lifeAnimation{\thepage}}{\lifeAnimation{1}}]}%
+  \PageNumDecor{0.1,0}{rb}{\cantorDecoration[\IfInteger{\thepage}{}{}]}%
   \rlap{~\pagemark~}%
 ] {%
-  \PageNumDecor{0.1,0}{rb}{\cantorDecoration[\IfInteger{\thepage}{\lifeAnimation{\thepage}}{\lifeAnimation{1}}]}%
+  \PageNumDecor{0.1,0}{rb}{\cantorDecoration[\IfInteger{\thepage}{}{}]}%
   \rlap{~\pagemark~}%
 }
 
@@ -155,7 +155,7 @@
         %
         \ifx\finalversion\undefined
         \else
-        \node[opacity=0.05] (gofl) at (0.5\paperwidth,5.25cm) {
+        \node[opacity=0.025] (gofl) at (0.5\paperwidth,5.25cm) {
           \ifthenelse{\equal{\LifeChapter}{}}{}{
             \includegraphics[width=\paperwidth]{figures/myelin_bw3.eps}
           }

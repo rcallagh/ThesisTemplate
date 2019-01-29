@@ -21,47 +21,48 @@ Warning--empty publisher in Price2009
 Warning--can't use both volume and number fields in Logan2007
 Warning--empty publisher in Logan2007
 Warning--empty publisher in Iserles2009
+Warning--empty publisher in Kirk2013
 Warning--empty publisher in Stiles2001
 Warning--can't use both volume and number fields in Rensonnet2015
-You've used 92 entries,
+You've used 95 entries,
             1876 wiz_defined-function locations,
-            1103 strings with 23502 characters,
-and the built_in function-call counts, 27764 in all, are:
-= -- 2754
-> -- 1237
+            1121 strings with 24221 characters,
+and the built_in function-call counts, 28509 in all, are:
+= -- 2818
+> -- 1279
 < -- 0
-+ -- 449
-- -- 357
-* -- 2076
-:= -- 3924
-add.period$ -- 105
-call.type$ -- 92
-change.case$ -- 79
++ -- 464
+- -- 369
+* -- 2131
+:= -- 4033
+add.period$ -- 109
+call.type$ -- 95
+change.case$ -- 81
 chr.to.int$ -- 0
-cite$ -- 104
-duplicate$ -- 1365
-empty$ -- 2452
-format.name$ -- 357
-if$ -- 6701
+cite$ -- 108
+duplicate$ -- 1404
+empty$ -- 2525
+format.name$ -- 369
+if$ -- 6878
 int.to.chr$ -- 0
-int.to.str$ -- 92
-missing$ -- 103
-newline$ -- 292
-num.names$ -- 92
-pop$ -- 250
+int.to.str$ -- 95
+missing$ -- 107
+newline$ -- 302
+num.names$ -- 95
+pop$ -- 266
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 975
+skip$ -- 993
 stack$ -- 0
-substring$ -- 1978
-swap$ -- 619
+substring$ -- 2010
+swap$ -- 630
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 12
-while$ -- 280
-width$ -- 94
-write$ -- 924
-(There were 12 warnings)
+warning$ -- 13
+while$ -- 286
+width$ -- 97
+write$ -- 951
+(There were 13 warnings)

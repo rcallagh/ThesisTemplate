@@ -25,7 +25,10 @@ This will give an understanding of how the density and arrangement of network no
 
 A potential improvement to \ac{ConFiG} is to use more clever generation of the network nodes. Currently, nodes are generated throughout the entire space in which the fibres will grow.
 This is not necessary, however, since only the area immediately surrounding the fibres will matter for growth.
-For this reason, it should be possible to generate the network only in the immediate area in which the fibres are growing, allowing for a more dense sampling of the space.
+For this reason, it should be possible to generate the network only in the immediate area in which the fibres are growing, allowing for a more dense sampling of the space. 
+
+Additionally, this generation of the network only in the immediate area around the fibres shifts the growth pattern from growing one fibre at a time to a concurrent growth of fibres.
+This, coupled with the denser sampling of space due to the spatially smaller network should allow the generation of substrates at higher densities. 
 
 A further potential improvement to network generation could be to generate the nodes based on the desired path of the fibre.
 For instance, it may be possible to generate a dense cloud of nodes around the desired path of each fibre and sparsely fill the remaining space to prevent oversampling of space where fibres are unlikely to grow.
@@ -40,7 +43,7 @@ Since a node becomes inaccessible when it is within a fibre, the number of neigh
 This may be used to penalise moving to areas with low connectivity, since the likelihood of becoming stuck is higher.
 Furthermore, connectivity from second neighbours may be incorporated to give some information more than just one step ahead. 
 
-One additional improvement would be to allow the nodes in the network to move slightly.
+Another improvement would be to allow the nodes in the network to move slightly.
 For instance, when a fibre grows very close to a node, it may be possible to move that node away from the fibre, so that future fibres will not have to shrink as much when they access that node.
 One drawback of this approach is that by adjusting the physical position of the node, but not its connectivity, you may introduce intersections between fibres.
 It may be possible that any intersection can be solved using the Blender meshing procedure, however this should be investigated if dynamic adjustment of the node positions is to be implemented. 

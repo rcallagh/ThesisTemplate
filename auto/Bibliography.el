@@ -3,7 +3,8 @@
  (lambda ()
    (TeX-run-style-hooks
     "multibib"
-    "cleveref")
+    "cleveref"
+    "cite")
    (TeX-add-symbols
     '("van" 3))
    (LaTeX-add-lengths

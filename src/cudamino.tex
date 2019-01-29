@@ -4,8 +4,8 @@
 \chaptertoc{}
 
 \begin{chapterabstract}
-  This chapter introduces CUDAmino, a \ac{GPU} accelerated \ac{dMRI} simulator based on the \ac{MC} simulator that is part of the Camino software package \cite{Cook2006,Hall2009}. .
-  The main differences between CUDAmino and Camino are outlined and well as presenting some experiments assessing the performance of CUDAmino relative to Camino.
+  This chapter introduces CUDAmino, a \ac{GPU} accelerated \ac{dMRI} simulator based on the \ac{MC} simulator that is part of the Camino software package \cite{Cook2006,Hall2009}.
+  The main differences between CUDAmino and Camino are outlined as well as presenting some experiments assessing the performance of CUDAmino relative to Camino.
 \end{chapterabstract}
 
 
@@ -42,7 +42,7 @@ So far, aligning with the \ac{CPU} Camino implementation, CUDAmino uses a simple
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.7\textwidth]{figures/cudamino/cuboid_lores.png}
-  \caption{Simple lo-res cuboid used for testing CUDAmino. Cuboid dimensions are $2\,\mu$m$\times5\,\mu$m$\times10\,\mu$m and it has 12 triangular faces.}
+  \caption[Simple lo-res cuboid used for testing CUDAmino.]{Simple lo-res cuboid used for testing CUDAmino. Cuboid dimensions are $2\,\mu$m$\times5\,\mu$m$\times10\,\mu$m and it has 12 triangular faces.}
   \label{fig:cudamino_cuboid}
 \end{figure}
 
@@ -55,7 +55,7 @@ This simple substrate was chosen since the analytic solution for diffusion betwe
 The first experiment investigated the effect of the number of timesteps on the resulting simulated signal.
 As the number of timesteps increases, the step length decreases and the rejection sampling approach of CUDAmino should approach the reflection approach of Camino.
 
-Simulations were run in both Camino and CUDAmino with $n = 100000$ spins and $t_{max} = 1000, 10000, 50000$ and impermeable membranes.
+Simulations were run in both Camino and CUDAmino with $n = 100000$ spins and $t_{max} = 1000, 10000, 50000$ and impermeable membranes. Each experiment was repeated 5 times. 
 Simulated \ac{dMRI} signals were generated using a standard \ac{PGSE} sequence with $\Delta = 50$ ms, $\delta = 0.1$ ms (very small $\delta$ to approximate \ac{SGP} regime) and $b$-value ranging from 0 to 60 ms/$\mu$m$^2$.
 CUDAmino experiments are run on an NVIDIA TITAN Xp \ac{GPU} and Camino experiments are run on a 3.1GHz Intel Core i7 \ac{CPU}. 
 
@@ -81,7 +81,7 @@ CUDAmino experiments are run on an NVIDIA TITAN Xp \ac{GPU} and Camino experimen
 \begin{figure}
   \centering
   \includegraphics[width=0.8\textwidth]{figures/cudamino/new/cuboid_all_cudamino_tmax.eps}
-  \caption{CUDAmino simulations (dotted lines) versus analytic solutions (solid black lines) for diffusion in the three directions normal to faces of the cuboid in \Cref{fig:cudamino_cuboid}. $a$ is the separation between the faces in each direction. The simulated signals match the analytic signal well, with more deviation at higher $b$-value in general. }
+  \caption[CUDAmino simulations versus analytic solutions for varying $t_{max}$.]{CUDAmino simulations (dotted lines) versus analytic solutions (solid black lines) for diffusion in the three directions normal to faces of the cuboid in \Cref{fig:cudamino_cuboid}. $a$ is the separation between the faces in each direction. The simulated signals match the analytic signal well, with more deviation at higher $b$-value in general. }
   \label{fig:cuboid_cudamino_tmax}
 \end{figure}
 
@@ -91,10 +91,10 @@ CUDAmino experiments are run on an NVIDIA TITAN Xp \ac{GPU} and Camino experimen
 \Cref{fig:cuboid_cudamino_tmax} shows the results of the tests varying the number of timesteps for CUDAmino against the analytic solution for each direction normal to the planes of the cuboid. Here $a$ is the separation between the planes. In general, CUDAmino matches the the analytic signal, with slightly more deviation from the analytic solution at higher $b$-value.
 Whilst \Cref{fig:cuboid_cudamino_tmax} gives the impression that the error is highest for the largest separation, $a=10\,\mu$m, this is in part a consequence of the logarithm on the y-axis.
 
-\Cref{tab:cuboid_results} shows the mean error between both the CUDAmino and Camino signals anf the analytic solution for each value of $t_{max}$. This shows that the mean error is of a similar order for all three values of $a$. In general, the error reduces with higher $t_{max}$, though this is not the case for $a=2\mu\,m$. Additionally, the errors are similar for both CUDAmino and Camino, suggesting that the difference between the rejection sample and reflection approaches is minimal, at least for this simple substrate. 
+\Cref{tab:cuboid_results} shows the mean error between both the CUDAmino and Camino signals and the analytic solution for each value of $t_{max}$. This shows that the mean error is of a similar order for all three values of $a$. In general, the error reduces with higher $t_{max}$, though this is not the case for $a=2\,\mu m$. Additionally, the errors are similar for both CUDAmino and Camino, suggesting that the difference between the rejection sampling and reflection approaches is minimal, at least for this simple substrate. 
 
 A similar experiment was carried out, varying the number of spins rather than the number of timesteps.
-In this case, $t_{max}$ was fixed to 5000 and $n = 1000, 10000, 100000, 1000000$.
+In this case, $t_{max}$ was fixed to 5000 and $n = 1000, 10000, 100000$.
 The same \ac{PGSE} sequence parameters were used.
 
 \Cref{fig:cuboid_cudamino_nspin} shows the results of the tests varying $n$ for CUDAmino against the analytic solutions. Again, the simulations generally match the analytic solutions well, with higher $n$ matching more closely as would be expected. As in the $t_{max}$ varying case, the deviation from the analytic solution tends to increase with increased $b$-value.
@@ -141,8 +141,8 @@ This is likely due to $n=1000$ not being enough spins to fully exploit the paral
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/cudamino/new/cuboid_all_cudamino_nspin.eps}
-  \caption{CUDAmino simulations (dotted lines) versus analytical solutions (solid black lines) simulations within the cuboid in \Cref{fig:cudamino_cuboid} varying the number of spins, $n$.}
+  \includegraphics[width=0.8\textwidth]{figures/cudamino/new/cuboid_all_cudamino_nspin_no_1mil.eps}
+  \caption[CUDAmino simulations versus analytic solutions for varying $n$.]{CUDAmino simulations (dotted lines) versus analytical solutions (solid black lines) simulations within the cuboid in \Cref{fig:cudamino_cuboid} varying the number of spins, $n$.}
   \label{fig:cuboid_cudamino_nspin}
 \end{figure}
 
@@ -197,7 +197,7 @@ This is likely due to $n=1000$ not being enough spins to fully exploit the paral
 
     \hline
   \end{tabular}
-  \caption{Mean error between simulations and analytic results for the cuboid in \Cref{fig:cudamino_cuboid}. Values are absolute difference between simulated signal and analytic signal, $|S_{simulated} - S_{analytic}|/S_0$, for the two experiments described in \Cref{sec:cudamino_experiments}. Here CUDAmino is shortened to CUDA to save space. In each case, the value across 5 repeats had insignificant variance.}
+  \caption[Mean error between simulations and analytic results for the cuboid in \Cref{fig:cudamino_cuboid}.]{Mean error between simulations and analytic results for the cuboid in \Cref{fig:cudamino_cuboid}. Values are absolute difference between simulated signal and analytic signal, $|S_{simulated} - S_{analytic}|/S_0$, for the two experiments described in \Cref{sec:cudamino_experiments}. Here CUDAmino is shortened to CUDA to save space. In each case, the value across 5 repeats had insignificant variance.}
   \label{tab:cuboid_results}
 \end{table}
 
@@ -215,7 +215,7 @@ This is likely due to $n=1000$ not being enough spins to fully exploit the paral
     $n=10^4$ & $1.1385 \pm 0.006$ & $114.82 \pm 0.775$ & $110.9\times$\\
     $n=10^5$ & $10.004 \pm 0.034$ & $1105.1 \pm 11.2$ & $110.5\times$\\\hline
   \end{tabular}
-  \caption{Timing results for CUDAmino versus Camino. For all experiments, CUDAmino shows faster running time with lower variance across runs. The typical speedup is around $100\times$.}
+  \caption[Timing results for CUDAmino versus Camino.]{Timing results for CUDAmino versus Camino. For all experiments, CUDAmino shows faster running time with lower variance across runs. The typical speedup is around $100\times$.}
   \label{tab:cuboid_timing}
 \end{table}
 
@@ -227,7 +227,7 @@ CUDAmino, as presented here, still has some way to go to fully replicate Camino'
 There are a number of features lacking, such as permeability and full reflections, however this represents a good first step towards a fully-featured GPU \ac{dMRI} simulator.
 
 As shown in \Cref{fig:cuboid_cudamino_tmax,fig:cuboid_cudamino_nspin}, CUDAmino is able to match the analytic result in a simple substrate. Additionally \Cref{tab:cuboid_results} shows that  the difference between the simulated signals in CUDAmino and Camino is small in the simple scenario presented.
-The is a promising result as it shows that CUDAmino is able to match analytic results as well as the results of Camino well.
+This a promising result as it shows that CUDAmino is able to match analytic results as well as the results of Camino well.
 There should be further investigation, however, to investigate how CUDAmino performs in other simple substrates compared to both Camino and analytical results. 
 
 The performance boost that CUDAmino has over Camino, running simulations 15-100$\times$ faster shows the promise that CUDAmino has in making \ac{dMRI} simulations much more efficient.

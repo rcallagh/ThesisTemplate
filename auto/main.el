@@ -11,8 +11,7 @@
     "src/config"
     "src/cudamino"
     "src/future"
-    "src/publications"
-    "src/acks")
+    "src/publications")
    (TeX-add-symbols
     '("van" 3)
     "titleinfo")

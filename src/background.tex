@@ -96,7 +96,7 @@ For a proton in its rest state, the only angular momentum is the intrinsic spin 
 \begin{equation}
 \frac{d\mathbf{S}}{dt} = \boldsymbol{\mu} \times \mathbf{B}_0 \,.
 \end{equation}
-Since $\mathbf{S}$ is equivalent to $\boldsymbol{\mu}/\gamma$, this becomes
+Since $\mathbf{S}$ is equivalent to $\boldsymbol{\mu}/\gamma$ (\Cref{eq:magnmom}), this becomes
 \begin{equation}
 \frac{d\boldsymbol{\mu}}{dt} = \gamma\boldsymbol{\mu} \times \mathbf{B}_0\,.
 \label{eq:dmudt}
@@ -125,7 +125,7 @@ The frequency $\omega_0$ is known as the Larmor frequency and lies in the \ac{RF
 		\label{fig:manyspins}
 	\end{subfigure}
 	
-	\caption{a) Illustration of the precessional motion of a single spin with magnetic moment $\mu$ in the presence of an external magnetic field $B_0$. b) Many individual spins in an external magnetic field precess around the external field with random phase producing a net magnetisation in the direction of the $B_0$ field.}
+	\caption[Illustration of the precessional motion of a single spin and production of magnetisation by many spins]{a) Illustration of the precessional motion of a single spin with magnetic moment $\mu$ in the presence of an external magnetic field $B_0$. b) Many individual spins in an external magnetic field precess around the external field with random phase producing a net magnetisation in the direction of the $B_0$ field.}
 	\label{fig:precession-spins}
 	
 \end{figure}
@@ -170,12 +170,12 @@ In order to make measurements, the net longitudinal magnetisation needs to be `f
 This is achieved by applying a second magnetic field, $\mathbf{B}_1$, oscillating in the transverse plane. 
 In much the same way as with $\mathbf{B}_0$, the magnetisation feels a torque from $\mathbf{B}_1$ and begins to rotate about $\mathbf{B}_1$, away from the longitudinal axis.
 The two external fields act simultaneously on $\mathbf{M}_0$ so the magnetisation will tip away from the $z$ axis whilst still precessing about $z$ with a frequency $\omega_0$.
-This kind of motion is known as nutation and is illustrated in \Cref{fig:nutation}.  
+This kind of motion is known as nutation and is illustrated in \Cref{fig:nutation}.
 
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{figures/background/nutation.eps}
-	\caption{Nutation motion of an on-resonance spin in the presence of an \ac{RF} field. Precession about the $B_0$ and $B_1$ fields create the spiralling motion in the laboratory frame.}
+	\caption[Nutation motion of an on-resonance spin the presence of an \ac{RF} field.]{Nutation motion of an on-resonance spin in the presence of an \ac{RF} field. Precession about the $B_0$ and $B_1$ fields create the spiralling motion in the laboratory frame.}
 	\label{fig:nutation}
 \end{figure}
 
@@ -185,7 +185,7 @@ This kind of motion is known as nutation and is illustrated in \Cref{fig:nutatio
 \label{sec:bg_bloch}
 The interaction between the magnetisation and magnetic fields is described by the Bloch equations - an empirical set of equations describing the evolution of magnetisation introduced by Felix Bloch in 1946\cite{Bloch1946}.
 
-The magnetisation arises from a sum of independent magnetic moments, meaning that we could represent the magnetisation as 
+The magnetisation arises from a sum of independent magnetic moments, meaning that we can represent the magnetisation as 
 \begin{equation}
 	\mathbf{M} = \sum_i \boldsymbol{\mu}_i \,,
         \label{eq:net_magnetisation}
@@ -212,10 +212,10 @@ To understand the interaction of the magnetisation with the $\mathbf{B}_1$ field
 %This means that the effect of this component on the magnetisation can be neglected and the exciting magnetic field will have the form\cite{DeGraaf2007}
 Usually, the $\mathbf{B}_1$ field is circularly polarised to oscillate in the transverse plane so that the field can be described as
 \begin{equation}
-	\mathbf{B}_1(t) = B_1\cos(\omega t) \mathbf{e_x} - B_1\sin(\omega t) \mathbf{e_y}\,,
+	\mathbf{B}_1(t) = B_1\cos(\omega t) \mathbf{\hat{x}} - B_1\sin(\omega t) \mathbf{\hat{y}}\,,
 	\label{eq:circB1}
 \end{equation}
-where $\mathbf{e_x}$ and $\mathbf{e_y}$ are unit vectors in the $x$ and $y$ directions respectively. 
+where $\mathbf{\hat{x}}$ and $\mathbf{\hat{y}}$ are unit vectors in the $x$ and $y$ directions respectively. 
 
 
 The combined effect of the $\mathbf{B}_0$ and $\mathbf{B}_1$ fields can be seen from \Cref{eq:dMdt} to get \cite{DeGraaf2007}
@@ -233,7 +233,7 @@ Relaxation is a term used to describe the way in which a spin system will return
 
 The relaxation processes are exponential and described by two time constants, $\mathrm{T}_1$ and $\mathrm{T}_2$. $\mathrm{T}_1$ is the longitudinal relaxation time and describes the rate at which longitudinal magnetisation regrows after a perturbation. 
 $\mathrm{T}_2$ is the transverse relaxation time and describes the rate at which transverse magnetisation decays after a perturbation. 
-$\mathrm{T}_2$ is always shorter than $\mathrm{T}_1$ since all the effects which contribute to $\mathrm{T}_1$ contribute to $\mathrm{T}_2$ relaxation, however $\mathrm{T}_2$ relaxation is also affected by the spins going out of phase with one another.
+$\mathrm{T}_2$ is always shorter than $\mathrm{T}_1$ since all the effects which contribute to $\mathrm{T}_1$ also contribute to $\mathrm{T}_2$ relaxation, however $\mathrm{T}_2$ relaxation is also affected by the spins going out of phase with one another.
 The relaxation process can be written as \cite{DeGraaf2007}
 \begin{align}
 	\frac{d\mathbf{M}_x(t)}{dt} &= -\frac{\mathbf{M}_x(t)}{\mathrm{T}_2}\,,\label{eq:bloch_rel1}\\
@@ -255,14 +255,14 @@ This is referred to as $\mathrm{T}_2^*$, with
   \frac{1}{\mathrm{T}_2^*} = \frac{1}{\mathrm{T}_2} + \frac{1}{\mathrm{T}_2'}\,,
   \label{eq:t2star}
 \end{equation}
-where $\mathrm{T}_2'$ is the relaxation time associated with these external sources. The $\mathrm{T}_2'$ effect can be negated using special MR pulse sequences which will be covered in \Cref{sec:spin_echoes}, however the intrinsic $\mathrm{T}_2$ relaxation cannot be avoided.  
+where $\mathrm{T}_2'$ is the relaxation time associated with these external sources and $\mathrm{T}_2$ is the intrinsic spin-spin relaxation time. The $\mathrm{T}_2'$ effect can be negated using special MR pulse sequences which will be covered in \Cref{sec:spin_echoes}, however the intrinsic $\mathrm{T}_2$ relaxation cannot be avoided.  
 
 
 \subsubsection{The Rotating Frame}
 To this point, everything has been described in a static Cartesian frame known as the laboratory frame. 
 The lab frame is not the most convenient reference frame to analyse the \ac{NMR} experiment in, however.
 Moving to a frame which is rotating about $\mathbf{B}_0$ (i.e.\ the $z$-axis) at a frequency $\omega$ matching the $\mathbf{B}_1$ field oscillation simplifies the maths of the system. 
-The axes of this frame will be referred to as $x', y'$ and $z'$. 
+The axes of this rotating frame will be referred to as $x', y'$ and $z'$. 
 
 The components of the magnetisation in the rotating frame can be calculated from the lab frame components as \cite{DeGraaf2007}
 \begin{align}
@@ -286,11 +286,11 @@ When $\Omega = 0$, meaning that $\mathbf{B}_1$ oscillates at the Larmor frequenc
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{figures/background/nutation_onres.eps}
-	\caption{Motion of a spin in the presence of a $B_1$ RF field in the rotating frame. This is identical to the nutation in \Cref{fig:nutation}, however viewing from the rotating frame simplifies the motion. }
+	\caption[Motion of a spin in the presence of a $B_1$ \ac{RF} field in the rotating frame]{Motion of a spin in the presence of a $B_1$ RF field in the rotating frame. This is identical to the nutation in \Cref{fig:nutation}, however viewing from the rotating frame simplifies the motion. }
 	\label{fig:onres}
 \end{figure}
 
-This situation is known as resonance - the frequency of the \ac{RF} pulse matches the Larmor frequency, tipping the magnetisation away from the $z'$ axis and into the transverse plane. 
+This situation is known as resonance - the frequency of the \ac{RF} pulse matches the Larmor frequency, perfectly tipping the magnetisation away from the $z'$ axis and into the transverse plane. 
 
 In the off-resonance case, an additional component of magnetic field with magnitude $\Omega/\gamma$ is produced in the $z$-direction.
 This results in an effective magnetic field, $\mathbf{B}_e$, with a magnitude \cite{DeGraaf2007}
@@ -304,7 +304,7 @@ The effective field is illustrated in \Cref{fig:B_e} with the additional compone
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{figures/background/B_e.eps}
-	\caption{The effective field, $B_e$, produced due to an off-resonance frequency $\Omega$. The off-resonance effects produce an additional component of magnetic field along the $z'$ axis.}
+	\caption[The effective field, $B_e$, produced due to an off-resonance frequency $\Omega$.] {The effective field, $B_e$, produced due to an off-resonance frequency $\Omega$. The off-resonance effects produce an additional component of magnetic field along the $z'$ axis.}
 	\label{fig:B_e}	
 \end{figure}
 Off-resonance effects can produce unwanted results meaning the spin does not get flipped as much as expected under an \ac{RF} pulse which can result in signal losses. 
@@ -338,7 +338,7 @@ Generally \ac{NMR} systems use something known as quadrature detection, meaning 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figures/background/FID_copy.png}
-  \caption{The \acl{FID} described by \Cref{eq:fid}. Here, just the real channel is plotted.}
+  \caption[The \acl{FID} described by \Cref{eq:fid}]{The \acl{FID} described by \Cref{eq:fid}. Here, just the real channel is plotted.}
   \label{fig:fid}
 \end{figure}
 
@@ -397,12 +397,11 @@ Peaks like this form the basis of all spectra used in \ac{NMR} spectroscopy.
 		\label{fig:spinecho_evolution}
 	\end{subfigure}
 
-	\caption{a) Spin echo sequence and (b) an indication of the evolution of spins under a spin echo sequence. This shows how the 180\degree\ refocusing pulse acts to refocus the spins after a time $\mathrm{TE}$.}
+	\caption[The spin echo sequence and the evolution of spin under a spin echo sequence.]{a) Spin echo sequence and (b) an indication of the evolution of spins under a spin echo sequence. This shows how the 180\degree\ refocusing pulse acts to refocus the spins after a time $\mathrm{TE}$.}
 	\label{fig:spinecho}
 \end{figure}
 It is possible to undo the effects of $\mathrm{T}_2'$ by designing a pulse sequence to `refocus' the spins, forming what is known as a spin echo.
-Spin echo sequences also enable localisation by combining \ac{RF} pulses with magnetic field gradients.
-
+%Spin echo sequences also enable localisation by combining \ac{RF} pulses with magnetic field gradients.
 The first spin echo sequence was introduced by Edwin Hahn in 1950 \cite{Hahn1950}. The simplest sequence to form a spin echo consists of a 90\degree\ pulse to excite the spins followed by a 180\degree\ pulse after a delay. 
 This sequence is shown in the diagram in \Cref{fig:spinecho} along with how the signal varies during the pulse sequence.
  
@@ -453,7 +452,7 @@ where $\mathbf{\Delta B}(\mathbf{r}, t)$ accounts for all of the variation in th
 An idealised expression for $\mathbf{\Delta B}(\mathbf{r}, t)$ often applied to \ac{MRI} assumes that all of the change in the magnetic field is due to an applied magnetic field gradient, $\mathbf{g}(\mathbf{r}, t)$, which only has a significant $\mathbf{\hat{z}}$ component. This means that \Cref{eq:mod_B} can be written as
 \begin{align}
   B(\mathbf{r}, t) &= \left|B_0\mathbf{\hat{z}} + \left(\mathbf{g}(\mathbf{r}, t)\cdot\mathbf{r}\right) \mathbf{\hat{z}}\right|\,,\nonumber \\
-                      &= B_0 + \mathbf{g}(\mathbf{r}, t)\cdot\mathbf{r}(t)\,.
+                      &= B_0 + \mathbf{g}(\mathbf{r}, t)\cdot\mathbf{r}\,.
                         \label{eq:mod_B_ideal}
 \end{align}
 
@@ -490,7 +489,7 @@ The dot product here indicates that only displacement projected onto the gradien
   \label{fig:PGSE_diagram}
 \end{figure}
 
-The first diffusion MR sequence, introduced by Stejskal and Tanner in 1965\cite{Stejskal1965}, is the \ac{PGSE} sequence, shown in \Cref{fig:PGSE_diagram}.
+The first diffusion MR sequence, introduced by Stejskal and Tanner in 1965\cite{Stejskal1965}, is the \acf{PGSE} sequence, shown in \Cref{fig:PGSE_diagram}.
 The PGSE sequence consists of a standard spin echo sequence with a pair of gradient pulses added either side of the refocussing pulse.
 In the ideal case, each pulse is rectangular with a gradient strength, $G$, and duration, $\delta$ and they are separated by a time, $\Delta$.  
 
@@ -504,26 +503,25 @@ Under the \ac{SGP} approximation, the phase accrued by a spin at a position $\ma
 Here, $\mathbf{R}_0$ refers to the spin position at time $t=t_0$ and is not time-dependent, because under the SGP approximation the motion of spins during the pulse is assumed to be negligible. 
 
 The 180\degree\ pulse in the \ac{PGSE} sequence is crucial, since it flips the orientation of the spins' magnetic moments as in the spin echo sequence in \Cref{fig:spinecho}.
-Not only does this refocus $\mathrm{T}_2^*$ effects as outlined in \Cref{sec:spin_echoes}, but it means that the phase accrued during the second gradient pulse has opposite sign to the phase accrued during the first spin. 
+Not only does this refocus $\mathrm{T}_2^*$ effects as outlined in \Cref{sec:spin_echoes}, but similarly, it means that the phase accrued due to the first gradient pulse now has a negative sign relative to the phase that will be accrued due to the second pulse. %due to the second gradient pulse has opposite sign to the phase accrued due to the first pulse. 
 
-A spin which is at a position $\mathbf{R}_0$ during the first pulse and then diffuses to a position $\mathbf{R}_1$ during the second pulse will therefore have a phase shift of 
+A spin which is at a position $\mathbf{R}_0$ during the first pulse and then diffuses to a position $\mathbf{R}_1$ during the second pulse will therefore have a relative phase shift of 
 \begin{equation}
   \Delta\phi(\mathbf{R}_1 - \mathbf{R}_0) = \gamma\delta\mathbf{g} \cdot \left(\mathbf{R}_1 - \mathbf{R}_0\right)\,.
   \label{eq:delta_phi}
 \end{equation}
 
-The $B_0$ term from \Cref{eq:phi_single_SGP} is the same for both gradient pulses, meaning that during the subtraction in \Cref{eq:delta_phi} it cancels and the only phase shift comes from the diffusive motion.
+The $B_0$ term from \Cref{eq:phi_single_SGP} is the same for both gradient pulses, meaning that during the subtraction in \Cref{eq:delta_phi} it cancels and the only relative phase shift comes from the diffusive motion.
 
 The total MR signal comes from an ensemble of spins, each with their own random Brownian motion and thus, from \Cref{eq:delta_phi}, their own relative phase shift.
-To get to the total MR signal, we need to consider the probability that a particle starts at position $\mathbf{R}_0$ (i.e. the initial spin density, $\rho(\mathbf{R}_0)$) and the probability that a particle which starts at $\mathbf{R}_0$ moves to $\mathbf{R}_1$ during the time $\Delta$, $P(\mathbf{R}_0, \mathbf{R}_1, \Delta)$.
+To get to the total MR signal, we need to consider the probability that a particle starts at position $\mathbf{R}_0$ (i.e. the initial spin density, $\rho(\mathbf{R}_0)$, which can generally be considered uniform within a voxel \cite{Price1997}) and the probability that a particle which starts at $\mathbf{R}_0$ moves to $\mathbf{R}_1$ during the time $\Delta$, $P(\mathbf{R}_0, \mathbf{R}_1, \Delta)$.
 Putting these together, gives an expression for the total MR signal\cite{Price1997,Stejskal1965}:
 \begin{equation}
   S(\mathbf{g}, \Delta) = S(\mathbf{0}, \Delta)\int\int \rho(\mathbf{R}_0)P(\mathbf{R}_0, \mathbf{R}_1, \Delta) e^{i\gamma\delta\mathbf{g} \cdot (\mathbf{R}_1 - \mathbf{R}_0)}  d\mathbf{R}_0d\mathbf{R}_1\,.
   \label{eq:total_signal_sgp}
 \end{equation}
 
-This quantity, $P(\mathbf{R}_0, \mathbf{R}_1, \Delta)$, is known as the diffusion propagator and is of great interest for diffusion MRI.
-$P(\mathbf{R}_0, \mathbf{R}_1, \Delta)$ encodes the information about the environment in which the spins are diffusing. 
+This quantity, $P(\mathbf{R}_0, \mathbf{R}_1, \Delta)$, is known as the diffusion propagator and is of great interest for diffusion MRI because $P(\mathbf{R}_0, \mathbf{R}_1, \Delta)$ encodes the information about the environment in which the spins are diffusing. 
 For diffusion in an isotropic, homogeneous medium, the diffusion propagator is a Gaussian distribution \cite{Price1997}:
 \begin{equation}
   P(\mathbf{R}_0, \mathbf{R}_1, t) = \left(4\pi Dt\right)^{-\sfrac{3}{2}}\exp\left(-\frac{(\mathbf{R}_1 - \mathbf{R}_0)^2}{4Dt}\right)\,.
@@ -543,7 +541,7 @@ The general form of this expression, accounting for finite duration gradient pul
 \end{align}
 where $b = \gamma^2g^2\delta^2(\Delta - \delta/3)$ is the so-called $b$-value which describes the strength of the diffusion encoding. 
 
-In general, we can formulate an equation similar to \Cref{eq:total_signal_sgp} without requiring any assumptions on the gradients as \cite{Price1997,Hall2009}
+We can formulate a more general form of  \Cref{eq:total_signal_sgp} without requiring any assumptions on the gradients (such as the \ac{SGP} approximation used above) as \cite{Price1997,Hall2009}
 \begin{equation}
   S(\mathbf{g}, t) = S(\mathbf{0}, t) \int_{-\infty}^{\infty} P(\phi, t) e^{i\phi} d\phi\,,
   \label{eq:sig_phi_complex}
@@ -573,19 +571,19 @@ For diffusion in an isotropic, homogeneous medium, the diffusion propagator is a
 
 \subsection{The \acl{BT} Equations}
 \label{sec:bg_bloch_torrey}
-As well as describing the \ac{dMRI} signal considering the microscopic diffusion of spins, a macroscopic formulation can be derived considering Fick's laws of diffusion. The combination of the Bloch equations (\Cref{eq:blochx,eq:blochy,eq:blochz}) with Fick's second law of diffusion leads to the \ac{BT} equations, proposed by H.\ C.\ Torrey in 1956\cite{Torrey1956,Callaghan1991,Price2009}:
+As well as describing the \ac{dMRI} signal by considering the microscopic diffusion of spins, a macroscopic formulation can be derived considering Fick's laws of diffusion. The combination of the Bloch equations (\Cref{eq:blochx,eq:blochy,eq:blochz}) with Fick's second law of diffusion leads to the \ac{BT} equations, proposed by H.\ C.\ Torrey in 1956\cite{Torrey1956,Callaghan1991,Price2009}:
 
 \begin{equation}
   \frac{\partial\mathbf{M(r},t)}{\partial t} = \gamma \mathbf{M \times B(r}, t) - \frac{M_x\mathbf{\hat{x}} + M_y\mathbf{\hat{y}}}{\mathrm{T}_2} - \frac{(M_z - M_0)\mathbf{\hat{z}}}{\mathrm{T}_1} + \nabla \cdot \left(\mathbf{D} \nabla \mathbf{M}\right)\,.
   \label{eq:bloch_torrey}
 \end{equation}
 
-This version of the \ac{BT} equation is sometimes referred to as the standard \ac{BT} equation. An additional term can be added to account for the evolution of the magnetisation due to a flow, described by a velocity field $\mathbf{v}$ to get the generalised \ac{BT} equation \cite{Jeener2002}. This flow term is often dropped, assuming no net flow, in the application to \ac{dMRI}, leaving \Cref{eq:bloch_torrey}. 
+This version of the \ac{BT} equation is sometimes referred to as the standard \ac{BT} equation. An additional term can be added to account for the evolution of the magnetisation due to a flow, described by a velocity field $\mathbf{v}$ to get the generalised \ac{BT} equation \cite{Jeener2002,Beltrachini2016}. However, this flow term is often dropped, assuming no net flow, in the application to \ac{dMRI}, leaving \Cref{eq:bloch_torrey}. 
 $\mathbf{D}$ is the diffusion tensor, a generalisation of the diffusion coefficient, $D$, to allow for anisotropic diffusion. In short, this means that diffusion happens at a different rate in different directions.
-It is the $\mathbf{D}$ term which encodes the evolution of the magnetisation when there is diffusion.
+It is the $\mathbf{D}$ term in \Cref{eq:bloch_torrey} which encodes the evolution of the magnetisation when there is diffusion.
 
 In general, the \ac{BT} equations cannot be solved analytically, apart from in some simple cases such as isotropic free diffusion.
-For instance, the solution to the \ac{BT} equations in isotropic free diffusion can be shown to give the expected Stejskal-Tanner equation, \Cref{eq:stejskal_tanner}.
+For instance, the solution to the \ac{BT} equations in isotropic free diffusion can be shown to give the expected Stejskal-Tanner equation, \Cref{eq:stejskal_tanner} \cite{Price1997}.
 
 For complex geometries, as with the case above, we must rely on computational methods to come to a solution for the \ac{BT} equations. 
 
@@ -593,7 +591,7 @@ For complex geometries, as with the case above, we must rely on computational me
 
 \section{Diffusion Simulation}
 \label{sec:diffusion_simulation}
-Diffusion simulations attempt to evaluate \Cref{eq:sig_phi_complex} or \Cref{eq:sig_phi_complex} computationally. Simulation approaches broadly fall into two categories: numerical solutions of the \ac{BT} equation and \ac{MC} simulations of the diffusion dynamics. This section introduces these techniques, highlighting the some of the similarities and differences between them. 
+Diffusion simulations attempt to evaluate \Cref{eq:sig_phi_complex} or \Cref{eq:bloch_torrey} computationally. Simulation approaches broadly fall into two categories: numerical solutions of the \ac{BT} equation and \ac{MC} simulations of the diffusion dynamics. This section introduces these techniques, highlighting the some of the similarities and differences between them. 
 
 
 At a high level, all diffusion simulations have three common components: the substrate, the diffusion dynamics and the measurement.
@@ -602,9 +600,7 @@ The diffusion dynamics describe our understanding of the processes underlying th
 \subsection{Numerical Solutions}
 \label{sec:numerical_solutions}
 Numerical solution approaches generally attempt to solve the \acl{BT} equation \cite{Torrey1956}.
-In literature, the \ac{BT} equation excluding the relaxation and flow terms is sometimes referred to as the standard \ac{BT} equation and the full \ac{BT} equation in \Cref{eq:bloch_torrey} is referred to as the generalised \ac{BT} equation \cite{Beltrachini2016}. 
-
-Numerical solution approaches combine both the dynamics and the measurement components of the diffusion simulation by solving for the magnetisation in  \Cref{eq:bloch_torrey}.
+These approaches combine both the dynamics and the measurement components of the diffusion simulation by solving for the magnetisation in  \Cref{eq:bloch_torrey}.
 The third component, the substrate, defines boundary conditions required for the solution of the equation. 
 
 There are two typical methods for solving the \ac{PDE} in \Cref{eq:bloch_torrey}, \acp{FDM} and \acp{FEM}.
@@ -614,7 +610,7 @@ Finite difference methods evaluate the \ac{PDE} using a local Taylor expansion a
 Finite element methods subdivide the domain into small elements which are simple geometric shapes, though unlike the \acp{FDM}, they do not have to form a regular grid, but rather an arbitrary mesh.
 In each element, the \ac{PDE} solution is approximated by simple functions such as a linear combination of polynomials.
 The combination of all of these local approximations can be solved to give a numerical solution of the \ac{PDE} across the whole domain \cite{Logan2007}.
-\acp{FEM} are generally more complex to formulate and implement than \acp{FDM}, however the added complexity can be worth the effort for more difficult problems in which \ac{FDM} may be ineffective \cite{Iserles2009}.
+\acp{FEM} are generally more complex to formulate and implement than \acp{FDM}, however the added complexity can be worth the effort for more difficult problems in which \acp{FDM} may be ineffective \cite{Iserles2009}.
 
 \subsection{Monte-Carlo Simulations}
 \label{sec:montecarlo}
@@ -627,7 +623,7 @@ There exist many different implementations of the Monte-Carlo simulation of \ac{
 
 Most early \ac{MC} studies used simple, easily parametrised substrates like regularly packed cuboids \cite{Szafer1995} or cylinders \cite{Ford1997}.
 As computational power has increased, so too has the capacity for more and more complex substrates.
-This includes cylinders with randomly distributed radii \cite{Hall2009}, undulating  cylinders \cite{Nilsson2012}, beading cylinders \cite{Budde2010} and meshes generated from high resolution microscopy of tissue \cite{Panagiotaki2010}.
+This includes cylinders with randomly distributed radii \cite{Hall2009}, undulating  cylinders \cite{Nilsson2012}, beading cylinders \cite{Budde2010} and meshes, both generated from high resolution microscopy of tissue \cite{Panagiotaki2010} and computer generated cell models \cite{Palombo2019,Rafael-Patino2018}.
 
 The Brownian motion of particles is typically simulated as a random walk of many independent particles. The time domain is discretised into many time points and at each time point each particle takes a random step through the substrate.  
 One step of the random walk can be briefly summarised as shown in \Cref{alg:MC_random_walk}.
@@ -648,10 +644,10 @@ One step of the random walk can be briefly summarised as shown in \Cref{alg:MC_r
 Following the Brownian motion, each particle in the simulation will have taken many steps giving each particle a unique trajectory that it has traversed.
 The incremental phase, $\Delta \phi$, accrued at each step can be calculated from a discrete version of \Cref{eq:phase_singlespin}. Under the assumption of uniform $B_0$, only the gradient term matters, giving
 \begin{equation}
-  \Delta \phi = \gamma \mathbf{g}(\mathbf{r}(t), t) \cdot \mathbf{r}(t)\, \Delta t \,,
+  \Delta \phi = \gamma \mathbf{g}(\mathbf{R}(t), t) \cdot \mathbf{R}(t)\, \Delta t \,,
   \label{eq:deltaPhi}
 \end{equation}
-where $\Delta t$ is the duration of the step and $\mathbf{g}(\mathbf{r}(t), t)$ and $\mathbf{r}(t)$ are the gradient and particle position during that step respectively.
+where $\Delta t$ is the duration of the step and $\mathbf{g}(\mathbf{R}(t), t)$ and $\mathbf{R}(t)$ are the gradient and particle position during that step respectively.
 
 The phase accumulation in \Cref{eq:deltaPhi} for each spin in the simulation can be combined with \Cref{eq:sig_phi_complex} to approximate the total signal for the \ac{dMRI} acquisition as
 \begin{equation}
@@ -673,13 +669,13 @@ The huge number of calculations required to handle large simulations can be alle
 
 The \acf{GPU} is one of the main processing units in a modern computer, along with the \acf{CPU}.
 The \ac{GPU} was developed, as the name suggests, to handle graphics operations.
-Rendering an image to a screen requires a value to be updated for every pixel, and since this calculation is essentially the same for all pixels, the \ac{GPU} was developed to be effective at performing many copies of the same operation simultaneously.
+Rendering an image to a screen requires a value to be updated for every pixel, and since this calculation is essentially the same for all pixels, the \ac{GPU} was developed to be effective at performing many copies of the same operation simultaneously \cite{Kirk2013}.
 A modern \ac{GPU} may be able to run upwards of 50,000 operations at a time.
 
-Conversely, the \ac{CPU} was historically developed to be able to run one set of sequential instructions very effectively.
-Modern \acp{CPU} typically have a few (4 - 32) processing cores, each of which is designed to run sequential programs efficiently.
+Conversely, the \ac{CPU} was historically developed to be able to run one set of sequential instructions very effectively \cite{Kirk2013}. 
+Modern \acp{CPU} typically have a few (2 - 32) processing cores, each of which is designed to run sequential programs efficiently.
 This allows them to run multiple sets of instructions at a time, however the design philosophy is different to the \ac{GPU}.
-The \ac{GPU} is designed to run \emph{the same} operation multiple times in parallel, the \ac{CPU} is designed to be flexible to run a few different operations very effectively. 
+The \ac{GPU} is designed to run \emph{the same} operation a large number of times in parallel, the \ac{CPU} is designed to be flexible to run \emph{a few} different serial operations very effectively. 
 
 In 2007, NVIDIA released \ac{CUDA} \cite{Nickolls2008}, a parallel computing platform and \ac{API} allowing programmers to write software to use a \ac{CUDA}-enabled \ac{GPU} for general purpose computing.
 Since then, programming for the \ac{GPU} has become increasingly popular with developers taking advantage of performance increases that can come from parallel programming across a wide range of fields, from physics simulations to deep learning. 
@@ -695,7 +691,7 @@ If different inputs cause the threads to take a different path through the code 
 Thread divergence reduces the performance of software since the \ac{GPU} is designed for all threads to run in step with one another, so when one thread takes a different branch all of the other threads must wait for that thread to finish before they can continue. 
 
 Thread divergence and handling memory transfers, both between the host and device and between memory spaces on the device, are two of the difficulties that come with developing for the \ac{GPU} and must be considered when designing algorithms.  
-There are many more technical points to take into account when developing \ac{GPU} software such as ensuring threads don't write to the same memory address at the same time and ensuring the data structures are optimal for parallel access.
+There are many more technical points to take into account when developing \ac{GPU} software such as ensuring threads don't write to the same memory address at the same time (a type of a problem known as a race condition) and ensuring the data structures are optimal for parallel access.
 \Cref{sec:cudamino} will discuss how some of these problems were addressed in order to get \ac{MC} \ac{dMRI} simulations running on the \ac{GPU}. 
 
 

@@ -5,9 +5,21 @@
 \chapter*{Abstract}
 %\addcontentsline{toc}{chapter}{Abstract}
 
+This report presents work towards improving the realism of \ac{WM} substrates for \ac{dMRI} simulations.
+\ac{WM} substrates are commonly used for simulation in the validation of diffusion MRI (dMRI) techniques and construction of computational models of the \ac{dMRI} signal so it is important that they are as realistic as possible.
+% Current numerical phantoms either oversimplify the complex morphology of WM or are unable to produce realistic orientation dispersion at high packing density. The highest packing density and orientation dispersion achieved so far is only 20\% at 10\degree. 
 
-Abstract goes here
+The most significant work towards this goal is the development of a new method for generating realistic \ac{WM} substrates with some control on the morphology of the resulting substrates.
+This method is called \textbf{Con}textual \textbf{Fi}bre \textbf{G}rowth \acused{ConFiG}(\acs{ConFiG}).
+\ac{ConFiG} generates \ac{WM} substrates by `growing' fibres contextually, avoiding intersections between fibres whilst attempting to follow some morphological priors.
+The potential of \ac{ConFiG} is demonstrated by the generation of example substrates with realistic morphology and at high density-orientation dispersion combinations (up to 25\% at 35\degree).
 
+With the increased complexity of substrates, the computational load increases and so simulations take longer.
+In an attempt to combat this, a \ac{GPU} accelerated \ac{dMRI} simulator is presented, called CUDAmino.
+CUDAmino is tested against the established \ac{CPU} \ac{dMRI} simulator, Camino, and is shown to generate similar synthetic \ac{dMRI} signals whilst achieving a speedup in execution of around $100\times$. 
+
+A summary of potential improvements that can be made to both \ac{ConFiG} and CUDAmino is presented along with an outline of the work planned to be completed during the remainder of the PhD. 
+\acresetall
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../main"

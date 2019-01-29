@@ -242,6 +242,22 @@ E.~Panagiotaki, M.~G. Hall, H.~Zhang, B.~Siow, M.~F. Lythgoe, and D.~C.
   Alexander, ``{High-Fidelity Meshes from Tissue Samples for Diffusion MRI
   Simulations},'' in {\em MICCAI}, pp.~404--411, 2010.
 
+\bibitem{Palombo2019}
+M.~Palombo, D.~C. Alexander, and H.~Zhang, ``{A generative model of realistic
+  brain cells with application to numerical simulation of diffusion- weighted
+  MR signal},'' {\em NeuroImage}, vol.~188, no.~June 2018, pp.~391--402, 2019.
+
+\bibitem{Rafael-Patino2018}
+J.~Rafael-Patino, G.~Girard, D.~Romascano, M.~Barakovic, G.~Rensonnet, J.-P.
+  Thiran, and A.~Daducci, ``{Realistic 3D Fiber Crossing Phantom Models for
+  Monte Carlo Diffusion Simulations},'' in {\em 26th Annual Meeting of the
+  International Society for Magnetic Resonance in Medicine (ISMRM)}, 2018.
+
+\bibitem{Kirk2013}
+D.~B. Kirk and W.~M.~W. Hwu, {\em {Programming massively parallel processors: A
+  hands-on approach, second edition}}.
+\newblock 2013.
+
 \bibitem{Stone2010}
 J.~E. Stone, D.~Gohara, and G.~Shi, ``{OpenCL: A Parallel Programming Standard
   for Heterogeneous Computing Systems},'' {\em Computing in Science {\&}

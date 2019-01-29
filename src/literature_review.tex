@@ -5,7 +5,7 @@
 
 \begin{chapterabstract}
   This chapter presents some examples of the use of numerical phantoms from literature.
-  It represents a review of the contemporary literature in \ac{dMRI} simulation, highlighting the state of the art and presenting some weakness which this project aims to address. 
+  It represents a review of the contemporary literature in \ac{dMRI} simulation, highlighting the state of the art and presenting some weaknesses which this project aims to address. 
 \end{chapterabstract}
 
 
@@ -35,17 +35,17 @@ Similarly, Xu et al.\ \cite{Xu2014} use histology based \ac{FDM} simulations to 
 % Van Nguyen et al.\ \cite{Nguyen2014} implement a 3D FEM solution of the Bloch-Torrey equation and apply it to three example questions in dMRI.
 % \todo{add more on numerical solutions}
 The first example of an \ac{FEM} solution known to the author is presented by Hagsl\"att et al.\ \cite{Hagslatt2003}.
-In this study, rather than solving the \ac{BT} equation, the \ac{FEM} is used to solve for the diffusion propagator \cite{Callaghan1991,Price1997}. From the diffusion propagator, the diffusion attenuated signal calculated from this based on an assumption of infinitely narrow gradient pulses.
+In this study, rather than solving the \ac{BT} equation, the \ac{FEM} is used to solve for the diffusion propagator \cite{Callaghan1991,Price1997}. From the diffusion propagator, the diffusion attenuated signal is calculated based on an assumption of infinitely narrow gradient pulses.
 A good agreement is shown between simulation and theoretical solutions for a range of simple geometries (parallel plates, a lamellar system and  hexagonally packed cylinders).
 
 More studies have recently begun investigating diffusion simulation using \acp{FEM}.
-Moroney et al.\ \cite{Moroney2013} present an \ac{FEM} solution of the standard \ac{BT} equation (\Cref{eq:bloch_torrey} without the relaxtion and flow terms) for numerical analysis of \ac{dMRI} experiments in the short gradient pulse limit. \ac{FEM} results are compared to analytical solutions and \ac{MC} simulations in simple geometries, showing that the \ac{FEM} is more accurate than \ac{MC} simulations, whilst taking less time to run.
+Moroney et al.\ \cite{Moroney2013} present an \ac{FEM} solution of the \ac{BT} equation without the relaxtion and flow terms for numerical analysis of \ac{dMRI} experiments in the short gradient pulse limit. \ac{FEM} results are compared to analytical solutions and \ac{MC} simulations in simple geometries, showing that the \ac{FEM} is more accurate than \ac{MC} simulations, whilst taking less time to run.
 
 Nguyen et al.\ \cite{Nguyen2014} also present an \ac{FEM} solution of the standard \ac{BT} equation, showing its application to diffusion simulation with more general gradient waveforms.
 The \ac{FEM} solution is shown to be more accurate in some simple geometries than a finite volume method, with second order accuracy in both the spatial and temporal domains.
 Three example applications to questions in \ac{dMRI} are demonstrated using this \ac{FEM}
 \cite{Nguyen2014}.
-One shows than an infinitely thin membrane can be used to approximate a thick membrane. The second shows that the \ac{ADC} approaches the value predicted by mathematical homegenisation for long diffusion times. Finally, a model of a neuron is presented as a spherical body, with cylindrical axons and dendrites potruding. The \ac{ADC} is shown to approach a steady state faster with a smaller neuronal body.
+One shows that an infinitely thin membrane can be used to approximate a thick membrane. The second shows that the \ac{ADC} approaches the value predicted by mathematical homegenisation for long diffusion times. Finally, a model of a neuron is presented as a spherical body, with cylindrical axons and dendrites potruding. The \ac{ADC} is shown to approach a steady state faster with a smaller neuronal body.
 
 Beltrachini et al.\ \cite{Beltrachini2016} present a solution of the generalised \ac{BT} equation, extending the \ac{FEM} of Nguyen et al.\ \cite{Nguyen2014} to include the relaxation and flow terms. This \ac{FEM} improves on some of the restrictions in the \ac{FEM}, making the simulations more stable through the use of an implicit scheme that is stable for coarser discretisations without compromising the validity of the result. 
 
@@ -54,10 +54,10 @@ Beltrachini et al.\ \cite{Beltrachini2016} present a solution of the generalised
 \label{sec:app_monte_carlo_packages}
 Historically, most studies utilising \ac{MC} simulation used in-house developed \ac{MC} simulation software \cite{Lipinski1990, Szafer1995,Stanisz1997, Duh2001}, however in more recent years and as the complexity of situations possible to simulate has grown, a range of \ac{MC} simulation packages have been released for public use.
 
-Hall and Alexander \cite{Hall2009} introduced \ac{MC} simulation as part of the Camino diffusion MRI toolkit \cite{Cook2006} in the context of simulating swelling cylinders as a model of the effect of ischaemic stroke, however the \ac{MC} framework is very general and can be used to simulate any arbitrary from a 3D mesh. 
+Hall and Alexander \cite{Hall2009} introduced \ac{MC} simulation as part of the Camino diffusion MRI toolkit \cite{Cook2006} in the context of simulating swelling cylinders as a model of the effect of ischaemic stroke, however the \ac{MC} framework is very general and can be used to simulate any arbitrary substrate from simple geometric constructs to complex 3D meshes. 
 
 Balls and Frank \cite{Balls2009} present DiffSim, a dMRI simulation framework which embeds the MCell \cite{Stiles1996,Stiles2001, Kerr2008} cellular microphysiology simulator within an \ac{MRI} simulator for synthesising the \ac{dMRI} signal.
-DiffSim is used to simulate myelinated white matter \cite{Baxter2013}, showing that an analytical solution model by Sen and Basser \cite{Sen2005} holds for an \ac{SPG} approximation or long diffusion time, however with more realistic pulse sequence parameters, the numerical simulations show lower anisotropy than the analytical model. 
+DiffSim is used to simulate myelinated white matter \cite{Baxter2013}, showing that an analytical solution model by Sen and Basser \cite{Sen2005} holds for an \ac{SGP} approximation or long diffusion time, however with more realistic pulse sequence parameters, the numerical simulations show lower anisotropy than the analytical model. 
 
 Landman et al.\ \cite{Landman2010} developed the DW-MRI \ac{RWS} showing, as an example of its flexibility and reproducibility, a range of geometrical models for white matter damage, including healthy straight cylinders, bulging cylinders, crimped cylinders and broken cylinders.
 
@@ -69,7 +69,7 @@ As of the writing of this review, the \ac{DMS} software package has not been pub
 \label{sec:app_monte_carlo_numerical_phantoms}
 The above packages, as well as \ac{dMRI} simulation software developed in-house in various research groups, have been used to investigate the diffusion signal in many different numerical phantoms. 
 
-A common target of microstructure imaging is the estimation of axonal diameter density.
+A common target of microstructure imaging is the estimation of axonal diameter and density.
 As mentioned above, \ac{FDM} approaches have been used to investigate this \cite{Chin2002,Xu2014}, whilst this has been the subject of \ac{MC} simulation studies as well.
 Alexander et al.\ \cite{Alexander2010} use Camino to simulate a series of numerical phantoms of parallel cylinders with radii drawn from a Gamma distribution for the validation of a technique for orientationally invariant indices of axon diameter and density.
 
@@ -86,7 +86,7 @@ These three studies all use similar numerical phantoms made of straight cylinder
 
 In their first study, Nilsson et al.\ \cite{Nilsson2009} use simulations and experimental data to draw the conclusion that it is necessary to include exchange in a model containing two compartments, one of which is restricted. 
 Fieremans et al.\ \cite{Fieremans2010} show that the K\"arger model is able to describe the signal for long diffusion times and sufficiently impermeable membranes, however at larger permeabilities, the K\"arger model underestimates the value of the permeability.
-Nilsson et al.\ also investigate the effectiveness of the K\"arger model at estimating the intracellular water fraction, showing that the K\"arger model has a negative bias, underestimating the intracellular water fraction by up to 25\% when there is high permeabilty when compared to a computational made by building a database of simulated signals \cite{Nilsson2010}.
+Nilsson et al.\ also investigate the effectiveness of the K\"arger model at estimating the intracellular water fraction, showing that the K\"arger model has a negative bias, underestimating the intracellular water fraction by up to 25\% when there is high permeabilty when compared to a computational model made by building a database of simulated signals \cite{Nilsson2010}.
 % These studies suggest that the simple K\"arger model is sufficient to explain the dMRI signal in certain situations, however in general it is in sufficient.
 
 Nilsson et al.\ \cite{Nilsson2012} also investigate the importance of axonal undulation on diffusion MRI measurements.
@@ -95,18 +95,18 @@ Nilsson et al.\ show that undulation affects essentially all of the parameters t
 
 Budde et al.\ \cite{Budde2010} use \ac{MC} simulations to investigate the effect of neurite beading, showing that beading is sufficient to explain the decrease in \ac{ADC} after ischaemic stroke. Numerical phantoms consisting of straight cylinders with increasing amounts of beading introduced are simulated, showing a decrease in \ac{ADC} in both the intra and extracellular spaces with increased beading. 
 
-Lin et al.\ \cite{Lin2016} investigate the effect of \ac{TBI} on ac{dMRI} derived parameters.
-Using a numerical phantom consisting of straight cylinders representing axons, ellipsoids representing glial cells and the extracellular space, the effects of \ac{TBI} are investigated by varying various parameters such as the size of the glial cells, the permeability of the cylinders and the spacing of the cylinders \cite{Lin2016}. 
+Lin et al.\ \cite{Lin2016} investigate the effect of \ac{TBI} on \ac{dMRI} derived parameters.
+Using a numerical phantom consisting of straight cylinders representing axons and ellipsoids representing glial cells, the effects of \ac{TBI} are investigated by varying various parameters such as the size of the glial cells, the permeability of the cylinders and the spacing of the cylinders \cite{Lin2016}. 
 Using this technique, Lin et al.\ conclude that the inconsistencies amongst previous \ac{dMRI} based \ac{TBI} studies \cite{Huisman2004,Bazarian2007,Rutgers2008} are due to differences in the timing between the onset of \ac{TBI} and the diffusion measurement, arguing that different processes drive the \ac{TBI} at different timings, leading to different \ac{dMRI} characteristics. 
 
 Lin et al.\ \cite{Lin2017} similarly investigate the effect of myelin water exchange on various \ac{dMRI} derived parameters. In this work, their representation of \ac{WM} is slightly different, choosing nested cylinders to represent the intra-axonal and myelin-water compartments.
-Using \ac{MC} simulations on these cylinders, they show correlations between \ac{dMRI} derived parameters such as \ac{ADC} and \ac{FA}.
+Using \ac{MC} simulations on these cylinders, they show correlations between \ac{dMRI} derived parameters such as \ac{ADC} and \ac{FA} and the \acl{TE}.
 
 Lam et al.\ \cite{Lam2015} produce an empirical model of the extra axonal space using a series of \ac{MC} simulations based on both regularly and randomly packed cylinders. The model is based on the diffusion spectrum \cite{Stepisnik1993}, modelling diffusion in densely packed cylinders as diffusion in a series of pores with a small chance of exchange between the pores.
 The empirical model agrees closely with \ac{MC} simulated data.
 
 Some studies combine analytical solutions of the Bloch-Torrey equation and \ac{MC} simulations.
-Rensonnet et al.\ \cite{Rensonnet2015} used this combined simulation to synthesise signals for parallel and crossing cylinders.
+Rensonnet et al.\ \cite{Rensonnet2015} use this combined simulation to synthesise signals for parallel and crossing cylinders.
 The intracellular component is modelled using an analytical solution for diffusion within a cylinder based on Grebenkov's multiple correlation function approach \cite{Grebenkov2008}.
 The extracellular compartment, which is much more complex geometrically, is simulated using Monte-Carlo simulations.
 This hybrid approach yields simulation results which are indistinguishable from pure \ac{MC} simulation whilst being quicker and more precise than a purely \ac{MC} approach \cite{Rensonnet2015}. 
@@ -125,7 +125,7 @@ The random forest regression is shown to estimate membrane permeability well, pe
 Palombo et al.\ \cite{Palombo2018a} verify this method using a cuprizone treated \emph{in vivo} mouse model. Cuprizone is a well known mouse model of \ac{WM} demyelination, which is important as demyelination is hypothesised to affect axonal permeability.
 The random forest approach achieves accurate and robust estimation of microstructural parameters which match expected microstructure changes from electron microscopy and gains more specific information that typical \ac{dMRI} measures such as \ac{ADC} and \ac{FA}. 
 
-Hill et al.\ \cite{Hill2018} extend this work to use a deep neural network \ac{NN} in place of the random forest regression. They are able to show that the \ac{NN} outperforms the random forest approach and an application in \emph{in vivo} estimates microstructural parameters in the biologically plausible range.
+Hill et al.\ \cite{Hill2018} extend this work to use a deep \ac{NN} in place of the random forest regression. They are able to show that the \ac{NN} outperforms the random forest approach and an application in \emph{in vivo} mice estimates microstructural parameters in the biologically plausible range.
 
 Rensonnet et al.\ \cite{Rensonnet2018} also attempt to use computational models to directly estimate microstructural parameters using \ac{dMRI} simulations.
 Using the hybrid approach mentioned above \cite{Rensonnet2015}, they generate a dictionary of \ac{dMRI} simulation signals for various combinations of microstructural parameters and crossing fascicles.
@@ -138,7 +138,7 @@ They show that their approach achieves accurate and robust estimates of microstr
 \label{sec:review_gpu}
 There have been a couple of studies attempting to modify \ac{MC} \ac{dMRI} simulations for the \ac{GPU}.
 The first, by Waudby and Christodoulou \cite{Waudby2011} implements a simple random walk on the \ac{GPU}, with a rejection sampling scheme to handle substrate boundaries.
-In this case, a step crossing a boundary is ignored rather than reflected.
+In this case, a step crossing a boundary is ignored and no step is taken rather than being reflected.
 
 Unlike other geometries studied in this report, the Waudby and Christodoulou work uses a binary representation for simple shapes, meaning that the collision check is as straightforward as checking whether a spin moves into a region of space that is disallowed.
 One downside of this approach is that complex geometries cannot be easily represented in this binary manner.
@@ -148,13 +148,13 @@ It is mentioned, that with \ac{CPU} optimisation, this difference should reduce 
 
 A second, more recent, \ac{GPU} accelerated \ac{dMRI} simulation has been reported by Nguyen et al.\ \cite{Nguyen2018}.
 This implementation handles arbitrary meshes with two approaches, one with an octree acceleration scheme and one following a similar binary approach to Waudby and Christodoulou.
-The octree scheme gives them a 45-65 $\times$ acceleration over Camino with the binary \ac{GPU} version achieving a 2000 $\times$ acceleration.
+The octree scheme gives them a 45-65$\times$ acceleration over Camino with the binary \ac{GPU} version achieving a 2000$\times$ acceleration.
 The binary representation in this work uses a uniform grid to divide the space.
 Each cell in the grid is assigned a 1 or a 0 based on whether or not it is inside the mesh and a step is considered to have collided with the mesh if it steps from a cell with a 1 to a cell with a 0.
 
 This approach enables them to achieve a massive speedup in their simulation, however, it is limited by the resolution of the grid and the size of the smallest features in the mesh.
 Nguyen et al.\ show that if the resolution is not sufficient, the simulated signal will not accurately represent the signal from the true mesh.
-For relatively small substrates, this is not a problem as the grid can be made fine enough, however for large substrates, the memory requirements may become excessive.
+For relatively small substrates, this is not a problem as the grid can be made fine enough, however for large and complex substrates, the memory requirements may become excessive.
 
 Currently, the \ac{GPU} \ac{dMRI} simulator presented by Nguyen et al.\ is not publicly available. 
 
@@ -166,11 +166,11 @@ One thing which is common throughout most of the works is a simple model of \ac{
 Typically, \ac{WM} is represented as a set of densely packed, straight, parallel cylinders, which oversimplifies the underlying complexity of the microstructure.
 Lee et al.\ \cite{Lee2018a} use electron microscopy to reconstruct a 3D section of mouse corpus callosum, showing that real \ac{WM} contains a large amount of microstructural complexity, including orientation dispersion, undulation and diameter variations.
 
-Generating \ac{WM} substrates which accurately represent real microstructure is important for kinds of model validation studies mentioned in \Cref{sec:app_monte_carlo_numerical_phantoms} because if a model is validated using overly simplified simulations, it may not be very robust when applied to real data.
+Generating \ac{WM} substrates which accurately represent real microstructure is important for the kinds of model validation studies mentioned in \Cref{sec:app_monte_carlo_numerical_phantoms} because if a model is validated using overly simplified simulations, it may not be very robust when applied to real data.
 
 Realistic \ac{WM} representations are important for the kind of computational models mentioned in \Cref{sec:app_monte_carlo_numerical_phantoms} for similar reasons.
 Another element which is particularly important for building the training datasets or dictionaries for these kinds of computational models is controllability.
-The \ac{WM} numerical phantoms need to be realistic, but also must be able to be generated in a controlled manner so that we can generate substrates covering then relevant ranges of microstructural parameters needed to build robust computational models.
+The \ac{WM} numerical phantoms need to be realistic, but also must be able to be generated in a controlled manner so that we can generate substrates covering the relevant ranges of microstructural parameters needed to build robust computational models.
 
 These are the main driving reasons behind the work presented in \Cref{sec:config} which aims to build these realistic \ac{WM} substrates with controllable morphology. 
 

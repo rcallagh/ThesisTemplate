@@ -22,14 +22,15 @@
 \backcite {DeGraaf2007}{{9}{2.1.3}{equation.2.1.15}}
 \backcite {DeGraaf2007}{{10}{2.1.3}{equation.2.1.22}}
 \backcite {DeGraaf2007}{{10}{2.1.3}{equation.2.1.25}}
-\backcite {DeGraaf2007}{{11}{2.1.3}{figure.caption.22}}
+\backcite {DeGraaf2007}{{11}{2.1.3}{figure.caption.27}}
 \backcite {Haacke1999}{{12}{2.1.4}{subsection.2.1.4}}
 \backcite {DeGraaf2007}{{12}{2.1.4}{equation.2.1.30}}
 \backcite {Levitt2008}{{12}{2.1.4}{equation.2.1.31}}
-\backcite {Hahn1950}{{14}{2.1.5}{figure.caption.26}}
+\backcite {Hahn1950}{{13}{2.1.5}{figure.caption.31}}
 \backcite {Denny1993}{{14}{2.2}{section.2.2}}
 \backcite {Haacke1999}{{14}{2.2}{section.2.2}}
-\backcite {Stejskal1965}{{15}{2.2}{figure.caption.29}}
+\backcite {Stejskal1965}{{15}{2.2}{figure.caption.34}}
+\backcite {Price1997}{{16}{2.2}{equation.2.2.39}}
 \backcite {Price1997,Stejskal1965}{{16}{2.2}{equation.2.2.39}}
 \backcite {Price1997}{{16}{2.2}{equation.2.2.40}}
 \backcite {Stejskal1965,Price1997}{{16}{2.2}{equation.2.2.41}}
@@ -37,9 +38,9 @@
 \backcite {Price1997,Hall2009}{{17}{2.2}{equation.2.2.44}}
 \backcite {Neuman1974, Balinov1993,Callaghan1995}{{17}{2.2}{equation.2.2.45}}
 \backcite {Torrey1956,Callaghan1991,Price2009}{{17}{2.2.1}{subsection.2.2.1}}
-\backcite {Jeener2002}{{17}{2.2.1}{equation.2.2.46}}
+\backcite {Jeener2002,Beltrachini2016}{{17}{2.2.1}{equation.2.2.46}}
+\backcite {Price1997}{{17}{2.2.1}{equation.2.2.46}}
 \backcite {Torrey1956}{{18}{2.3.1}{subsection.2.3.1}}
-\backcite {Beltrachini2016}{{18}{2.3.1}{subsection.2.3.1}}
 \backcite {Grossmann2007}{{18}{2.3.1}{subsection.2.3.1}}
 \backcite {Hagslatt2003, Grossmann2007}{{18}{2.3.1}{subsection.2.3.1}}
 \backcite {Logan2007}{{18}{2.3.1}{subsection.2.3.1}}
@@ -51,6 +52,9 @@
 \backcite {Nilsson2012}{{19}{2.3.2}{subsection.2.3.2}}
 \backcite {Budde2010}{{19}{2.3.2}{subsection.2.3.2}}
 \backcite {Panagiotaki2010}{{19}{2.3.2}{subsection.2.3.2}}
+\backcite {Palombo2019,Rafael-Patino2018}{{19}{2.3.2}{subsection.2.3.2}}
+\backcite {Kirk2013}{{20}{2.4}{section.2.4}}
+\backcite {Kirk2013}{{20}{2.4}{section.2.4}}
 \backcite {Nickolls2008}{{20}{2.4}{section.2.4}}
 \backcite {Stone2010}{{20}{2.4}{section.2.4}}
 \backcite {Chin2002}{{23}{3.1}{section.3.1}}
@@ -121,6 +125,6 @@
 \backcite {Fujimoto1986}{{44}{5.1}{section.5.1}}
 \backcite {Kay1986}{{44}{5.1}{section.5.1}}
 \backcite {Callaghan1995,Linse1995}{{45}{5.2}{section.5.2}}
-\backcite {Chajdas2014}{{50}{6.2}{section.6.2}}
+\backcite {Chajdas2014}{{51}{6.2}{section.6.2}}
 \backcite {Hill2018,Palombo2018a}{{51}{6.3}{section.6.3}}
 \backcite {Rensonnet2018}{{51}{6.3}{section.6.3}}
