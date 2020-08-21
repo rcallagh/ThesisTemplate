@@ -2,7 +2,7 @@
 
 
 %% University
-\gdef\@school{Department of Medical Physics and Bioengineering}
+\gdef\@school{University College London}
 \def\school#1{\gdef\@school{#1}}
 
 %% Thesis date
@@ -10,11 +10,12 @@
 \def\thesisdate#1{\gdef\@thesisdate{#1}}
 
 % Programa Doutoral em Engenharia Electrotecnica e de Computadores
-\gdef\@program{Centre for Doctoral Programme in Medical Imaging}
+\gdef\@program{Centre for Doctoral Training in Medical Imaging}
 \gdef\@department{Department of Medical Physics and Bioengineering}
 
 %% Degree
-\gdef\@degree{MPhil Medical Imaging}
+\gdef\@degree{Doctor of Philosophy}
+\gdef\@subject{Medical Imaging}
 \def\degree#1{\gdef\@degree{#1}}
 
 %% Provisional text space
@@ -66,7 +67,7 @@
   %% Title page
   \begin{titlepage}
   	\begin{center}
-    \includegraphics[width=0.66\columnwidth]{template/logos/UCL_logo.eps}
+    \includegraphics[width=0.5\columnwidth]{template/logos/UCL_logo.eps}
     \vfill%
 
     % \vspace*{20mm}%
@@ -88,8 +89,13 @@
     } % Supervisor
     \vskip 5mm
 
-
-    {\large \@program} % Program
+    {\large A thesis submitted for the degree of}\vskip 4mm
+    {\large \bfseries \@degree } \vskip 2mm
+    {\large in } \vskip 2mm
+    {\large \bfseries \@subject} \vskip 4mm
+    {\large as part of} \vskip 2mm
+    {\large \bfseries \@school } \vskip 2mm
+    {\large \bfseries \@program} % Program
     \vskip 30mm
     \vfill
 

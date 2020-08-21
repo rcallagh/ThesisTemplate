@@ -1,5 +1,5 @@
 %%% File encoding is ISO-8859-1 (also known as Latin-1)
-%%% You can use special characters just like ä,ü and ñ
+%%% You can use special characters just like Ã¤,Ã¼ and Ã±
 
 % Custom command fpr the margin notes: \myMarginnote{Your Text}
 % Comment on the \lineskiplimit=-\maxdimen:
@@ -52,14 +52,14 @@
 \newlength{\cantorSep}
 \setlength{\cantorSep}{0.3cm}%
 \newcommand\cantorDecoration[1][]{%
-  \begin{tikzpicture}[decoration=Cantor set]
-    \draw (0.5\cantorSep,0) -- (0.5\cantorSep,\myLenghthTemp);
-    \draw decorate{ (0\cantorSep,0) -- (0\cantorSep,\myLenghthTemp) };
-    \draw decorate{ decorate{ (-.5\cantorSep,0) -- (-.5\cantorSep,\myLenghthTemp) }};
-    \draw decorate{ decorate{ decorate{ (-1\cantorSep,0) -- (-1\cantorSep,\myLenghthTemp) }}};
-    \draw decorate{ decorate{ decorate{ decorate{ (-1.5\cantorSep,0) -- (-1.5\cantorSep,\myLenghthTemp) }}}};
-    #1
-  \end{tikzpicture}%
+  % \begin{tikzpicture}[decoration=Cantor set]
+  %   \draw (0.5\cantorSep,0) -- (0.5\cantorSep,\myLenghthTemp);
+  %   \draw decorate{ (0\cantorSep,0) -- (0\cantorSep,\myLenghthTemp) };
+  %   \draw decorate{ decorate{ (-.5\cantorSep,0) -- (-.5\cantorSep,\myLenghthTemp) }};
+  %   \draw decorate{ decorate{ decorate{ (-1\cantorSep,0) -- (-1\cantorSep,\myLenghthTemp) }}};
+  %   \draw decorate{ decorate{ decorate{ decorate{ (-1.5\cantorSep,0) -- (-1.5\cantorSep,\myLenghthTemp) }}}};
+  %   #1
+  % \end{tikzpicture}%
 }
 
 % Define content of header and footer
