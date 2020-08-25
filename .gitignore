@@ -19,5 +19,7 @@
 *.fls
 .#*
 *#*
+*.synctex
+*.tdo
 examiner_nomination_form-2018-19.docx
 PhD_summary.docx
