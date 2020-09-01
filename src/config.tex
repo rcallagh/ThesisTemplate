@@ -1,303 +1,456 @@
-\chapter{Contextual Fibre Growth (ConFiG)}
-\label{sec:config}
+\chapter{ConFiG: Contextual Fibre Growth}
+\label{chap:config}
 
 \chaptertoc{}
 
 \begin{chapterabstract}
-  This chapter introduces \acf{ConFiG}, a method for generating \acf{WM} numerical phantoms with realistic orientation dispersion and packing density.
-  The algorithm behind \ac{ConFiG} is introduced, describing how each \ac{WM} fibre is grown individually to generate a densely packed substrate.
-  
-  Some experiments are presented, one of which explores how different inputs to \ac{ConFiG} impacts the shape of resulting fibres. 
-  An application of the method to dMRI is demonstrated with simulations of the diffusion-weighted MR signal in three example substrates with differing orientation dispersions, packing densities and permeabilities.
+  This chapter introduces a series of mechanisms which were added to improve the initial implementation of ConFiG described in \Cref{chap:ipmi-implementation} and the biological fibre growth processes which inspire these mechanisms.
 \end{chapterabstract}
 
+\section{Introduction}
+\label{sec:config_introduction}
+Numerical phantoms play a valuable role in the development and validation of many magnetic resonance imaging (MRI) techniques.
+In particular, numerical phantoms are often used when developing diffusion MRI (dMRI) microstructure imaging techniques where simulations of the dMRI signal in phantoms with known microstructural properties are used in lieu of an in vivo ground truth measure of microstructure \cite{Alexander2017}.
+While recently numerical phantoms have proven useful for validating microstructure imaging of grey matter \cite{Palombo2020}, they have more commonly been used for validating white matter (WM) microstructure, with many studies comparing parameter estimates from fitting their models to the known ground truth from the phantoms e.g. \cite{Li2019,Jelescu2017,Scherrer2016,Tariq2016,Daducci2015,Nilsson2017,Xu2014,Zhang2012,Nilsson2010}.
+Some recent works directly estimate microstructural features using fingerprinting techniques and machine learning to match simulated signals and the corresponding ground truth microstructure of the numerical phantom to the measured signal\cite{Hill2019,Palombo2018a,Rensonnet2018,Nedjati-Gilani2017}.
+As well as affecting the dMRI signal, microstructural features also influence other MR techniques such as susceptibility-weighted imaging \cite{Li2012,Lee2010}.
+For instance, Xu et al. \cite{Xu2018} recently used simulations to show that using realistic axonal models rather than simple circular cylinders affects the MR signal.
+Therefore, it is important to the MRI community to generate realistic WM numerical phantoms which accurately capture microstructural features in order to get realistic simulated signal.
 
-\section{ConFiG: Contextual Fibre Growth}
-\label{sec:fibre_growth_algorithm}
-In this section we describe ConFiG  which grows fibres one-by-one avoiding intersection between fibres whilst attempting to ensure that the resulting substrate has desired morphological properties such as orientation dispersion, diameter distribution and packing density.
-The algorithm is broken into a few stages:
+Typically, however, there is a mismatch between the complexity of true brain tissue microstructure and the models used in simulation, with simulations simplifying the microstructure.
+On one hand, ex vivo electron microscopy (EM) studies have revealed the high complexity of real axonal morphology \cite{Abdollahzadeh2019,Lee2019b,Salo2018}.
+Reconstructions of axons from these studies show that real WM contains axons with complex morphologies on an individual axon basis such as undulation, beading and non-circular cross sections, as well as non-trivial configurations including orientation dispersion and crossing bundles.
+On the other hand, the models used in simulation studies often represent axons in WM using simplistic geometrical representations such as parallel cylinders with uniform \cite{Fieremans2010,Nilsson2010,Nilsson2009,Ford1997} or polydisperse \cite{Alexander2010,Hall2009} radii.
+Some studies investigate the effect of differing configurations of fibres such as simple crossing \cite{Rensonnet2017,Zhang2011a} and orientation-dispersed \cite{Tariq2016,Zhang2012,Zhang2011} fibre bundles.
+A few groups generate WM numerical phantoms with complex fibre configurations for the application to  tractography \cite{Close2009,Neher2014}; however realistic microstructural morphology is not the focus of these approaches.
+
+Other studies introduce more microstructural complexity into the numerical phantoms, typically only considering one mode of morphological variation at a time; some examples of this include harmonic beading \cite{Budde2010,Landman2010}, spines \cite{Palombo2018}, undulation \cite{Brabec2019,Nilsson2012} and myelination \cite{Brusini2019}.
+
+
+Recently, a number of groups have attempted the challenge of combining these features to generate phantoms approaching the morphological complexity and density of real tissue.
+The most common approach to this is the packing of fibres into densely packed configurations \cite{Close2009,Ginsburger2018,Ginsburger2019,Rafael-Patino2018}.
+The typical approach, as taken in the state-of-the-art MEDUSA algorithm \cite{Ginsburger2019}, is to generate a set of overlapping fibres decomposed into small segments and iteratively refine their positions to remove the overlap between them.
+Despite their recent progress, further advance of this class of techniques may be limited, because nature does not create fibres before attempting to pack them together.
+Instead, real axons are guided by chemical cues and fit into available space as they grow \cite{Price2017,Lowery2009}.
+Mimicking the natural fibre genesis may prove important for building more realistic phantoms.
+
+To this end, we propose Contextual Fibre Growth (ConFiG), an approach to generate WM numerical phantoms that emulates natural fibre growth. ConFiG generates WM numerical phantoms by growing fibres one-by-one, mimicking a set of key mechanisms which govern real axonal growth. A preliminary implementation of ConFiG was presented in \cite{Callaghan2019}.
+We assess the performance of ConFiG by measuring the impact of each of the biologically inspired mechanisms on the achievable phantom density and comparing against state-of-the-art MEDUSA phantoms.
+To test how realistic ConFiG phantoms are, we compare the microstructural properties of the phantoms to measured data from electron microscopy and compare simulated dMRI signal in the phantoms to real dMRI data.
+
+The rest of the paper is organized as follows: \Cref{sec:config_methods} describes the ConFiG algorithm, \Cref{sec:config_experiments} details the experiments outlined above and \Cref{sec:config_results,sec:config_discussion} summarise the contributions and discuss future work.
+
+\section{Methods}
+\label{sec:config_methods}
+In this section we describe the ConFiG algorithm, beginning with an overview of the main components in the growth algorithm. We then describe the biological mechanisms motivating ConFiG and how each of these are implemented to give the final ConFiG algorithm.
+
+\subsection{Overview of the ConFiG algorithm}
+\label{sec:config-alg-overview}
+Given a set of morphological input parameters (target density, orientation distribution and diameter distribution), ConFiG generates a densely packed set of fibres by growing each fibre following a set of biologically motivated rules. The generation of ConFiG numerical phantoms happens in three main steps:
+\begin{description}
+  \item [STEP 1] Generate initial growth configuration from user inputs
+  \item [STEP 2] Grow the fibres using ConFiG growth algorithm
+  \item [STEP 3] Generate 3D meshes for dMRI simulation
+\end{description}
+Each of these steps are discussed in detail below.
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/method_inputs_only.eps}
+  \caption[Inputs to the ConFiG algorithm]{Inputs to the ConFiG algorithm for the single bundle case. $L$ defines the size of the area of that the growth will take place in. The target density and fibre radius distribution govern the generation of starting points for each fibre by packing in 2D. Orientation dispersion parameters govern the generation of target points corresponding to each starting point. $N$ defines the number of nodes to use when generating the network. In the case of multiple bundles, starting and target points are generated for each bundle and then combined into the same space which is filled with nodes for the network. }
+  \label{fig:config_inputs}
+\end{figure}
+
+First, Step 1 is broken down in to three substeps as outlined in \Cref{fig:config_inputs}:
+\begin{description}
+  \item [STEP 1.1] Generate fibre starting points (~\Cref{fig:config_inputs}a-b). To generate a starting point for each fibre to grow from, ConFiG packs circles with the desired diameter distribution up to the target density (defined in terms of the desired fibre volume fraction) in 2D, following the approach taken in \cite{Hall2009}.
+
+  \item [STEP 1.2] Generate fibre target points (~\Cref{fig:config_inputs}c). To encode the desired orientation distribution, each fibre has a direction drawn from the target distribution which gives a target point for the fibre to grow towards. As a demonstration of the flexibility of the framework, in this work we use the Watson distribution \cite{Mardia2008} for isotropic dispersion and the elliptically symmetric angular Gaussian distribution \cite{Paine2018} for anisotropic orientation dispersion, however other orientation distributions can be defined according to the user’s needs.
+
+  \item [STEP 1.3] Generate growth nodes (~\Cref{fig:config_inputs}d). ConFiG uses a set of pseudorandomly placed points (nodes) to sample the space and encode which regions are occupied by existing fibres. This simplifies collision checking making growth more efficient than a direct collision detection approach involving growing each fibre one small step at a time and checking collisions with existing fibres \cite{Callaghan2019}.
+\end{description}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/method_without_inputs1.eps}
+  \caption[Overview of the ConFiG growth algorithm]{Overview of the basic growth algorithm in ConFiG. In this example, three fibres are shown with a growth network that only contains relevant nodes for the sake of visualisation.  From the set of nodes, a network is constructed using the Delaunay triangulation. Each fibre then grows from node to node, along any edge connected to the current node. The node moved to will be the node with the lowest cost. Once a fibre segment has grown, the network nodes are updated to store information about which nodes are occupied or near to an existing fibres. This contributes to the cost function for any future fibres, penalising moving to nodes too close to existing fibres.  It is not possible to move to any node now inside a fibre as indicated by the removal of this edges from the network (pairs of blue arrows show where this is happening). The next fibres grow, now avoiding existing fibres until all fibres have finished. See Supplementary Video 1 for an animation of this algorithm. }
+  \label{fig:config_algorithm}
+\end{figure}
+
+Second, Step 2, the main growth algorithm, is broken down into a series of substeps as outlined in \Cref{fig:config_algorithm}:
+\begin{description}
+  \item [STEP 2.1] Create growth network (~\Cref{fig:config_algorithm}a\&b). In order to encode which nodes a fibre can move to from any other node, the growth nodes are connected using the Delaunay triangulation.
+
+  \item [STEP 2.2] Grow one fibre step (~\Cref{fig:config_algorithm}c-e). Fibres grow one-by-one in a random order along this network towards their target points while avoiding existing fibres. During growth, a fibre must choose in which direction it should grow. This direction is chosen in ConFiG by following a cost function motivated by biological axonal guidance mechanisms (~\Cref{fig:config_algorithm}d), described in \Cref{sec:config_chemoattraction,sec:config_fasciculation}.
+
+  \item [STEP 2.3] Update the network (~\Cref{fig:config_algorithm}f). The growth network is updated in order to store the information about the space this fibre is occupying so that future fibres can avoid it. The simplest way to do this is to store the minimum distance from each node in the network to any existing fibre as in \cite{Callaghan2019}. Additionally, another biologically motivated network updating strategy is described in \Cref{sec:config_dynam_growth}.
+
+  \item [STEP 2.4] Repeat steps 2.2 and 2.3 until fibre reaches target (~\Cref{fig:config_algorithm}g). By default in ConFiG, each fibre will grow completely before the next one starts, meaning that step 5 only needs to be performed once the fibre has finished growing. If fibres are allowed to grow concurrently, step 5 must be performed after each growth step.
+
+  \item [STEP 2.5] Repeat steps 2.2-2.4 for remaining fibres (~\Cref{fig:config_algorithm}h-i). As noted in \Cref{fig:config_algorithm} (e-h), as the network is updated, more and more nodes become inaccessible making the network sparser. This means that some fibres may reach a point from which they cannot grow any further and will become stuck. Biologically inspired mechanisms designed to address this point are described in \Cref{sec:config_fibre_collapse,sec:config_dynam_growth}.
+\end{description}
+
+Finally, Step 3, the meshing procedure, is briefly described below and in further detail in \Cref{sec:config_meshing}:
+\begin{description}
+  \item [STEP 3] Generate 3D fibre meshes. After the growth process, each fibre will be represented by a series of connected 3D points and corresponding diameters at each point. In order to simulate diffusion MRI signals, these fibre skeleta need to be turned into 3D meshes. ConFiG uses a meshing procedure designed to eliminate overlap between fibres.
+\end{description}
+
+The basic ConFiG growth algorithm described here is illustrated in \Cref{fig:config_algorithm}, with an animation of the algorithm in Supplementary Video 1. The remainder of this section outlines the biological process governing real axonal growth, and how these processes motivated the final implementation of the ConFiG algorithm.
+
+\subsection{Biological motivation for ConFiG}
+\label{sec:config_biol_motiv}
+In nature, axons grow following chemical cues in their environment through various mechanisms which either attract or repel fibres to guide their growth \cite{Dent2011,Lowery2009,Mortimer2008,Polleux2010,Price2017,Rauch2013,Sakisaka2005}. In an attempt to emulate real axonal growth, mechanisms motivated by the following guidance processes have been integrated into ConFiG:
 \begin{itemize}
-\item the definition of inputs to the algorithm
-\item the generation of the network on which fibres grow
-\item the method by which each fibre grows
-\item the meshing procedure to create 3D meshes
+  \item Chemoattraction – the process by which fibres are attracted to diffusible chemical cues in their environment \cite{Price2017,Mortimer2008}.
+  \item Fibre collapse – a response to a chemorepulsive source whereby a fibre withdraws and regrows in a different direction \cite{Rauch2013}.
+  \item Cell adhesion molecules – chemical signals on the surface of cells which guide axons that come into contact with them \cite{Sakisaka2005}.
+  \item Fasciculation – the process by which multiple axons come together to form bundles \cite{Price2017,Smit2017}.
 \end{itemize}
-Pseudocode for the first three of these points is shown in \Cref{alg:main_algorithm}. The rest of this section details each of the above stages.
+The following sections detail how mechanisms motivated by these biological processes are implemented in ConFiG while \Cref{fig:config_chemoattraction,fig:config_dynam_growth,fig:config_fasciculation} illustrate these biological processes alongside their ConFiG counterparts.
 
-\begin{algorithm}
-  \centering
-  \begin{algorithmic}
-    \Procedure{fibreGrowth}{OD, $\rho$, $d_0$, numNodes}
-    \State [startPoints, targets] $\leftarrow$ \Call{getInitialPoints}{OD, $\rho$, $d_0$} \Comment{\Cref{sec:config_input}}
-    \State [DT, D] $\leftarrow$ \Call{intialiseNetwork}{numNodes, startPoints, targets}\Comment{\Cref{sec:creation_of_the_growth_network}}
-    \State numFibre $\leftarrow$ number of entries in startPoints
-    \For{i in 1:numFibre} \Comment{Initialise the fibre structures}
-    \State fibres(i).node(0) = startPoints(i)
-    \EndFor
-    \For{i in 1:numFibre} \Comment{Main growth loop (\Cref{sec:growth_of_a_fibre})}
-    \State terminated $\leftarrow$ false
-    \State j $\leftarrow$ 0
-    \While{not terminated}
-    \State\Call{getCandidates}{fibres(i).node(j), DT} \Comment{\Cref{fig:config_method}a}
-    \State \hspace{1em} $\bullet$ candiates $\leftarrow$ DT.nodes sharing edge with fibres(i).node(j)
-    \State\Call{getBestStep}{candidates, D, targets}    \Comment{\Cref{fig:config_method}b}
-    \State \hspace{1em} $\bullet$ costs $\leftarrow$ costs for candiates from Eq. (1) given targets, D
-    \State \hspace{1em} $\bullet$ bestStep $\leftarrow$ candidate with minimum cost
-    \State\Call{takeStep}{fibres(i), bestStep}       \Comment{\Cref{fig:config_method}c}
-    \State \hspace{1em} $\bullet$ fibres(i).node(j+1) $\leftarrow$ bestStep
-    \State\Call{updateTriangulation}{fibres(i), DT, D} \Comment{\Cref{fig:config_method}d}
-    \State \hspace{1em} $\bullet$ segment $\leftarrow$ vector from fibre(i).node(j) to fibre(i).node(j+1)
-    \State \hspace{1em} $\bullet$ D$_\mathrm{new} \leftarrow$ distance from DT.nodes to segment
-    \State \hspace{1em} $\bullet$ D $\leftarrow$ min(D, D$_\mathrm{new}$)
-    \State\Call{isTerminated}{fibres(i), targets}
-    \State \hspace{1em} $\bullet$ \textbf{if} fibre(i) has reached target:
-    \State \hspace{3em} terminated $\leftarrow$ true
-    \State \hspace{1em} $\bullet$ \textbf{elseif} fibre(i) has no possible node to move to:
-    \State \hspace{3em} terminated $\leftarrow$ true
-    \State \hspace{1em} $\bullet$ \textbf{else}:
-    \State \hspace{3em} terminated $\leftarrow$ false
-    \State \hspace{3em} j $\leftarrow$ j + 1
-    \EndWhile
-    \EndFor
-    \EndProcedure
-  \end{algorithmic}
-  \caption[Fibre growth algorithm.]{Fibre growing algorithm. Takes desired morphological priors (OD, $\rho$ and $d_0$) as well as desired number of nodes in the growth network. From these initial fibre positions, targets and the growth network are generated before the main loop of the algorithm in which each fibre grows one-by-one.}
-  \label{alg:main_algorithm}
-\end{algorithm}
+\subsubsection{Chemoattraction}
+\label{sec:config_chemoattraction}
+As mentioned in \Cref{sec:config-alg-overview}, as a fibre grows it must choose in which direction it will move. One of the main processes governing the guidance of real axons is chemotropism; a process by which axons respond to diffusible chemical cues in their environment. One key chemotropic mechanism is chemoattraction, in which fibres are attracted along a chemical gradient towards a target region \cite{Price2017}.
 
-\subsection{Input to the algorithm}
-\label{sec:config_input}
-The morphology of the final substrate will depend on the inputs to the algorithm which can be split into two general categories: parameters defining the fibre population(s), and parameters defining the space in which fibres grow.
-
-\paragraph*{Fibre parameters}
-Fibre parameters include the desired orientation dispersion (OD), packing density ($\rho$) and diameter distribution ($P(d_0)$).
-These three parameters determine the initial settings for each individual fibre. 
-Each fibre is defined by a starting point and a target point towards which it will grow as well as an initial fibre diameter, $d_0$.
-These parameters for each fibre are determined from OD, $\rho$ and $P(d_0)$ by packing circles with the diameters drawn from $P(d_0)$ up to a density of $\rho$ in 2 dimensions. Orientation dispersion is introduced by moving the target points of fibres relative to the starting points. For instance, planar dispersion can be introduced by splitting the substrate into planes and rotating these relative to one another.
-
-Each fibre is allowed to shrink its diameter if it is necessary to fit into spaces close to other fibres.
-The maximum amount of shrinkage permitted is a controllable parameter, specified as a percentage of the initial fibre diameter.
-
-Due to the stochastic nature of the algorithm, the final substrate is not guaranteed to have the exact morphological properties as input in the priors, however these inputs give the target morphology that ConFiG will attempt to produce.
-
-Additionally, if the user wishes, the starting point, target point and diameter for each fibre can be directly input, rather than allowing ConFiG to generate them, in order to specify particular fibre configurations such as crossing fibre bundles.
-
-\paragraph*{Space defining parameters}
-Parameters defining the space in which the fibres grow are used to define a discretisation of the space which is necessary to make the algorithm run in a practically feasible time.
-Ideally, the space in which the fibres can grow is a continuous space, so there are an infinite number of positions a fibre can occupy. Practically, this is intractable, so in ConFiG the space is discretised into a set of points which define nodes that the fibres can occupy.
-
-Naturally, the choice of the density and arrangement of node points will have an impact on the substrate that is produced. Too few nodes will result in fibres that have very long, straight segments and may introduce intersections between fibres. Using more nodes will reduce overlap between fibres at the cost of more memory usage and slower growth of the fibres.
-
-The arrangement of the nodes will also affect the morphology of the final substrate. For instance, placing nodes on a uniform grid may produce fibres with unnaturally regular and angular paths. If the density of points on a uniform grid becomes sufficiently high, these angular bends are insignificant compared to the diameter and the fibres will have more natural shapes. For large substrates however, the number of nodes required to satisfy this condition becomes intractably large. For this reason, the nodes used are typically pseudo-randomly distributed to ensure broadly uniform coverage of the space, whilst keeping the number of nodes required lower. 
-The impact of the choice of node points is investigated in \Cref{sec:config_choice_of_network}.
-
-\subsection{Creation of the Growth Network}
-\label{sec:creation_of_the_growth_network}
-In order to embed information about the local environment at each node, the first step of the algorithm is generating the paths that fibres can take between the nodes as well as defining a maximum diameter that can be sustained at each node to avoid intersection which will be denoted by $d_i$, for a node, $i$. These paths define a network along which the fibres may grow.
-
-The paths between nodes are defined by the Delaunay triangulation\cite{Delaunay1934} of the nodes which creates a fully connected network.
-This triangulation creates edges between nearby nodes, encoding information about the local connectivity at each node.
-Nodes that become occupied by a fibre will be inaccessible to any future fibres, which is one way in which intersection is minimised between fibres.  
-
-The maximum diameter, $d_i$, at each node encodes information on the amount of space available at each node.
-Where $d_i$ is small, that node is close to an existing fibre, so any subsequent fibre passing through that node will have to shrink its diameter to $d_i$ in order to prevent intersections.
-Allowing fibres to contextually shrink their diameter allows fibres to occupy spaces which would otherwise be unavailable.
-
-\subsection{Growth of a Fibre}
-\label{sec:growth_of_a_fibre}
 \begin{figure}
-	\centering
-	\includegraphics[width = \textwidth]{figures/config/newMethod_v1.eps}
-	\caption[Schematic overview of the fibre growth algorithm.]{\small Schematic overview of the fibre growth algorithm. A fibre grows sequentially, moving from one node to the next, starting from the start point (top left, green node) toward the target (top left, blue node) along the edges defined by the Delaunay triangulation. Inset: The algorithm determining which node a fibre steps to at any given iteration. a) The possible nodes to step to are those which share an edge with the current node. b) From the edges available costs are calculated using \cref{eq:l_t,eq:l_D}. c) The fibre will grow along the edge with the lowest cost. d) From this new segment, the maximum diameter sustainable at a given node is calculated, giving each node a cost based on the maximum sustainable diameter. This cost will then be used in the calculation of edge weights (b) for future fibres. Note that although this figure illustrates the algorithm in 2D, in practice the algorithm grows fibres in 3D.} 
-	\label{fig:config_method}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/biological_target+cam-01.png}
+  \caption[Illustration of the chemoattraction process]{Illustration of two of the biological motivations and how they are implemented in ConFiG. a) Growth towards the target is enforced by means of a cost function encouraging growth towards the target point. b) Fibre collapse is implemented by allowing the fibre to move backwards if it reaches a node from which there are no viable steps. The biological figures are adapted from \cite{Price2017}}
+  \label{fig:config_chemoattraction}
 \end{figure}
-Each individual  fibre grows by moving the head of the fibre from node to node according to a cost function which attempts to ensure that the fibre moves towards its target whilst avoiding intersection.
-The main steps in the growth of a single fibre are shown in \Cref{fig:config_method}. 
 
-The first step in the growth of a fibre is determining which nodes are the possible next nodes can step to, referred to as candidate nodes.
-From a given starting node, $s$, the candidate nodes are any of the nodes which share an edge with $s$.
-
-The choice of which candidate node a fibre steps to from the current node is determined by a cost function. 
-The cost function consists of two terms, one which penalises moving away from the target point, $t$, and one which penalises moving to a position where $d_i$ is low, meaning the fibre diameter would have to shrink. The cost function for a fibre at a position, $s$, to move to an candidate node, $c$, given a target point, $t$, is $l = l_t + fl_d$,
-% \begin{equation}
-% l = l_t + f l_d\,,
-% \label{eq:costfunction}
-% \end{equation}
-where 
+To approximate this chemoattractive mechanism, each fibre is encouraged to grow towards its target point (i.e. the target point acts like a chemoattractive source). From any node in the growth network, the fibre will move along an edge that takes it towards its target while avoiding existing fibres according to a cost function \cite{Callaghan2019}. The chemoattractive mechanism and its ConFiG counterpart are illustrated in \Cref{fig:config_chemoattraction}a.
+From a starting node, $s$, the candidate nodes, $c$, that the fibre can move to are any nodes that share an edge with $s$. In addition to its position, each network node stores the maximum fibre diameter, $d_c$, that can be sustained at that node without intersecting another fibre. The fibre will move to a candidate node according to a cost function consisting of two terms; $l_t$, which penalises taking very large steps or moving away from the target point, $t$, and $l_d$, which penalises moving to a position where $d_c$ is low meaning that the fibre will have to shrink. The cost function for a fibre at a position, $s$, to move to a candidate node, $c$, given a target point, $t$, is (Callaghan et al., 2019)
 \begin{align}
-l_t &= \frac{1}{2} \cdot \frac{\|s - c\|}{1 + \|s - c\|} \cdot \left(1 - \frac{(c -s)\cdot(t - s)}{\|c-s\|\|t-s\|}\right)\,,\label{eq:l_t}\\
-l_d &= \max\left(0,\, \frac{1}{d_{0}} (d_0 - d_i)\right)\,,\label{eq:l_D}
+  l &= l_t+fl_d  \,,\label{eq:original_cost}\\
+      \mathrm{where}\nonumber\\
+  l_t &=  \frac{1}{2} \cdot \frac{\|s-c\|}{1+ \|s-c\|} \cdot \left(1- \frac{\left(\left(c-s\right) \cdot \left(t-s\right)\right)}{\|c-s\|\|t-s\|}\right)\,, \label{eq:original_lt}\\
+  l_d &=\mathrm{max}\left(0, \frac{1}{d_0} \left(d_0 - d_c \right)\right) \,. \label{eq:original_ld}
 \end{align}
-$d_0$ is the desired radius of the fibre and $f$ is a weighting factor between the two terms. In this work, $f$ is fixed to 0.2 to more strongly weight growth toward the target.
+Here, $d_0$ is the target diameter of the fibre and $f$ is a weighting factor between the two terms. In this work, $f$ is fixed to 0.2 to more strongly weight growth towards the target.
 
-\Cref{eq:l_t} is the term penalising moving away from the target. The dot product between the vector to the candidate and the vector to the target ensures that the minimum cost occurs when the candidate is directly aligned with the target.
-This term of the cost function is inspired by the work of Bicho et al.\ \cite{Bicho2012} who use the space colonisation algorithm \cite{Runions2005,Runions2007} to simulate crowds.
+The next node for a fibre will be the candidate node which has the lowest cost according to Equation (1). This method of finding a path through the triangulation by choosing the lowest cost node at each position amounts to a greedy best-first pathfinding approach with a heuristic given by Equation (1).
 
-\Cref{eq:l_D} is the term penalising moving to a position where the radius of the fibre must shrink. 
-For radii lower than the desired radius of the fibre, $d_0$, \Cref{eq:l_D} grows linearly with distance from $d_0$. 
-For radii greater than or equal to $d_0$, \Cref{eq:l_D} is zero, meaning that regions of empty space are equally weighted.
+Growing fibres along the network using just this chemoattractive mechanism is the minimal implementation of ConFiG that will generate substrates to try and meet the morphological inputs. There are some limitations to this minimal approach however; the greedy growth and the sparse sampling of the space means that fibres can grow into regions from which they cannot grow further and become stuck. Additionally, in this approach, fibres grow independently of one another, whereas real fibres grow forming bundles in the process known as fasciculation.
 
-The next node for a fibre will be the candidate node which has the lowest cost according to \Cref{eq:l_t,eq:l_D}.
-This method of finding a path through the triangulation by choosing the lowest cost node at each position amounts to a greedy best-first pathfinding approach with a heuristic given by \Cref{eq:l_t,eq:l_D}. 
+\Cref{sec:config_fibre_collapse,sec:config_dynam_growth,sec:config_fasciculation} describe further mechanisms which were added to enable ConFiG to address these limitations in order to meet more complex morphological priors (e.g. high density and orientation dispersion together).
 
-With the next node chosen, the value of $d_i$ needs to be updated for other nearby nodes. 
-All nodes have $d_i$ set to the Euclidean distance between the node and the surface of the new section of fibre if that distance is less than the current value of $d_i$. This is illustrated in \Cref{fig:config_method}d.
+\subsubsection{Fibre Collapse}
+\label{sec:config_fibre_collapse}
+As mentioned in \Cref{sec:config_biol_motiv}, in ConFiG a fibre can become stuck when there are no possible next steps because all neighbouring nodes are inaccessible. In an attempt to ameliorate this a process mimicking fibre collapse was implemented, illustrated in \Cref{fig:config_chemoattraction}b.
 
-Any nodes which now lie within the fibre have $d_i$ set to zero. 
-Nodes with $d_i = 0$ are disallowed from future steps, meaning that once a fibre has grown, no future fibres can connect to any nodes within the fibre. 
-This, in addition to shrinking the radius of future fibres according to $d_i$ at each node means that the fibres grow in an almost completely  non-intersecting manner.
-Since the value of $d_i$ is set based on fibre-to-node distances, however, there can be cases in which the fibres would intersect when the closest point between two fibre sections is not at one of the fibre nodes.
-In order to account for this, a meshing process was developed which can deform fibres around one another. This is described in \Cref{sec:creation_of_fibre_meshses}.
+In ConFiG fibre collapse, the fibre will move back by an initial distance, $g_0$, and regrow from there avoiding any nodes in the route it took previously. If the fibre becomes stuck again, it will move back by a further distance, $g_0+ \delta$, where $\delta$ is the additional distance to step back. This process is repeated until the fibre reaches the target or gets stuck a user-defined maximum number of times. In this work, $g_0=\SI{2}{\micro\metre}$  and $\delta=\SI{5}{\micro\metre}$ in an approximation of the biological fibre collapse process investigated by Rauch et al. \cite{Rauch2013} who show fibres collapsing up to \SI{25}{\micro\metre} back towards the soma. The maximum number of steps back is set to 5, meaning that the maximum step back is \SI{27}{\micro\metre}, in line with real fibres. If there is no possible route after 5 attempts then the fibre will stop growing and will be removed from the phantom. This process of removing stuck fibres means that the resulting substrate may not always have the same density as the input desired fibre density.
 
-
-The fibre growth algorithm will output a set of fibres which are defined by a series of nodes and the diameter of the fibre at each node.
-These are written into the Stockley-Wheal-Cole (SWC) format\cite{Stockley1993}, a format commonly used to store cellular morphology information.   
-\vspace{-1em}
-\subsection{Creation of Fibre Meshes}
-\label{sec:creation_of_fibre_meshses}
-% \vspace{-0.5em}
-In order to create 3D meshes to be used in dMRI simulations, a meshing process was developed using 3D modelling software Blender (https://blender.org).
-Fibres are meshed one-by-one using the Blender “SWC Mesher” add-on  (https://github.com/mcellteam/\\swc\_mesher) which uses Blender metaballs to make a mesh.
-
-In Blender, a metaball is an implicit surface defined as the isosurface of a so-called directing structure. 
-This directing structure can be seen the source of a static field. For instance a spherical isosurface can be formed with a directing structure which mimics the electric field a point charge.
-When multiple metaballs come close to one another, the fields will combine to form a surface that merges the two spheres together.
-An example of metaball interactions is shown in \Cref{fig:metaballs}.
-
-By placing metaballs along the skeleton of each fibre, with the path and diameters given from the fibre growth algorithm, a smooth surface is formed for each fibre.
-It is this implicit surface, created using metaballs that the SWC mesher add-on creates. 
-This implicit surface can be turned into an explicit surface (i.e. a mesh of vertices and faces) in Blender, which can then be refined by progressively smoothing and reducing the number of faces in the mesh to create a mesh which can be used in dMRI simulations. 
-
-This process can be used to mesh each fibre individually, however issues can arise with intersection of fibres, as mentioned in \Cref{sec:growth_of_a_fibre}.
-In order to account for this, a contextual meshing algorithm was developed.
-The metaball surface for one fibre is created using the SWC Mesher.
-This surface is then turned into a mesh as described above, however the metaballs are retained.
-The metaball potential is then turned negative, meaning that rather than attracting any future nearby metaball surfaces, it will repel them, as shown in \Cref{fig:metaballs}b.
-This means that subsequent fibres which are meshed very close to, or overlapping with existing fibres will deform organically to resolve the intersection, thus creating a series of completely non-intersecting fibre meshes which can be used by the dMRI simulator.
-
-The deformation introduced by the contextual meshing process has two effects.
-As well as helping to prevent intersection between fibres, the deformation produces fibres with more organic non-circular cross sections, better mimicking realistic fibres.
-This is vastly different to the majority of previous WM numerical phantoms which model fibres as circular or elliptic cylinders.
-
+\subsubsection{Dynamic Growth Network}
+\label{sec:config_dynam_growth}
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{figures/config/metaballs.png}
-  \caption[Simple example of metaball interactions.]{\small Simple example of metaball interactions. a) With two positive metaballs, the fields combine to attract the surfaces together. This is used to join individual segments into a continuous fibre. b) With one negative metaball (indicated by the flat grey circle) the surface of the metaball is repelled from the negative metaball. This is used to deform nearby fibres around one another.}
-  \label{fig:metaballs}
+  \includegraphics[width=0.8\textwidth]{figures/config/biological_cam.png}
+  \caption[Illustration of the contact guidance mechanism]{Illustration of the contact guidance axonal growth mechanism and the dynamic growth network implemented in ConFiG. The dynamic growth network is implemented as a set of points added around each fibre after growth, enable future fibres to more easily grow along/around existing fibres.}
+  \label{fig:config_dynam_growth}
 \end{figure}
 
+In the preliminary implementation of ConFiG \cite{Callaghan2019}, the network nodes were initialised pseudorandomly within the growth region and once initialised, the growth network was static, meaning that the nodes and edges of the network were fixed. This limited the growth to the specific instantiation of the network and it could not adapt to where fibres were once they had grown. Furthermore, as illustrated in \Cref{fig:config_algorithm}, as fibres grow, many nodes become inaccessible due to being within fibres meaning that the network becomes gradually sparser.
 
+A dynamic growth network was implemented to ameliorate these effects. Now, once a fibre has reached the target, a number of nodes, $N_{added}$, are generated around the path of the fibre. This gives a denser sampling of the space in regions in which fibres exist and serves to give subsequent fibres more nodes to use to grow along or around that fibre, helping to increase the achievable density by limiting the number of fibres which get stuck. In this work, where the dynamic network is used, $N_{added}=2500$.
 
-\section{Experiments and Results}
-\label{sec:experiments_and_results}
+This is also loosely motivated by the contact guidance mechanism in which axons are attracted to or repelled by chemical cues on the surface of other cells, known as cell adhesion molecules (CAMs). Here, the added points act like CAMs meaning that a future fibre which grows can use these points near to the fibre to grow around or along it as if it were following contact guidance cues. \Cref{fig:config_dynam_growth} shows how CAMs work in biological axonal growth alongside the ConFiG dynamic network, illustrating the parallels between the two.
 
-\subsection{Effect of Choice of Growth Network}
-\label{sec:config_choice_of_network}
+\subsubsection{Axon Fasciculation}
+\label{sec:config_fasciculation}
+
 \begin{figure}
   \centering
-  \includegraphics[width=0.9\textwidth]{figures/config/uniform_vs_rand.png}
-  \caption{Fibres generated using uniform grid (orange) and pseudo-random (blue) network nodes for increasing numbers of nodes.}
-  \label{fig:config_uniform_vs_rand}
+  \includegraphics[width=0.5\textwidth]{figures/config/biological_fasciculate.png}
+  \caption[Illustraction of the fasciculation process]{Illustration of how the labelled pathway hypothesis is expected to work in biology and its ConFiG counterpart. Fasciculation is implemented using the cost function term in Eq. 1 which means that fibres in the same bundle are encouraged to stay close to one another.}
+  \label{fig:config_fasciculation}
 \end{figure}
-As mentioned in \Cref{sec:config_input}, the choice of the node points in the network will affect the morphology of the resulting substrate.
-In order to investigate this, a qualitative experiment was performed in which a single fibre was grown on a network with either a) nodes on a uniform grid or b) pseudorandom nodes.
-In each case, the number of nodes was increased and the resulting fibre investigated.
 
-The fibre was defined by a start point (20, 0, 0) $\mu$m,  target point (0, 0, 50) $\mu$m and diameter 1 $\mu$m.
-This configuration was chosen so that the fibre would not have a path that directly followed one of the 90\degree\ or 45\degree\ lines in the uniform grid.
-Node points were initialised in either a uniform grid or pseudorandomly within the space [-5, -5, -5] to [25, 5, 55] to ensure coverage of the space in which the fibre would grow.
-The number of source points used was $N \approx 1000, 10000, 100000, 1000000, 5000000$. 
+One particular role CAMs play is in axon fasciculation, the process in which axons follow a so-called pioneer axon closely, forming a bundle \cite{Price2017,Sakisaka2005}. To mimic the process of axon fasciculation, the term in the cost function penalising moving into regions in which the fibre had to shrink, $l_d$ (Equation (3)), was altered to be conditional on which fibre bundle is closest.
 
-The resulting fibres can be seen in \Cref{fig:config_uniform_vs_rand}, where orange fibres are grown using the uniform grid and blue fibres using pseudorandom points.
-In both cases, as the number of nodes increases, the resulting fibre has more of a smooth, straight path between start and target.
-The uniform grid fibres, have a much more angular, structured path due to being forced to grow on the grid, while the pseudorandom fibres more irregular paths, which could be considered more `organic' looking. 
+A fibre, $f$, with a target diameter, $d_0$, moving to a candidate node, $c$, which has a maximum sustainable diameter $d_c$ will now have $l_d$ given by:
+\begin{equation}
+  \label{eq:updated_ld}
+  l_d = \begin{cases}
+    \max\left(0, \frac{1}{d_0} \left(d_0 - d_c\right)\right) & \text{if } b_c \neq b_f \\
+    \mathrm{abs}\left(\frac{1}{d_0} \left(d_0 - d_c\right)\right) & \text{if } b_c = b_f
+    \end{cases}
+\end{equation}
 
+Where $b_f$ is an index identifying the bundle that fibre $f$ belongs to and $b_c$ is the index of the bundle that is closest to $c$ (i.e. the index of the bundle of the fibre that set $d_c$). This means that when $c$ is closest to the same bundle as $f$, the cost function penalises moving away from that bundle as well as shrinkage, whereas when the bundles differ, it only penalises shrinkage.
 
-\subsection{Demonstration of ConFiG}
-\label{sec:method_demonstration}
-To demonstrate the potential of ConFiG, three substrates at different (dispersion, packing density) conditions were generated: (0\degree, 60\%), (15\degree, 30\%) and (35\degree, 25\%), shown in \Cref{fig:substrates}a.
-Each substrate is grown using $5 \times 10^6$ pseudo-randomly placed source nodes for the growth network, giving a network with $3.88\times10^7$  edges and a mean distance between any given node and its neighbours of 0.29 $\mu$m.
-The packing densities chosen represent the highest densities achievable using ConFiG for each dispersion condition.
+This new form of the cost function encourages fibres of the same bundle to stick together while still avoiding fibres of different bundles, inspired by the labelled pathway hypothesis, which states that axons join different fascicles based on different CAMs expressed on the fibres \cite{Price2017}. In this case, bundle indices $b_c$ and $b_f$ act like different identifying CAMs. \Cref{fig:config_fasciculation} shows how this fasciculation process is expected to happen in biology alongside how the improved cost function encourages a similar process in ConFiG.
 
+\subsubsection{Global Optimisation}
+\label{sec:config_global_optimisation}
+Since the growth of fibres in ConFiG takes place on a discrete network of points, the final positions of fibre nodes may be suboptimal for achieving the maximum density. In other words, certain fibres’ nodes may be closer to other fibres than they would ideally be in order to reach their target diameter (i.e. the fibre has had to shrink its diameter at that node).
 
-For the 0\degree\ dispersed substrate, initial diameters were drawn from a gamma distribution with mean $d_0 = 2\ \mu$m and standard deviation $\sigma_d = 0.2\ \mu$m. The 15\degree\ and 35\degree\ substrates were generated with $d_0 = 1.2\ \mu$m and $\sigma_d = 0.2\ \mu$m in order to show the flexibility of ConFiG to generate substrates with different diameter distributions as well as orientation dispersion and packing density. Diameters were limited to be permitted to shrink to 25\% of the original fibre diameter in order to fit into space. 
+To mitigate against this, a global optimisation step was added at the end of the growth in a procedure similar to MEDUSA \cite{Ginsburger2019}. For each point, $i$, that is part of a fibre, its nearest $n$ neighbours $(j \in NN(i))$ from other fibres are found; in this work $n=10$. The distance to all of the neighbours is found and the point’s position is updated from these distances according to the update vector, $\vec{u}_i$
+\begin{equation}
+  \label{eq:global_opt_update_vec}
+\vec{u}_i= \sum_{j \in NN(i)} D(i,j) \cdot \left(\vec{p}_i - \vec{p}_j\right) \,,
+\end{equation}
+where $\vec{p}_i$ and $\vec{p}_j$ are the locations of point $i$ and $j$. $D(i,j)$ is the function determining whether the interaction is repulsive or attractive:
+\begin{equation}
+  \label{eq:global_opt_Dij}
+  D(i, j) = \mathrm{sgn}\left(r_i + r_j - \|\vec{p}_i - \vec{p}_j\|\right) \,.
+\end{equation}
 
-For each substrate, the Pulsed-Gradient-Spin-Echo (PGSE) signal was simulated in Camino\cite{Cook2006} using $5\times 10^5$ diffusing spins and $5\times 10^3$ discrete time steps, uniformly distributed with bulk-diffusivity D$_0$=2 $\mu$m$^2$/ms. To show the range of simulation possibilities available, three different membrane permeabilities ($\kappa$=0, 0.0025, 0.0050 $\mu$m/ms) were also imposed.
-The simulated PGSE measurement parameters were: $\delta/\Delta=1/40$ ms and 50 b-values from 0 to 9 ms/$\mu$m$^2$ along x-, y- and z-directions.
+Here, $\mathrm{sgn}$ is the signum function and $r_i$ and $r_j$ are the target radii of point $i$ and $j$. The sum of these radii is the desired distance between the points since that means the fibres are just touching. $D(i,j)$ imposes that the force is repulsive if the points are closer together than the desired radius and attractive if they are further apart. The update vector is scaled such that if $\|\vec{u}_i\| > 0.2r_i$, the update vector is rescaled so that $\|\vec{u}_i\|=0.2r_i$. This acts to prevent the update vector from becoming very large.
 
-The corresponding direction-averaged simulated PGSE signals at different permeabilities are shown with SNR = $\infty$ in \Cref{fig:substrates}b and SNR = 20 in \Cref{fig:substrates}c.
-The signal decays to a lower value as the dispersion increases and density decreases, as expected. 
+There is some biological evidence that this kind of interaction between fibres is important in the fasciculation process. The fasciculation process described in \Cref{sec:config_fasciculation} relies on CAMs detected at the tip of a growing axon, however some studies provide evidence for fasciculation through interactions along axon shafts, known as zippering \cite{Barry2010,Smit2017,Voyiadjis2011}. In zippering, nearby axon shafts attract one another to form more closely packed fascicles, which is a similar process to the global optimisation process in ConFiG.
 
-\begin{figure}[h!]
+\subsubsection{Creation of 3D meshes}
+\label{sec:config_meshing}
+
+\begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{figures/config/substrates_and_signals_otherlabels.png}
-  \caption[Example substrate generated using \ac{ConFiG} and simulated signals.]{\small a) Example substrates (cut into 30x30x30 $\mu$m$^3$ cube) from the fibre growth algorithm, left to right:  Zero macroscopic dispersion (60\% density), 15\degree\ of macroscopic dispersion (30\% density), 35\degree\ dispersed (25\% density). b) Simulations for each substrate for varying permeabilities with SNR = $\infty$  and c) SNR = 20. Units of $\kappa$ are $\mu$m/ms.}
-  \label{fig:substrates}
+  \includegraphics[width=0.8\textwidth]{figures/config/METABALL_fig.png}
+  \caption[ConFiG meshing procedure]{Demonstration of the meshing procedure in ConFiG. The first fibre is created using metaballs to create a smooth surface. The second, and following fibres will be created using negative metaballs for any fibres that intersect in order to deform around them. Note that in practice, more spheres will be much more closely placed along the skeleton to create a smoother surface}
+  \label{fig:config_meshing}
 \end{figure}
 
-\subsection{Comparison with Brute-Force Approach}
-\label{sec:method_bruteforce}
-ConFiG was compared against the na\"ive brute-force approach to fibre growth.
-The brute-force approach grows fibres one segment at a time and checks for collisions between the new segment and all existing fibres.
-Each new segment is chosen from one of 128 candidate directions on a cone aligned with the previous segment, with each direction being weighted according to \Cref{eq:l_t}.
-%In the case of collisions between the proposed new section and an existing fibre, each direction is tested in order of the weight of the direction until a non-colliding direction is found, or all directions have been tested and the fibre is stuck.
+As mentioned in \Cref{sec:config-alg-overview}, following the growth process ConFiG fibres will be represented by a series of connected points and corresponding radii. To convert these skeleta into 3D meshes, the ConFiG meshing procedure uses Blender (\url{https://blender.org}) and is built on the SWC mesher addon (\url{https://github.com/mcellteam/swc_mesher}).
 
-Substrates were grown with both the brute-force approach and ConFiG using the same starting and target points and initial diameters.
-These initial parameters were determined by packing circles with gamma distributed radii (mean $d_0 = 2\ \mu$m, standard deviation $\sigma = 0.6\ \mu$m) into a 40 $\mu$m x 40 $\mu$m square up to a packing density of 60\%. Target points were set as 40 $\mu$m directly above the starting points to define a substrate with 0\degree\ macroscopic orientation dispersion.
-This resulted in a substrate with a total of 54 initial fibres. 
+ConFiG meshes are constructed using Blender metaballs, an implicit surface representation which is the isosurface of a function; typically a function analogous to the electric potential from a point charge. When two metaballs come close to one another, the fields combine and the surfaces will merge to form a smooth surface. By placing a series of metaballs along the skeleton of each fibre, a smooth surface is formed for each fibre one-by-one as shown in \Cref{fig:config_meshing}a. Supplementary Figure 1 demonstrates that the ConFiG meshing procedure does not impact the diffusion dynamics compared to a straight cylinder.
 
-The fibre growth algorithm used $1\times 10^6$ randomly distributed points for the Delaunaty triangulation giving a mean distance between points of 0.5 $\mu$m, matching the brute force approach which used a segment length of 0.5 $\mu$m for each new fibre segment. 
+When fibres are densely packed, the surfaces from neighbouring fibres may overlap. To account for this, a meshing procedure was developed in which fibres can deform around nearby fibres to avoid overlap. The metaball surface for one fibre is created as described above. This surface is then turned into a triangulated mesh, however the metaballs are retained. The metaball potential is then turned negative, meaning that rather than merging with any future nearby metaball surfaces, it will repel them, as shown in \Cref{fig:config_meshing}b. This means that subsequent fibres which are meshed very close to, or overlapping with, existing fibres will deform organically to resolve the intersection, thus creating a series of completely non-intersecting fibre meshes which can be used by the dMRI simulator.
 
-From these initial parameters, fibres were grown using a subset of $n = 1, 5, 10, 15, 20, 25, 30, 40$ fibres and the growth was timed. Each value of $n$ was timed 5 times with and the mean taken to reduce single-run timing fluctuations.
+\subsection{Summary of ConFiG input parameters}
+\label{sec:config_summary_of_input}
+Table 1 summarises the key parameters that govern the generation of ConFiG phantoms. Parameters are split into those which define the target microstructural morphology and those which define the instantiation of the growth algorithm. For each parameter, the theoretical range is reported alongside the practical range that has been tested so far. This is due to stochastic nature of the algorithm and the interdependence of the parameters. For instance a very large substrate is possible if very large fibres are chosen, but likely impossible with very small fibres since this will require a very large number of fibres and run into memory limitations.
 
-\begin{figure}[h!]
+\section{Experiments}
+\label{sec:config_experiments}
+In order to assess the performance of ConFiG, a range of experiments were performed. The first set of experiments were performed in order to explore the impact of each of the biologically inspired growth mechanisms. Another set of experiments aimed to show that ConFiG is able to generate substrates with realistic microstructure by comparing generated substrates with real tissue. Additionally, the relationship between the user-specified target morphology and the final output morphology was investigated by comparing resulting phantoms to their inputs (target density and orientation distribution). Finally, a simulation experiment was performed to assess how well ConFiG phantoms can be used to generate realistic diffusion MRI data. The rest of this section outlines these experiments.
+
+\subsection{Testing the performance of ConFiG}
+\label{sec:config_test_perf}
+In order to test how each of the biological mechanisms proposed in \Cref{sec:config_methods} impacted on the resulting phantoms, an experiment was devised to measure how phantoms changed when each mechanism was introduced. Four scenarios of interest were generated using several variants of the ConFiG algorithm that included these mechanisms either one at a time or all at once, attempting to grow phantoms as densely as possible:
+\begin{itemize}
+  \item one bundle of parallel fibres, target density 75\%
+  \item one bundle with Watson distributed fibres $(\kappa=8)$, target density 75\%
+  \item two perpendicular crossing bundles, intra-bundle target density 40\%
+  \item three mutually perpendicular crossing bundles, intra-bundle target density 30\%
+\end{itemize}
+These target densities were chosen to ensure that the centre of the phantom (i.e. the crossing region for crossed bundles) had a high target density whilst ensuring that each bundle had a reasonable number of fibres to begin with (>50).
+
+The ConFiG variants were tested by generating phantoms for each of the scenarios starting with the same initial conditions. Each phantom was generated 5 times with a different random seed and results averaged across the seeds.
+
+To investigate the impact of the biological mechanisms on dMRI simulation, a comparison was made between real dMRI signals and simulations from ConFiG phantoms. The NODDI model \cite{Zhang2012} was fitted to a WM ROI in the corpus callosum of a Human Connectome Project (HCP) \cite{VanEssen2012} subject to provide sensible input parameters (target fibre density and orientation dispersion) for ConFiG to generate phantoms. We generated phantoms using the two extreme cases: the minimal growth case only using chemoattraction, and the complete ConFiG algorithm using all mechanisms. Whilst the random nature of ConFiG means that the resulting phantom will not have morphology exactly matching the input parameters, this approach ensured that the phantoms were reasonable for this proof of concept experiment.
+
+The dMRI signal was simulated in the phantoms using Camino \cite{Cook2006,Hall2009} with identical simulation conditions in both cases and the measurement scheme corresponding to the HCP dMRI sequence \cite{Sotiropoulos2013a}. An important consideration when performing dMRI simulations is the size of the substrate relative to the diffusion length. The phantom should be large enough that it is bigger than the diffusion length, but not so large as to require excessive computational resources. Owing to the relatively long diffusion time (\SI{43}{\milli\second}) in the HCP sequence, phantoms were extended with reflected copies \cite{Lee2019a,Fieremans2018} to increase their effective size relative to the diffusion length scale.
+
+All dMRI simulations in this work used a bulk diffusivity $D=\SI{2.0}{\micro\metre\squared\per\milli\second}$ in agreement with values used in similar Monte Carlo simulations \cite{Hall2009,Nilsson2009,Rensonnet2017} with $10^5$ spins and $2000$ timesteps. Standard Camino periodic boundaries were used \cite{Hall2009}, with dMRI signal was generated from a central region 75\% the size of the total phantom to avoid boundary effects \cite{Panagiotaki2010}.
+
+\subsection{Microstructural measures}
+\label{sec:config_micr_meas}
+
+\begin{figure}
   \centering
-  \includegraphics[width=0.8\textwidth]{figures/config/brute_force_vs_algo_2.eps}
-  \caption[Timing of brute force growth vs. \ac{ConFiG}].{\small Timing of brute force growth vs.\ ConFiG along with a quadratic fit (brute-force) and linear fit (\ac{ConFiG}). \ac{ConFiG} is clearly linear in the number of fibres, while brute force growth fits an order $n^2$ well. }
-  \label{fig:brute_force_vs_algo}
+  \includegraphics[width=\textwidth]{figures/config/centre_line_extraction-01.png}
+  \caption[Mesh centreline extraction]{Centre line extraction of fibres. Each fibre was sliced N times along the z-axis, connecting the centre of mass of each slice to create the points in the centre line. This line could then be optionally smoothed according the diffusion time coarse graining effect, as in \cite{Lee2019b}}
+  \label{fig:config_micro_centreline}
 \end{figure}
 
-\Cref{fig:brute_force_vs_algo} shows the timing results of the brute-force approach versus the fibre growth algorithm.
-The fibre growth algorithm  has approximately $\mathcal{O}(n)$ complexity with $n$ being the number of fibres.
-Conversely, the brute-force algorithm shows $\mathcal{O}(n^2)$ complexity owing to the fact that every new segment has to check for collisions with all existing fibres.
+In order to test how realistic the microstructure generated using ConFiG is, microstructural measurements of diameter distribution and orientation distribution were calculated using methods to be comparable with previous studies on ex-vivo tissue \cite{Abdollahzadeh2019,Lee2019b}.
 
-The fibre growth algorithm has a higher $n=0$ offset which is caused by the overhead in calculating the Delaunay triangulation for the growth network.
-This causes the brute-force approach to have better performance at low $n$, while at higher $n$ (approaching the $>100$ fibres needed for a realistic dMRI voxel) the linearity of the fibre growth algorithm gives it much faster performance. 
+A centre line is generated from each of the fibre meshes by aligning the ends of each fibre with the z-axis and connecting the centre of mass of 100 equidistant slices through each fibre, following the approach taken by Lee et al., \cite{Lee2019b}. This is illustrated in \Cref{fig:config_micro_centreline}.
 
+Each segment in this centre line could then be used to assess the microstructure of the phantom. The direction of each segment was used to assess the orientation distribution of the phantom, illustrated in \Cref{fig:config_micro_OD}. Following the approach of Lee et al., \cite{Lee2019b}, the direction of each segment was projected onto the surface of a triangulated unit sphere \cite{Womersley2018}. For each triangle, the number of segments pointing in that direction was used to colour the triangle to visualise the orientation distribution.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/od_calculation-01_sym_whitebg.png}
+  \caption[Orientation distribution extraction from microstructure]{Orientation distribution calculation. Each segment of a fibre was projected onto the surface of a triangulated sphere, here illustrated with a sectioned circle. For each section in the sphere, the number of fibre segments going through that section was used to colour and/or raise the surface to visualise the orientation distribution. Since the diffusion process is symmetric about the origin, each fibre segment was projected onto the sphere forwards and backwards.}
+  \label{fig:config_micro_OD}
+\end{figure}
 
-\section{Discussion and Conclusion}
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/diam_calculation-01.png}
+  \caption[Diameter distribution extraction from microstructure]{Calculation of the diameter distribution. A slice is taken through each fibre perpendicular to every segment in the centre line. The area of each of these slices is used to find a circle equivalent radius or diameter using $A = \pi r^2$. }
+  \label{fig:config_micro_diam}
+\end{figure}
+
+A second approach was devised to better visualise orientation distributions in 3D to aid differentiation of crossing bundles and antipodal symmetry. In this approach each vertex was raised above the surface of the sphere proportionally to the number of segments pointing in its direction as illustrated in \Cref{fig:config_micro_OD}.
+
+To measure the diameter profile along fibres, the direction of each segment gave the normal to a plane used to cut the fibre using Boolean intersection to give a cross section of each fibre at each segment. The diameter profile along the axon was generated by calculating the equivalent diameter of a circle with the same area as the fibre cross section. This process is illustrated in \Cref{fig:config_micro_diam}.
+
+\subsection{Virtual Histology}
+\label{sec:confg_virtual_histology}
+Virtual histological slices were generated to compare ConFiG substrates to real white matter analysed using histology. Histological slices were found by calculating the Boolean intersection of a cutting plane with the generated fibre meshes using Blender (\url{https://blender.org}). A myelin sheath was added to the fibres when generating virtual histology for visualisation purposes.  Virtual histological images were rendered with a resolution of \SI{5 x 5 x 100}{\nano\metre}, chosen to be comparable to real histological white matter measurements \cite{Abdollahzadeh2019,Lee2019b}.
+
+In order to compare ConFiG virtual histology to real histology, virtual histological slices were rendered in binary black and white to compare against intra-axonal segmentations from \cite{Lee2019b}. Slices from real histology, ConFiG phantoms and a parallel cylinder phantom were processed using the MorphoLibJ plugin for ImageJ \cite{Rueden2017,Legland2016,Schindelin2012,Schneider2012} to extract morphological features: circularity ($4\pi$ × Area/Perimeter$^2$), convexity (Area of shape/Area of convex hull), eccentricity of fitted ellipse and Area/$\pi r_{max}^2$ for each axon. Axons touching the edge of the image were removed since truncation from the image edge would skew these microstructural metrics.
+
+\subsection{Relationship between input and output morphology}
+\label{sec:config_input_output_rel}
+As mentioned in \Cref{sec:config_methods}, the nature of the ConFiG growth algorithm means that the microstructural morphology of the phantoms may not match the user input. Some fibres may become stuck and fibres cannot typically grow in a straight line, affecting the density and orientation distribution.
+
+To investigate this, we generated a series of ConFiG phantoms with Watson distributed orientation dispersion with $\kappa=[8,10,15,20,30,50,100]$ and target density, $\rho = 75$\%. The target density of 75\% is chosen as this is the upper limit of what is achievable empirically and towards the higher end of expected axonal volume fraction. Additionally, with 75\% achieved, lower densities can be generated easily, either by running ConFiG in full, or simply by removing or shrinking fibres.
+
+The mean and standard deviation of the angle from $z$, $\mu_\theta$ and $\sigma_\theta$ respectively, for each $\kappa$ was calculated by taking $10000$ samples from the Watson distribution and this was compared to $\mu_\theta$ and $\sigma_\theta$ of the ConFiG fibres. Additionally, the density of the ConFiG phantoms was compared to the target density of 75\%. Each phantom was generated in a \SI{20 x 20 x 20}{\micro\metre} region, using \num{2.5e6} nodes in the growth network.
+
+\subsection{Diffusion MRI simulation}
+\label{sec:config_diffusion_sim}
+To qualitatively verify that the simulated diffusion MRI signals from ConFiG phantoms are realistic, simulated signals from ConFiG phantoms were compared to real HCP data \cite{Sotiropoulos2013a,VanEssen2012}.
+
+In the real data, the fibre orientation distribution (FOD) was fit in each voxel using constrained spherical deconvolution in MRTrix \cite{Tournier2019,Tournier2007}. Voxels were selected in regions of interest in the midbody of the corpus callosum (CC), internal capsule (IC), regions in which a single bundle of fibres is found from the FOD. A third voxel was selected in which three crossing fibre populations were found from visual inspection of the FOD (TC).
+
+In each voxel, the diffusion tensor was fit to the signal and the principal eigenvector used to define a major direction of diffusion in the voxel, $n$. From this, the normalised diffusion weighted signal was plotted against $|n\cdot G|$, where $G$ is the gradient direction. Additionally, the direction averaged signal was calculated for each b-shell.
+
+To attempt to generate representative microstructure for each voxel using ConFiG, the NODDI model \cite{Zhang2012} was fitted to the average signal to give some initial parameters for ConFiG. Most importantly, the value of $\kappa$ for the Watson distribution \cite{Mardia2008} estimated using NODDI was used to initialise the orientation dispersion in the ConFiG phantoms used to represent CC ($\kappa=6.2$) and IC $(\kappa=5.5)$ regions. To represent the TC voxel, a phantom generated using three mutually perpendicular crossing bundles was used.
+
+ConFiG phantoms were grown using these initial conditions and the diffusion MRI signal simulated using the Camino Monte Carlo diffusion MRI simulator \cite{Hall2009}. For each phantom, the same processing as with the real data was performed, finding the direction dependent and direction averaged signal per b-shell.
+
+\section{Results}
+\label{sec:config_results}
+
+\subsection{Impact of biological mechanisms}
+\label{sec:config_result_impact_of_mechanisms}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/improvements_wfascicle_tight.eps}
+  \caption[Impact of biological mechanisms in ConFiG]{Demonstration of the impact of each biological growth mechanism on the density achievable with ConFiG. Each bar shows the mean density for each proposed mechanism, error bars show $\pm$ standard error on the mean. MEDUSA values are estimated from Fig. 14 in Ginsberger et al. (Ginsburger et al., 2019).}
+  \label{fig:config_res_improvements}
+\end{figure}
+
+Each of the proposed biological mechanisms enabled ConFiG to generate phantoms with increased density over the minimal case of chemoattraction only, as is shown in \Cref{fig:config_res_improvements}. Global optimisation resulted in the largest improvement, 17-24\%, consistently giving a large improvement. Other improvements performed better for specific phantom configurations. For instance, fasciculation and the dynamic network produced only modest improvements in crossing fibre configurations (4-6\%), but performed well in the single bundle cases (11-14\%). Fibre collapse was particularly effective in the three perpendicular case, offering 10\% improvement.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/improvements_virthist.png}
+  \caption[Impact of biological mechanisms on virtual histology]{Virtual histology demonstrating the impact of biologically inspired mechanism on the final phantom created for one of the parallel phantoms tested. This visually demonstrates the improvement in density. Leftmost image shows the phantom generated with all mechanisms in 3D and the cutting plane used to produce the virtual histology.  }
+  \label{fig:config_res_improvements_virthist}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/improvement_3drender.png}
+  \caption[Impact of biological mechanisms on 3D phantoms]{Demonstration of the improvement in density achieved when using all mechanisms in ConFiG compared to the minimal implementation using only chemoattraction. Colours chosen to match \Cref{fig:config_res_improvements}. }
+  \label{fig:config_res_improvements_3d}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/hcp_old_vs_new_figure_whitebg.png}
+  \caption[Impact of improvements on simulated dMRI signal]{Left: Direction averaged signal attenuation for real HCP data (± standard deviation over ROI) and simulated data from the minimal ConFiG implementation using only chemoattraction and using all growth mechanisms ConFiG showing that ConFiG can produce realistic dMRI signals. Right: The original and improved ConFiG phantoms used to generate the signal on the left. Simulations performed with $10^5$ spins, 2000 timesteps and HCP measurement scheme (Stamatios N. Sotiropoulos et al., 2013). Diffusivity set to $2.0microm ^2/ms$ , chosen to be consistent with previously reported values (Hall and Alexander, 2009; Nilsson et al., 2009; Rensonnet et al., 2017).  }
+  \label{fig:config_res_improvements_sig}
+\end{figure}
+
+When combining all of the proposed mechanisms together, the achievable density is higher than any of the improvements individually. This improved performance is comparable to the state of the art, MEDUSA \cite{Ginsburger2019}, with particularly good performance relative to MEDUSA in the crossing fibre configurations.
+
+This improvement in density can be appreciated visually in \Cref{fig:config_res_improvements_virthist} which demonstrates virtual histology of a parallel fibre phantom for each of the mechanisms. Additionally, \Cref{fig:config_res_improvements_3d} visually shows the difference in density of the phantoms in 3D between the minimal case of chemoattraction and all biological mechanism for each fibre configuration.
+
+The improvement in the density of phantoms leads to a much more realistic simulated diffusion MRI signal as demonstrated in \Cref{fig:config_res_improvements_sig}. The root mean square error to the real data is reduced by 10 times when using improved ConFiG.
+
+\subsection{Microstructural measures and virtual histology}
+\label{sec:config_result_micro_meas}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/virthist1_wbox_whitebg.png}
+  \caption[Comparison of real and virtual histology]{Comparison of real  and virtual histology. A) Light microscopy of rat ventromedial WM in thoracic spinal cord. Reproduced from Baxi et al. 2015 (Baxi et al., 2015), scale bar 2microm. B) Two virtual histological slices from a ConFiG generated phantom. Phantoms are rendered to have similar col ours to electron microscopy studies. The exact contrast and fibre bundle configurations are different between the real and virtual tissues, but the general morphology of the myelinated axons are captured well using ConFiG as highlighted by corresponding boxes. Yellow and Blue: axons severely deformed between other axons. Red: Pockets of empty space forming. Green: Largely circular axon surrounded by other axons deforming around it. Scale bar 2microm.}
+  \label{fig:config_res_real_vs_virt_hist}
+\end{figure}
+
+The microstructural morphology generated using ConFiG is comparable to results from real data as demonstrated in \Cref{fig:config_res_real_vs_virt_hist,fig:config_res_slice_wise_metrics,fig:config_res_diameter_dist,fig:config_res_OD}.~\Cref{fig:config_res_real_vs_virt_hist} demonstrates virtual histology of a ConFiG phantom alongside a real EM image from mouse corpus callosum \cite{Baxi2015}. The exact microstructural features, such as diameter distribution, as well as the EM contrast do not exactly match between ConFiG and the real data. However, ConFiG is able to capture the general morphology or real axons as highlighted in \Cref{fig:config_res_slice_wise_metrics,fig:config_res_diameter_dist}. In particular, ConFiG is able to capture complex fibre cross-sections such as in the case of fibres squashed into small spaces. This is the first model of white matter able to handle complex fibre cross-sections such as this to our knowledge.
+
+ConFiG morphological metrics calculated slice-wise on the virtual histology correspond much more closely to real axons than the same metrics calculated for parallel cylinders, as shown in \Cref{fig:config_res_slice_wise_metrics}. While cylinders produce a delta function at one extreme of each metric, ConFiG phantoms produce much closer distributions to the real data. Supplementary Figure 2 shows each of these slices coloured by their morphological metrics.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/slice_wise_metrics_whitebg.png}
+  \caption[Slice-wise microstructural measurements]{Slice wise morphological metrics calculated for real axons, ConFiG phantoms and parallel cylinders. Across each of the metrics, ConFiG produces much more realistic distributions than  the cylinder phantom. Some of the cylinders have a non-zero eccentricity, but this arises since the metrics are calculated from binary images where the pixelated circles may appear to not be perfectly circular.}
+  \label{fig:config_res_slice_wise_metrics}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/diameter_dist_NEW_whitebg.png}
+  \caption[Diameter distributions of real and ConFiG axons]{a) Along fibre diameter variation in ex vivo mouse corpus callosum, reproduced from (Lee et al., 2019) compared to along axis diameter variation in the phantom inset demonstrating the ability of ConFiG to generate realistic microstructure. b) Histograms of the inner diameter of axons from (Lee et al., 2019) and diameter of ConFiG axons. c) Coefficient of variation along axons for real and ConFiG axons and d) Three example fibres reconstructed from the EM data used by Lee et al. to make a). d) Three example ConFiG fibres selected for similarity to the EM examples }
+  \label{fig:config_res_diameter_dist}
+\end{figure}
+
+The diameter distribution of a ConFiG substrate is compared to a reconstruction from real EM data \cite{Lee2019b} in \Cref{fig:config_res_diameter_dist}. ConFiG is able to capture the general profile of axonal variations well, with the overall shape of the diameter distribution matching well. The distribution of the coefficient of variation along ConFiG axons is slightly narrower with a smaller mean than real axons, though these discrepancies may be alleviated with a different choice of input parameters to ConFiG.
+
+ConFiG is also able to generate orientation distributions comparable to real tissue as shown in \Cref{fig:config_res_OD}. The orientation dispersion is introduced to ConFiG phantoms using the elliptically symmetrical angular Gaussian \cite{Paine2018} to best approximate the EM data and also using isotropic Watson distributed directions to demonstrate the flexibility of ConFiG.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/OD_ESAG_wcolorbar_wiso_sym_whitebg.png}
+  \caption[Orientation distributions from real WM and ConFiG phantoms]{Dispersion profiles for EM data and a series of numerical phantoms. Top row: EM data used to generate OD profile, reproduced from Lee et al. (Lee et al., 2019) and three ConFiG phantoms with one, two and three crossing bundles (each crossing bundle coloured a different shade of grey). Middle row: OD profile for real EM data and OD profiles corresponding to ConFiG phantoms above, generated using an elliptically symmetric dispersion. Bottom row: Three OD profiles generated from ConFiG phantoms generated using isotropic orientation dispersion. Colormap has units of steradians-1. }
+  \label{fig:config_res_OD}
+\end{figure}
+
+\subsection{Relationship between input and output morphology}
+\label{sec:config_result_input_output_rel}
+The morphology of ConFiG phantoms matches the input morphology well, as shown in Table 2. Whilst the input and output $\mu_\theta$ and $\sigma_\theta$, do not match exactly, the values are close and increasing the input $\mu_\theta$ and $\sigma_\theta$ also increases the output $\mu_\theta$ and $\sigma_\theta$. Additionally, the output density generally matches the input target density well, achieving higher densities than MEDUSA for the same angular dispersion. Supplementary Table 1 shows the same experiment run with a target density of 60\% to demonstrate ConFiG’s performance at lower densities.
+
+These phantoms took an average of 6 hours to grow plus an average of 20 minutes for the meshing and microstructural measurement procedure, using 9.4GB of RAM on average. These values give an estimate of the time taken to generate a typical ConFiG phantom, though it is strongly dependent on user inputs (number of nodes in the network etc.).
+
+\subsection{Diffusion MRI simulation}
+\label{sec:config_result_dmri_sim}
+Simulated data from ConFiG substrates match real dMRI data well, as shown in \Cref{fig:config_res_dMRI}. The direction averaged signal matches well in each case, in particular, for the corpus callosum and three crossing phantoms, the simulated signal matches the real signal closely. The b = \SI{3}{\milli\second\per\micro\metre\squared} signal in the internal capsule and corpus callosum is lower in simulation than in real data. This is to be expected however because as $|n\cdot G|$ approaches 1, the signal reaches the noise floor and the noise-free simulations fall below the measured data. Supplementary Figure 3 shows the difference between the simulated and measured signal in 3D.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/hcp_vs_sim_new_review_2_whitebg.png}
+  \caption[dMRI signals from HCP subject and ConFiG phantoms ]{Comparison of diffusion MRI simulations and real data from three different brain regions:  a) a voxel  in the midbody of the corpus callosum, with phantom with volume fraction 55\% and mean orientation from z 25 o. b) a voxel  in which there are three crossing bundles, with phantom of three crossing bundles with volume fraction 50\% and c) a voxel in the internal capsule, with phantom with volume fraction 58\% and mean orientation from z 22o. Top row shows the ConFiG phantom and corresponding WM voxel. Middle row shows the direction dependent signal for ConFiG (lines) and HCP data (dots). Bottom row shows the direction averaged signal. Black lines correspond to phantom in top row. Grey lines are signal from phantoms with the same orientation distribution as the black line in each plot but different densities to show that ConFiG has the flexibility to generate a wide range of realistic signals. Simulations performed with 105 spins, 2000 timesteps, diffusivity 2.0micrometersquaredpermillsecond  and HCP measurement scheme (Stamatios N. Sotiropoulos et al., 2013). }
+  \label{fig:config_res_dMRI}
+\end{figure}
+
+\section{Discussion}
 \label{sec:config_discussion}
-ConFiG shifts perspective from previous works attempting to pack together fibres, by trying to mimic natural fibre genesis. 
-This approach represents a major step towards very high fibre packing, enabling us to reach the highest dispersion at the highest packing density reached so far, to our knowledge. Our (15\degree, 30\%) and (35\degree, 25\%) represent an average \mytilde50\% and \mytilde200\% improvement, respectively, over the best previously reported results of (10\degree, 20\%)\cite{Ginsburger2018}.
+ConFiG is shown to produce substrates with microstructural properties comparable to real white matter, both in terms of measures derived from histology (i.e., electron microscopy) and in terms of the diffusion MRI signal.
 
-One limitation of the ConFiG approach is that the resulting substrate will depend on the choice of the growth network.
-This is briefly investigated in \Cref{fig:config_uniform_vs_rand}, showing that choosing a uniform grid can introduce regularities in the substrate which could be considered unrealistic.
-The dependence of the final substrate on the number and arrangement of network nodes should be investigated further, to gain a better understanding of which arrangement of nodes will be necessary to produce a desired substrate, particularly when packing fibres together densely.  
+ConFiG is shown to produce WM numerical phantoms with state-of-the-art performance. The amount of real data containing 3D microstructural morphology information available to compare to is limited, so we have only compared to one sample in this study. Whilst limited, this shows that ConFiG is able to produce realistic microstructure by following simple biologically inspired growth rules.
 
+\Cref{fig:config_res_slice_wise_metrics} demonstrates that ConFiG phantoms are able to create fibre morphologies that match real axons much more closely than previous methods based on cylinders. Whilst some of the features such as eccentricity may be achievable with cylinders oriented obliquely to the cutting plane, ConFiG phantoms capture morphological features that are otherwise impossible with cylinders such as convexity less than one.
 
-The substrates presented in \Cref{fig:substrates} are just a few examples of the kinds of substrates that can be produced using our ConFiG method.
-By varying the setup of the morphological controls and start and target points, many different fibre configurations can be produced.
-Currently, fibres will attempt to grow in a straight line between the start and target points, meaning that certain configurations such as kissing bundles cannot be represented.
-However, the algorithm can in principle be extended to allow for series of target points, allowing the definition of a desired `path' of a fibre.
+Whilst the input morphological priors do not necessarily correspond to the morphology of the resulting ConFiG phantom, Table 2 shows that even for relatively high orientation dispersion and density, this effect is small. Even so, for use in further analysis, microstructural measures such as orientation dispersion and density should be calculated based on the resultant phantom, rather than taking the input microstructural parameters.
 
-This behaviour of attempting to grow in a straight line from start to target is due to the dot product term in the cost function which was inspired by Bicho et al.\ \cite{Bicho2012}.
-This method may not be ideal however, since the dot product is very local measure, so at any point you only know the direction towards the target, but have no information about any `desired' path. 
-An alternative approach would be to adjust the cost function so that rather than maximising a dot product, it would minimise the distance to desired path which could allow any arbitrary path to be specified.
+A related property of ConFiG is that the growth algorithm strongly depends on the growth network, meaning that the resulting phantom for the same input fibre configuration will be different for different network choices. This is alleviated to an extent by using the dynamic network introduced here, however the phantom will still be dependent on the initialisation of the network. The dependence appears to be relatively minor as is demonstrated by the small standard errors on the mean density shown in \Cref{fig:config_res_improvements} across the five repetitions.
 
-Additionally, some input parameter settings cannot be achieved.
-For instance, trying to grow a substrate with both very high density and very high dispersion will result in a final substrate that does not reach the density required.
-The reason for this could be a combination of limitations of the algorithm in restricting growth to a discrete network and also the fact that some morphological settings are practically infeasible.
-This limitation, however, also applies to the fibre packing and  brute force growth approaches.  
+The diffusion MRI simulations shown in \Cref{fig:config_res_dMRI} demonstrate the ability of ConFiG to generate phantoms which reproduce real diffusion MRI data well. These simulations, however, are just three examples of ConFiG phantoms and corresponding simulations. Using NODDI as input to ConFiG means that the resulting phantoms have sensible morphologies and are shown to generate signals that match the real tissue well, though there may be other configurations that can better reproduce the signal. As an example, the b = \SI{3}{\milli\second\per\micro\metre\squared} signal from the internal capsule is higher at low $|n\cdot G|$ in the simulated versus the real data (~\Cref{fig:config_res_dMRI}c). One explanation of this is that the phantom generated does not have microstructure accurately representing this region, for instance the phantom may have too little dispersion caused by ConFiG underrepresenting the target orientation dispersion, as seen at low $\kappa$ in Table 2.
 
-One weakness of the fibre-growth algorithm is that since the fibre diameters are calculated from a fibre-to-point distance, there can still be some small amount of overlap between fibres.
-This is solved using the meshing process in Blender to deform the regions of slight overlap between neighbouring fibres. 
+ It may be possible to find a better matching phantom using a computational modelling approach such as that proposed in \cite{Nedjati-Gilani2017}, however the simulations presented are sufficient to demonstrate a proof-of-concept that ConFiG can be used to generate realistic simulated dMRI data.
 
-To conclude, the proposed ConFiG approach, using the fully connected growth network, is shown to be more efficient than a `brute-force' growth approach.
-The fact that ConFiG is linear with the number of fibres makes it far more efficient for high numbers of fibres. For instance, a realistic voxel will need hundreds or thousands of fibres which will become impractically slow for the `brute-force' approach, whilst remaining manageable for our algorithm.
-This efficiency, along with the high density and orientation dispersion achieved means that ConFiG represents a promising step forward in the construction of ultra-realistic numerical phantoms of WM.
+\subsection*{Limitations and future work}
+\label{sec:config_limitations_future}
+One limitation of ConFiG is that the algorithm relies on the space being sufficiently densely sampled by the growth network. This can require a large number of nodes for a large phantom, becoming prohibitively memory expensive. The dependence of the resulting phantom on the density of network nodes can be addressed by growing the fibres in small subregions local to the head of the fibres rather than the whole space at once. For instance, rather than filling the entire space of growth with nodes, it is possible to fill a small layer of the space with points and then grow layer by layer. In this way, it is possible to achieve a high density of nodes using fewer nodes than when covering the entire space.
 
+One further potential limitation of ConFiG is that once a fibre has grown, it is static. The fibre will remain fixed in place and all other fibres will have to grow around it. One problem with this is that once the fibres are fixed, they may create pockets of inaccessible space which limits the space available for following fibres. Additionally, in real tissue, axons are flexible and non-rigid, meaning that it may be more realistic that growing fibres can push existing fibres out of the way to make more space for growth. A potential approach to ameliorate this would be to have an optimisation procedure during growth, similar to the global optimisation introduced in this work but optimising the shape of a fibre as it grows.
+
+A limitation of the current study is that the simulations assume a single diffusivity for the intra and extracellular spaces and no permeability of the axonal membranes. Furthermore, effects such as T2 and magnetic susceptibility are ignored. These effects are a limitation of the simulator used rather than ConFiG, and work is planned to improve these aspects of the simulator for more realistic simulated signals.
+
+Additionally, as mentioned above, this study only compares ConFiG to one EM sample of real tissue. Future work will also aim at more extensive validation of the digital phantoms generated using ConFiG, making comparison with larger EM dataset, including different WM configurations from different brain regions.
+
+We will work towards decreasing the difference between the input and output morphological measures, particularly in complex situations, such as high orientation dispersion and crossing bundles. This can be addressed through the improvements to ConFiG mentioned here and also by improving the strategy for the generation of starting and target points for each fibre. For instance, currently it is not intuitive how starting and target points should be arranged to achieve a desired density in crossing regions of fibres.
+
+One planned extension of ConFiG is to implement periodic boundary conditions in the growth network, enabling the generation of fully periodic phantoms. This would enable ConFiG phantoms to be generated in relatively small volumes and tiled for simulation, accelerating the process of generating a wide range of phantoms and the memory required to store each phantom.
+
+The core growth algorithm for ConFiG relies on a set of starting and target points, a connected network of nodes and some rules defining the growth. As such, ConFiG is very flexible since the exact form of each of these components can be modified based on the application. One example of a simple modification that may be explored is the order of growth of the axons. Currently, in the absence of any clear biological precedent know to the authors, fibres grow in a random order, but it may be possible that there is a better order such as growing large diameter axons first, or central axons in a bundle growing first.
+
+In this work, ConFiG is applied to the case of densely packed axons, without contributions from neuronal cell bodies or other processes. A planned future extension of ConFiG is to allow for the addition of glial cells such as astrocytes and oligodendrocytes \cite{Palombo2019} to the extracellular space to make the virtual WM tissue more realistic.
+
+Additionally, to further add to the realism of ConFiG phantoms, realistic myelin may be modelled, creating spiral layers wrapped around the axons \cite{Brusini2019}. Furthermore, intra-axonal structures such as mitochondria and microtubules may be added to investigate their contributions to the diffusion weighted signal.
+
+A planned future application will be to use ConFiG to generate a wide range of phantoms with different microstructural features. These can then be used to create a computational model to estimate microstructural features directly from the diffusion MRI signal in an approach similar to previous works \cite{Hill2019,Palombo2018a,Palombo2016,Nedjati-Gilani2017,Rensonnet2018}.
+
+\subsection*{Applications beyond diffusion MRI}
+\label{sec:config_beyond_dmri}
+As mentioned in the introduction, axonal configuration impacts MR signals beyond dMRI. One potential avenue of exploration would be to investigate the impact of realistic axonal configurations on magnetic susceptibility in a similar way to Xu et al. \cite{Xu2018}, extending their 2D simulations to use realistic 3D geometries generated in ConFiG.
+
+The virtual histology presented in \Cref{fig:config_res_real_vs_virt_hist} shows an approximation of electron microscopy generated using ConFiG substrates. In this work, the purpose of this is to show that ConFiG is generating microstructurally realistic phantoms. For this reason, the virtual histology is simply produced by rendering images to have similar contrast to electron microscopy for comparison. It may be possible, however to generate more realistic electron microscopy images using a physically realistic electron microscopy simulator \cite{Ophus2017,Grella2003,Babin2010} which may be used to train and test axon segmentation routines. This may be of particular use for cases of fibres parallel to the electron microscopy plane or crossing bundles which are typically difficult for 3D reconstruction and segmentation algorithms.
+
+The 3D meshes generated by ConFiG are saved in the PLY format, a widely used format for storing meshes for many purposes. This means that the ConFiG phantoms may be used in other types of simulations such as polarized light imaging \cite{Matuschke2019,Menzel2015} or molecular dynamics simulations using software such as MCell (\url{https://mcell.org}) \cite{Kerr2008a,Stiles2001,Stiles1996} or LAMMPS (\url{http://lammps.sandia.gov}) \cite{Plimpton1997}.
+
+\section{Conclusion}
+\label{sec:config_conclusion}
+ConFiG enables the generation of realistic white matter numerical phantoms achieving state of the art fibre density whilst ensuring realistic microstructural morphology by following biologically motivated rules. This realistic microstructure is shown to generate realistic simulated diffusion MRI signals, opening up the possibility to use ConFiG to create a realistic computational model of WM microstructure.
+ConFiG outputs fibre meshes which can be used for realistic diffusion MRI simulations or can be processed to produce virtual histological slices, allowing for further potential applications outside of diffusion MRI.
 
 %%% Local Variables:
 %%% mode: latex
