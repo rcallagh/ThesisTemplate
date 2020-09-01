@@ -1,11 +1,11 @@
 \renewcommand{\LifeChapter}{y}
 \chapter{Introduction}
-\label{sec:introduction}
+\label{chap:introduction}
 
 \chaptertoc{}
 
 \begin{chapterabstract}
-  This purpose of this chapter is to introduce the main motivations behind this project, from the historical relevance of \acl{dMRI} to the use of modern simulations for validating new \acl{dMRI} models.
+  This purpose of this chapter is to introduce the main motivations behind this project, from the historical relevance of \acl{dMRI} to the use of modern simulations for validating and developing new \acl{dMRI} models.
   This chapter also sets out the problem that this project aims to address and the specific aims for addressing various aspects of it.
 \end{chapterabstract}
 
@@ -19,24 +19,26 @@ This technique of using \ac{MRI} for measuring the movement of water molecules i
 
 In the 25 years since the work of Basser et al.\ the field of \acl{dMRI} has grown into a major topic of \ac{MRI} research, generating thousands of publications per year.
 Diffusion MRI has found extensive use for imaging the brain, generating new techniques such as tractography which attempts to map out the connections in the brain \emph{in vivo}.
-Another technique which takes advantage of \ac{dMRI} is microstructure imaging, in which measurements of the diffusion of water in tissue is used to infer information about the structure of the tissue. 
+Another technique which takes advantage of \ac{dMRI} is microstructure imaging, in which measurements of the diffusion of water in tissue is used to infer information about the structure of the tissue on a scale much lower than the size of an MRI voxel.
 
 \begin{comment}
 \ac{MRI} provides researchers and clinicians a powerful and flexible tool for non-invasively imaging the human body \emph{in vivo} and has found extensive use over the past few decades in furthering the understanding the structure and function of the human brain.
 One technique which is commonly employed to study the structure of the human brain is \ac{dMRI}.
 \end{comment}
 
-These techniques work because \ac{dMRI} sensitises the \ac{MRI} signal to the diffusive motion of water molecules.
+These techniques work because \ac{dMRI} sensitises the \ac{MRI} signal to the diffusive motion of water molecules on the micrometer scale.
 The environment in which the water molecules move will restrict the motion of the molecules and so will affect the \ac{MRI} signal. 
 This dependency of the \ac{dMRI} signal on the environment in which water molecules diffuse can be exploited to infer information about the environment solely from the \ac{dMRI} signal.  
+
+
 Microstructure imaging attempts to do exactly this, infer information about the microstructural environment such as cell size and density from the \ac{dMRI} signal.
-In order to infer meaningful information from the \ac{dMRI} signal, models are typically used which relate microstructural features to the \ac{dMRI} signal.
+Since the microstructural environment is on a much smaller scale than the \ac{dMRI} voxels, models are used to relate the \ac{dMRI} signal from a voxel to microstructural features.
 
 The validation of these microstructural models can be difficult since ground truth microstructural features are typically inaccessible \emph{in vivo} and classical histological validation techniques have limitations such as disruption due to tissue extraction and preparation. 
 One approach commonly taken for the validation of new models is simulation of the \ac{dMRI} signal using well defined and controllable ground truth microstructural environments known as numerical phantoms. 
 
 Whilst these numerical phantoms often provide a valuable ground truth for simulation, they typically over simplify the complex microstructure of real tissue.
-An example of this is in \ac{WM}, where fibres are commonly represented as straight cylinders \cite{Hall2009,Leemans2005} whereas in real tissue, fibres have complex shapes with undulation and diameter variation \cite{Nilsson2013,Lee2018a}.
+An example of this is in \ac{WM}, where fibres are commonly represented as straight cylinders \cite{Hall2009,Leemans2005} whereas in real tissue, fibres have complex shapes with undulation and diameter variation \cite{Abdollahzadeh2019, Lee2019b}.
 
 In order to validate models in scenarios that are as close as possible to \emph{in vivo} conditions, the realism of numerical phantoms should be improved, attempting to fully capture all of the microstructural variation found in \emph{in vivo}.
 
@@ -44,19 +46,10 @@ Another application of numerical phantoms which is growing in popularity is in t
 These techniques use machine learning or fingerprinting-style techniques to match simulated signals and the corresponding ground truth microstructure of the numerical phantom to the measured signal \cite{Rensonnet2018,Hill2018,Palombo2018a,Nedjati-Gilani2017}.
 Again, in this case, the more realistic the numerical phantoms used for simulation, the more accurately microstructural features can be estimated. 
 
-With increased complexity of numerical phantoms, however, the computational cost of \ac{dMRI} simulations grows. Complex numerical phantoms are typically represented by polygon meshes and as the number of faces in a mesh grows, the computational cost of simulating the diffusion process grows.
-
-In order to attempt to account for some of this increased computational complexity, adapting the \ac{dMRI} simulations for the \ac{GPU} can provide a performance boost.
-
-The \ac{GPU} has a different architecture to the \ac{CPU}, being designed for parallel processing of graphics data.
-Over the past decade, utilising the GPU for performing non-graphics calculations has become increasingly popular. 
-In short, the goal is to exploit the parallel design of the \ac{GPU} to perform  many calculations simultaneously.
-There are certain limitations on the kind of tasks that can be improved by the \ac{GPU}, for instance, as a minimum the problem must be parallelisable.
-\ac{dMRI} simulations are inherently parallel, meaning that adapting the simulations for \ac{GPU} should be able to bring a performance increase. 
 
 \section{Problem Statement}
 \label{sec:intro_problem_statement}
-There is a need to be able to generate numerical phantoms that realistically represent \ac{WM} microstructure, with controllable microstructural parameters such as axon packing density and orientation dispersion, and to improve the efficiency of \ac{dMRI} simulations.
+There is a need to be able to generate numerical phantoms that realistically represent \ac{WM} microstructure, with controllable microstructural parameters such as axon packing density and orientation dispersion.
 
 
 \section{Project Aims and Scope}
@@ -66,27 +59,16 @@ This report summarises work towards improving the realism of simulations of diff
  
 
 The mains aims of this work are as follows:
-% \begin{itemize}
-% \item Present \acused{ConFiG} \acs{ConFiG} (\textbf{Con}textual \textbf{Fi}bre \textbf{G}rowth), a method developed for `growing' fibres densely while attempting to respect some morphological priors to generate realistic \ac{WM} numerical phantoms.
-% \item Present CUDAmino, a \ac{GPU} accelerated \ac{MC} \ac{dMRI} simulator based on the \ac{MC} simulation in Camino\cite{Cook2006,Hall2009}
-% \end{itemize}
 \begin{enumerate}
 \item Develop and test a method for generating realistic \ac{WM} numerical phantoms with realistic and controllable axon packing densities and orientation dispersion
-\item Develop and test a \ac{GPU} accelerated \ac{dMRI} simulator
 \end{enumerate}
 
 In an effort to achieve aim 1, a method called\acused{ConFiG} \acs{ConFiG} (\textbf{Con}textual \textbf{Fi}bre \textbf{G}rowth) is presented which `grows' fibres densely attempting to respect some morphological priors to generate realistic \ac{WM} numerical phantoms.
 %\ac{ConFiG} is tested, using it to general phantoms with simple morphology that can be easily generated using other means to test its ability to replicate simple situations and explore the input parameter space.
 
-
-Additionally, to tackle aim 2, CUDAmino, a \ac{GPU} implementation of \ac{MC} \ac{dMRI} simulations is presented. The \ac{GPU} simulations are based on the \ac{MC} simulator software in Camino \cite{Cook2006,Hall2009} and leverage NVIDIA's \acs{CUDA} parallel programming platform \cite{Nickolls2008}.
-
-
-
-
 \section{Report Overview}
 \label{sec:intro_report_overview}
-The rest of the report is arranged as follows: \Cref{sec:background} outlines some of the physics behind \acl{dMRI} and how we simulate it as well as some background on \ac{GPU} architecture and considerations for programming the \ac{GPU}. \Cref{sec:literature_review} reviews current literature on \ac{dMRI} simulations (including \ac{GPU} \ac{dMRI} simulations). \Cref{sec:config} outlines \ac{ConFiG} for generating new phantoms and some experiments assessing the performance of \ac{ConFiG} in some simple situations and presenting examples of realistic substrates. \Cref{sec:cudamino} presents CUDAmino and some experiments assessing its performance against the \ac{CPU} simulations. \Cref{sec:future} discusses future perspectives for the work.
+The rest of the report is arranged as follows: \Cref{chap:background} outlines some of the physics behind \acl{dMRI} and how we simulate it. \Cref{chap:literature_review} reviews current literature on \ac{dMRI} simulations. \Cref{chap:config} outlines \ac{ConFiG} for generating new phantoms and some experiments assessing the performance of \ac{ConFiG} in some simple situations and presenting examples of realistic substrates. \Cref{chap:conclusion} summarises the work with some concluding remarks.
 
 
 
