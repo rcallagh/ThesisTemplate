@@ -1,7 +1,7 @@
 \renewcommand{\BrainFuckChapter}{y}
 \renewcommand{\LifeChapter}{y}
 \chapter{Background}
-\label{sec:background}
+\label{chap:background}
 \chaptertoc{}
 
 \begin{chapterabstract}
@@ -30,7 +30,7 @@ A planet spinning about its axis will have an angular momentum associated with t
 Unlike the angular momentum of a rotating planet, however, the spin is an intrinsic property of the particle itself and not a result of its motion\cite{Levitt2008}.
 
 \begin{comment}
-One of the postulates of quantum mechanics is that angular momentum is quantised \cite{DeGraaf2007}. This means that the spin angular momentum, $S$, of a particle in its rest state can only take values of 
+One of the postulates of quantum mechanics is that angular momentum is quantised \cite{DeGraaf2007}. This means that the spin angular momentum, $S$, of a particle in its rest state can only take values of
 \begin{equation}
 S = \hbar \sqrt{(I(I+1))} \,,
 \label{eq:angmom_quant}
@@ -661,39 +661,6 @@ Additionally, \ac{MC} simulations can be modified to account for effects that ar
 
 A drawback of \ac{MC} simulation, particularly for complex substrates is the need to simulate enough spins to mimic the ensemble behaviour of spins \emph{in vivo} as well as enough discrete time points to adequately capture the dynamics through the pulse sequence.
 The huge number of calculations required to handle large simulations can be alleviated by exploiting the inherent parallel nature of the problem to run simulations in parallel on a \ac{CPU} cluster or, even more effectively, a \ac{GPU} cluster.
-
-
-
-\section{Graphics Processing Units}
-\label{sec:bg_gpu}
-
-The \acf{GPU} is one of the main processing units in a modern computer, along with the \acf{CPU}.
-The \ac{GPU} was developed, as the name suggests, to handle graphics operations.
-Rendering an image to a screen requires a value to be updated for every pixel, and since this calculation is essentially the same for all pixels, the \ac{GPU} was developed to be effective at performing many copies of the same operation simultaneously \cite{Kirk2013}.
-A modern \ac{GPU} may be able to run upwards of 50,000 operations at a time.
-
-Conversely, the \ac{CPU} was historically developed to be able to run one set of sequential instructions very effectively \cite{Kirk2013}. 
-Modern \acp{CPU} typically have a few (2 - 32) processing cores, each of which is designed to run sequential programs efficiently.
-This allows them to run multiple sets of instructions at a time, however the design philosophy is different to the \ac{GPU}.
-The \ac{GPU} is designed to run \emph{the same} operation a large number of times in parallel, the \ac{CPU} is designed to be flexible to run \emph{a few} different serial operations very effectively. 
-
-In 2007, NVIDIA released \ac{CUDA} \cite{Nickolls2008}, a parallel computing platform and \ac{API} allowing programmers to write software to use a \ac{CUDA}-enabled \ac{GPU} for general purpose computing.
-Since then, programming for the \ac{GPU} has become increasingly popular with developers taking advantage of performance increases that can come from parallel programming across a wide range of fields, from physics simulations to deep learning. 
-
-Other vendors have also produced similar \acp{API} to \ac{CUDA}, most prominently OpenCL\cite{Stone2010}, however in this project \ac{CUDA} was used due to its compatibility with the NVIDIA \acp{GPU} available.
-
-The \ac{CUDA} \ac{API} enables software running on the \ac{CPU} (known as the host) to launch what are called `kernels' on the \ac{GPU} (known as the device) as well as handling the memory transfers between the host and device. Kernels are the parallel functions which will run on the device.
-
-When a kernel is launched it will generate a large number of threads to execute the function on the device, with each thread essentially performing one copy of the kernel function with different inputs.
-For instance, each thread could render one pixel to the screen for the graphics example.
-
-If different inputs cause the threads to take a different path through the code (for instance, different branches at an if-else statement) this causes a problem known as \emph{thread divergence}.
-Thread divergence reduces the performance of software since the \ac{GPU} is designed for all threads to run in step with one another, so when one thread takes a different branch all of the other threads must wait for that thread to finish before they can continue. 
-
-Thread divergence and handling memory transfers, both between the host and device and between memory spaces on the device, are two of the difficulties that come with developing for the \ac{GPU} and must be considered when designing algorithms.  
-There are many more technical points to take into account when developing \ac{GPU} software such as ensuring threads don't write to the same memory address at the same time (a type of a problem known as a race condition) and ensuring the data structures are optimal for parallel access.
-\Cref{sec:cudamino} will discuss how some of these problems were addressed in order to get \ac{MC} \ac{dMRI} simulations running on the \ac{GPU}. 
-
 
 
 %%% Local Variables:
