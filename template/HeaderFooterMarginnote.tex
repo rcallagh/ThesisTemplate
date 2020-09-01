@@ -168,8 +168,7 @@
         };
         \fi
         %
-        \node[xshift=0.5\paperwidth,anchor=east, rectangle, rounded corners=20pt, inner sep=11pt,fill=black] at (0.5\linewidth,0)
-        {\color{white}\Huge\bfseries\chapterlabel#1};
+        \node[xshift=0.5\paperwidth,anchor=east, rectangle, rounded corners=20pt, inner sep=11pt,fill=black] at (0.5\linewidth,0) {\begin{varwidth}{\textwidth}\begin{flushright}\textcolor{white}{\Huge\bfseries\chapterlabel#1}\end{flushright}\end{varwidth}};
         %
       \end{tikzpicture}
     };
