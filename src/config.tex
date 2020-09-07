@@ -5,6 +5,8 @@
 
 \begin{chapterabstract}
   This chapter introduces a series of mechanisms which were added to improve the initial implementation of ConFiG described in \Cref{chap:ipmi-implementation} and the biological fibre growth processes which inspire these mechanisms.
+
+  These improvements are tested against the state of the art MEDUSA algorithm and simulated \ac{dMRI} signals compared to real \ac{dMRI} signals from the \acl{WM} of a healthy subject.
 \end{chapterabstract}
 
 \section{Introduction}
@@ -200,25 +202,34 @@ Here, $\mathrm{sgn}$ is the signum function and $r_i$ and $r_j$ are the target r
 
 There is some biological evidence that this kind of interaction between fibres is important in the fasciculation process. The fasciculation process described in \Cref{sec:config_fasciculation} relies on CAMs detected at the tip of a growing axon, however some studies provide evidence for fasciculation through interactions along axon shafts, known as zippering \cite{Barry2010,Smit2017,Voyiadjis2011}. In zippering, nearby axon shafts attract one another to form more closely packed fascicles, which is a similar process to the global optimisation process in ConFiG.
 
-\subsubsection{Creation of 3D meshes}
-\label{sec:config_meshing}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.8\textwidth]{figures/config/METABALL_fig.png}
-  \caption[ConFiG meshing procedure]{Demonstration of the meshing procedure in ConFiG. The first fibre is created using metaballs to create a smooth surface. The second, and following fibres will be created using negative metaballs for any fibres that intersect in order to deform around them. Note that in practice, more spheres will be much more closely placed along the skeleton to create a smoother surface}
-  \label{fig:config_meshing}
-\end{figure}
-
-As mentioned in \Cref{sec:config-alg-overview}, following the growth process ConFiG fibres will be represented by a series of connected points and corresponding radii. To convert these skeleta into 3D meshes, the ConFiG meshing procedure uses Blender (\url{https://blender.org}) and is built on the SWC mesher addon (\url{https://github.com/mcellteam/swc_mesher}).
-
-ConFiG meshes are constructed using Blender metaballs, an implicit surface representation which is the isosurface of a function; typically a function analogous to the electric potential from a point charge. When two metaballs come close to one another, the fields combine and the surfaces will merge to form a smooth surface. By placing a series of metaballs along the skeleton of each fibre, a smooth surface is formed for each fibre one-by-one as shown in \Cref{fig:config_meshing}a. Supplementary Figure 1 demonstrates that the ConFiG meshing procedure does not impact the diffusion dynamics compared to a straight cylinder.
-
-When fibres are densely packed, the surfaces from neighbouring fibres may overlap. To account for this, a meshing procedure was developed in which fibres can deform around nearby fibres to avoid overlap. The metaball surface for one fibre is created as described above. This surface is then turned into a triangulated mesh, however the metaballs are retained. The metaball potential is then turned negative, meaning that rather than merging with any future nearby metaball surfaces, it will repel them, as shown in \Cref{fig:config_meshing}b. This means that subsequent fibres which are meshed very close to, or overlapping with, existing fibres will deform organically to resolve the intersection, thus creating a series of completely non-intersecting fibre meshes which can be used by the dMRI simulator.
-
 \subsection{Summary of ConFiG input parameters}
 \label{sec:config_summary_of_input}
-Table 1 summarises the key parameters that govern the generation of ConFiG phantoms. Parameters are split into those which define the target microstructural morphology and those which define the instantiation of the growth algorithm. For each parameter, the theoretical range is reported alongside the practical range that has been tested so far. This is due to stochastic nature of the algorithm and the interdependence of the parameters. For instance a very large substrate is possible if very large fibres are chosen, but likely impossible with very small fibres since this will require a very large number of fibres and run into memory limitations.
+\Cref{tab:config_parameters} summarises the key parameters that govern the generation of ConFiG phantoms. Parameters are split into those which define the target microstructural morphology and those which define the instantiation of the growth algorithm. For each parameter, the theoretical range is reported alongside the practical range that has been tested so far. This is due to stochastic nature of the algorithm and the interdependence of the parameters. For instance a very large substrate is possible if very large fibres are chosen, but likely impossible with very small fibres since this will require a very large number of fibres and run into memory limitations.
+
+\begin{table}[!h]
+  \footnotesize
+  \centering
+  \caption{Summary of ConFiG parameters split into parameters which define the target microstructural morphology and parameters which define the instantiation of the growth algorithm. For each parameter the theoretical range is reported as well as the practical range that has been tested so far.}
+  \label{tab:config_parameters}
+  \begin{tabular}{cccr@{}lb{2cm}c}
+    \toprule
+     \multicolumn{2}{c}{\textbf{Parameter}} & \multicolumn{3}{c}{\textbf{Meaning}} & \centering \textbf{Theoretical Range} & \textbf{Practical Limits Tested} \\ \midrule
+     \multirow{7}{*}{\rotatebox[origin=c]{90}{\parbox[c]{3.5cm}{\centering \textbf{Target microstructure parameters}}}}
+     & $L$ & \multicolumn{3}{c}{Size of growth region} & \centering $\mathbb{R}_+^3$ & $[0,0,0] \rightarrow [50,50,50]$ \si{\micro\metre} \\
+     &$\rho$& \multicolumn{3}{c}{Fibre volume fraction}& \centering$[0,1]$ & $[0,0.8]$ \\
+     & $\mu_r$& \multicolumn{3}{c}{Mean radius}& \centering $\mathbb{R}_+$&  $[0.5,2]$ \si{\micro\metre}\\
+     & $\sigma_r$& \multicolumn{3}{c}{Standard deviation radius}& \centering$\mathbb{R}_+$& $[0.1,0.5]$ \si{\micro\metre}\\
+     & \multirow{3}{*}{$GAD$} & \multirow{3}{2cm}{\centering Global angular dispersion} & Watson & $: \kappa$ & \centering$\mathbb{R}_+$& $[4,100]$ \\
+     & & & \multirow{2}{*}{ESAG $\Big\{\!$}& $\ \mu$ & \centering$\mathbb{R}_+$ & $[2,10]$ \\
+     & & & & $\ \gamma$ & \centering$\mathbb{R}_+^2$ & $[2,2] \rightarrow [10,10]$\\ \midrule
+    \multirow{4}{*}{\rotatebox[origin=c]{90}{\parbox[c]{3cm}{\centering \textbf{Growth algorithm parameters}}}} & $N$ & \multicolumn{3}{c}{Number of growth nodes} & \centering$\mathbb{N}$ & $[0,10^7]$ \\
+    & $f$ & \multicolumn{3}{c}{Cost function weighting term} & \centering$[0,1]$ & $[0,0.5]$  \\
+    & \multirow{2}{*}{$g_0, \delta$} & \multicolumn{3}{c}{\multirow{2}{4cm}{\centering Fibre collapse initial and subsequent step length}} & \centering\multirow{2}{*}{$\mathbb{R}_+$} & \multirow{2}{*}{$[1,5],[1,5]$ \si{\micro\metre}} \\
+    & & & & & \\
+    & \multirow{2}{*}{$N_{\text{added}}$} & \multicolumn{3}{c}{\multirow{2}{4cm}{\centering Dynamic network no. nodes added}} & \centering\multirow{2}{*}{$\mathbb{N}$} & \multirow{2}{*}{$[0,5000]$}\\
+    & & & & & \\ \bottomrule
+  \end{tabular}
+\end{table}
 
 \section{Experiments}
 \label{sec:config_experiments}
