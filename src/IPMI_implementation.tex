@@ -4,10 +4,10 @@
 \chaptertoc{}
 
 \begin{chapterabstract}
-  This chapter introduces a preliminary implementation of \acf{ConFiG}, a method for generating \acf{WM} numerical phantoms with realistic orientation dispersion and packing density.
-  The algorithm behind \ac{ConFiG} is introduced, describing how each \ac{WM} fibre is grown individually to generate a densely packed substrate.
+  This chapter introduces a preliminary fibre growth algorithm (\acused{preFiG}\ac{preFiG}), a method for generating \acf{WM} numerical phantoms with realistic orientation dispersion and packing density.
+  The growth algorithm is introduced, describing how each \ac{WM} fibre is grown individually to generate a densely packed substrate.
 
-  Some experiments are presented, one of which explores how different inputs to \ac{ConFiG} impacts the shape of resulting fibres.
+  Some experiments are presented, one of which explores how different inputs to \ac{preFiG} impacts the shape of resulting fibres.
   An application of the method to dMRI is demonstrated with simulations of the diffusion-weighted MR signal in three example substrates with differing orientation dispersions, packing densities and permeabilities.
 \end{chapterabstract}
 
@@ -33,20 +33,20 @@ Instead, real axons are guided by chemical cues and fit into available space as 
 Mimicking the natural fibre genesis may prove important for building more realistic phantoms.
 
 Here, we propose a completely different strategy: rather than densely `packing' irregular fibres, we `grow' fibres contextually, mimicking natural fibre genesis.
-We propose a method called ConFiG (Contextual Fibre Growth) for the generation of WM numerical phantoms with more realistic orientation dispersion and packing density.
+We propose a preliminary fibre growth algorithm (\ac{preFiG}) for the generation of WM numerical phantoms with more realistic orientation dispersion and packing density.
 Fibres are grown one-by-one following a cost function which attempts to impose the morphological priors that are input to the algorithm.
 
-The rest of the chapter is organised as follows: \Cref{sec:ipmi_config_description} describes ConFiG, \Cref{sec:impi_experiments_and_results} details some experiments showing the potential of the algorithm and comparing it to a brute-force approach to fibre growth and \Cref{sec:ipmi_discussion} summarises the contributions and discusses future work.
+The rest of the chapter is organised as follows: \Cref{sec:ipmi_config_description} describes \ac{preFiG}, \Cref{sec:impi_experiments_and_results} details some experiments showing the potential of the algorithm and comparing it to a brute-force approach to fibre growth and \Cref{sec:ipmi_discussion} summarises the contributions and discusses limitations in the preliminary implementation and future work to improve the method.
 
 
-\section{ConFiG: Contextual Fibre Growth}
+\section{A preliminary fibre growth algorithm}
 \label{sec:ipmi_config_description}
-In this section we describe ConFiG  which grows fibres one-by-one avoiding intersection between fibres whilst attempting to ensure that the resulting substrate has desired morphological input properties such as orientation dispersion, diameter distribution and packing density.
+In this section we describe a preliminary fibre growth algorithm (\acs{preFiG}) which grows fibres one-by-one avoiding intersection between fibres whilst attempting to ensure that the resulting substrate has desired morphological input properties such as orientation dispersion, diameter distribution and packing density.
 
-The generation of ConFiG numerical phantoms happens in three main steps:
+The generation of \ac{preFiG} numerical phantoms happens in three main steps:
 \begin{description}
   \item [STEP 1] \label{item:step1} Generate initial growth configuration from user inputs
-  \item [STEP 2] Grow the fibres using ConFiG growth algorithm
+  \item [STEP 2] Grow the fibres using \ac{preFiG} growth algorithm
   \item [STEP 3] Generate 3D meshes for dMRI simulation
 \end{description}
 
@@ -55,7 +55,7 @@ The remainder of this section outlines these steps in further detail, breaking e
 \begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{figures/config/method_inputs_only.eps}
-  \caption[Inputs to the ConFiG algorithm]{Inputs to the ConFiG algorithm for the single bundle case. $L$ defines the size of the area of that the growth will take place in. The target density and fibre radius distribution govern the generation of starting points for each fibre by packing in 2D. Orientation dispersion parameters govern the generation of target points corresponding to each starting point. $N$ defines the number of nodes to use when generating the network. In the case of multiple bundles, starting and target points are generated for each bundle and then combined into the same space which is filled with nodes for the network. }
+  \caption[Inputs to the \ac{preFiG} algorithm]{Inputs to the \ac{preFiG} algorithm for the single bundle case. $L$ defines the size of the area of that the growth will take place in. The target density and fibre radius distribution govern the generation of starting points for each fibre by packing in 2D. Orientation dispersion parameters govern the generation of target points corresponding to each starting point. $N$ defines the number of nodes to use when generating the network. In the case of multiple bundles, starting and target points are generated for each bundle and then combined into the same space which is filled with nodes for the network. }
   \label{fig:ipmi_inputs}
 \end{figure}
 
@@ -63,17 +63,17 @@ The remainder of this section outlines these steps in further detail, breaking e
 \label{sec:ipmi_step1_details}
 \textbf{\sffamily STEP 1} is broken down in to three substeps which are outlined in \Cref{fig:ipmi_inputs}:
 \begin{description}
-  \item [STEP 1.1] Generate fibre starting points for each fibre to grow from (~\Cref{fig:ipmi_inputs}a-b). To generate these starting points ConFiG packs circles with the desired diameter distribution up to the target density (defined in terms of the desired fibre volume fraction) in 2D, following the approach taken in \cite{Hall2009}.
+  \item [STEP 1.1] Generate fibre starting points for each fibre to grow from (~\Cref{fig:ipmi_inputs}a-b). To generate these starting points \ac{preFiG} packs circles with the desired diameter distribution up to the target density (defined in terms of the desired fibre volume fraction) in 2D, following the approach taken in \cite{Hall2009}.
 
   \item [STEP 1.2] Generate fibre target points for each point to grow towards (~\Cref{fig:ipmi_inputs}c). To encode the desired orientation distribution, each fibre has a direction drawn from the target distribution which gives a target point for the fibre to grow towards. As a demonstration of the flexibility of the framework, in this work we use the Watson distribution \cite{Mardia2008}.
 
-  \item [STEP 1.3] Generate growth nodes (~\Cref{fig:ipmi_inputs}d). ConFiG uses a set of pseudorandomly placed points (nodes) to sample the space and encode which regions are occupied by existing fibres. This simplifies collision checking making growth more efficient than a direct collision detection approach involving growing each fibre one small step at a time and checking collisions with existing fibres. This is demonstrated in \Cref{sec:impi_bruteforce}.
+  \item [STEP 1.3] Generate growth nodes (~\Cref{fig:ipmi_inputs}d). \ac{preFiG} uses a set of pseudorandomly placed points (nodes) to sample the space and encode which regions are occupied by existing fibres. This simplifies collision checking making growth more efficient than a direct collision detection approach involving growing each fibre one small step at a time and checking collisions with existing fibres. This is demonstrated in \Cref{sec:impi_bruteforce}.
 \end{description}
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{figures/config/method_without_inputs1.eps}
-  \caption[Overview of the ConFiG growth algorithm]{Overview of the basic growth algorithm in ConFiG. In this example, three fibres are shown with a growth network that only contains relevant nodes for the sake of visualisation.  From the set of nodes, a network is constructed using the Delaunay triangulation. Each fibre then grows from node to node, along any edge connected to the current node. The node moved to will be the node with the lowest cost. Once a fibre segment has grown, the network nodes are updated to store information about which nodes are occupied or near to an existing fibres. This contributes to the cost function for any future fibres, penalising moving to nodes too close to existing fibres.  It is not possible to move to any node now inside a fibre as indicated by the removal of this edges from the network (pairs of blue arrows show where this is happening). The next fibres grow, now avoiding existing fibres until all fibres have finished. See Supplementary Video 1 for an animation of this algorithm. }
+  \caption[Overview of the \ac{preFiG} growth algorithm]{Overview of the basic growth algorithm in \ac{preFiG}. In this example, three fibres are shown with a growth network that only contains relevant nodes for the sake of visualisation.  From the set of nodes, a network is constructed using the Delaunay triangulation. Each fibre then grows from node to node, along any edge connected to the current node. The node moved to will be the node with the lowest cost. Once a fibre segment has grown, the network nodes are updated to store information about which nodes are occupied or near to an existing fibres. This contributes to the cost function for any future fibres, penalising moving to nodes too close to existing fibres.  It is not possible to move to any node now inside a fibre as indicated by the removal of this edges from the network (pairs of blue arrows show where this is happening). The next fibres grow, now avoiding existing fibres until all fibres have finished. See Supplementary Video 1 for an animation of this algorithm. }
   \label{fig:ipmi_config_algorithm}
 \end{figure}
 
@@ -85,7 +85,7 @@ The remainder of this section outlines these steps in further detail, breaking e
 
   \item [STEP 2.2] Grow one fibre step (~\Cref{fig:ipmi_config_algorithm}c-e). Fibres grow one-by-one in a random order along this network towards their target points while avoiding existing fibres.
 
-    During growth, a fibre must choose in which direction it should grow. This direction is chosen in ConFiG by following a cost function which encourages fibres to grow towards their target points (~\Cref{fig:ipmi_config_algorithm}d).
+    During growth, a fibre must choose in which direction it should grow. This direction is chosen in \ac{preFiG} by following a cost function which encourages fibres to grow towards their target points (~\Cref{fig:ipmi_config_algorithm}d).
 From a starting node, $s$, the candidate nodes, $c$, that the fibre can move to are any nodes that share an edge with $s$. In addition to its position, each network node stores the maximum fibre diameter, $d_c$, that can be sustained at that node without intersecting another fibre (described further in \textbf{\sffamily STEP 2.3}). The fibre will move to a candidate node according to a cost function consisting of two terms; $l_t$, which penalises taking very large steps or moving away from the target point, $t$, and $l_d$, which penalises moving to a position where $d_c$ is low meaning that the fibre will have to shrink. The cost function for a fibre at a position, $s$, to move to a candidate node, $c$, given a target point, $t$, is
 \begin{align}
   l &= l_t+fl_d  \,,\label{eq:ipmi_original_cost}\\
@@ -108,7 +108,7 @@ This, in addition to shrinking the radius of future fibres according to $d_c$ at
 Since the value of $d_c$ is set based on fibre-to-point distances, there can be cases in which the fibres would intersect when the closest point between two fibre sections is not at one of the fibre nodes.
 In order to account for this, a meshing process developed which can deform fibres around one another. This is described in \Cref{sec:ipmi_step3_meshing}.
 
-  \item [STEP 2.4] Repeat steps 2.2 and 2.3 until fibre reaches target (\Cref{fig:ipmi_config_algorithm}g). By default in ConFiG, each fibre will grow completely before the next one starts, meaning that step 5 only needs to be performed once the fibre has finished growing. If fibres are allowed to grow concurrently, step 5 must be performed after each growth step.
+  \item [STEP 2.4] Repeat steps 2.2 and 2.3 until fibre reaches target (\Cref{fig:ipmi_config_algorithm}g). By default in \ac{preFiG}, each fibre will grow completely before the next one starts, meaning that step 5 only needs to be performed once the fibre has finished growing. If fibres are allowed to grow concurrently, step 5 must be performed after each growth step.
 
   \item [STEP 2.5] Repeat steps 2.2-2.4 for remaining fibres (\Cref{fig:ipmi_config_algorithm}h-i). As noted in \Cref{fig:ipmi_config_algorithm} (e-h), as the network is updated, more and more nodes become inaccessible making the network sparser. This means that some fibres may reach a point from which they cannot grow any further and will become stuck. Currently, these fibres are simply removed from the final phantom, meaning the final phantom may have a lower density than the target density.
 \end{description}
@@ -121,15 +121,15 @@ In order to account for this, a meshing process developed which can deform fibre
 \begin{figure}
   \centering
   \includegraphics[width=0.8\textwidth]{figures/config/METABALL_fig.png}
-  \caption[ConFiG meshing procedure]{Demonstration of the meshing procedure in ConFiG. The first fibre is created using metaballs to create a smooth surface. The second, and following fibres will be created using negative metaballs for any fibres that intersect in order to deform around them. Note that in practice, more spheres will be much more closely placed along the skeleton to create a smoother surface}
+  \caption[\ac{preFiG} meshing procedure]{Demonstration of the meshing procedure in \ac{preFiG}. The first fibre is created using metaballs to create a smooth surface. The second, and following fibres will be created using negative metaballs for any fibres that intersect in order to deform around them. Note that in practice, more spheres will be much more closely placed along the skeleton to create a smoother surface}
   \label{fig:ipmi_meshing}
 \end{figure}
 
 Finally, Step 3, the meshing procedure is described in more detail below:
 \begin{description}
-  \item [STEP 3] Generate 3D fibre meshes. After the growth process, each fibre will be represented by a series of connected 3D points and corresponding diameters at each point, stored in the Stockley-Wheal-Cole (SWC) format \cite{Stockley1993}. In order to simulate diffusion MRI signals, these fibre skeleta need to be turned into 3D meshes. ConFiG uses a meshing procedure designed to eliminate overlap between fibres, using Blender (\url{https://blender.org}), building upon on the SWC mesher addon (\url{https://github.com/mcellteam/swc_mesher}).
+  \item [STEP 3] Generate 3D fibre meshes. After the growth process, each fibre will be represented by a series of connected 3D points and corresponding diameters at each point, stored in the Stockley-Wheal-Cole (SWC) format \cite{Stockley1993}. In order to simulate diffusion MRI signals, these fibre skeleta need to be turned into 3D meshes. \ac{preFiG} uses a meshing procedure designed to eliminate overlap between fibres, using Blender (\url{https://blender.org}), building upon on the SWC mesher addon (\url{https://github.com/mcellteam/swc_mesher}).
 
-ConFiG meshes are constructed using Blender metaballs, an implicit surface representation which is the isosurface of a function; typically a function analogous to the electric potential from a point charge. When two metaballs come close to one another, the fields combine and the surfaces will merge to form a smooth surface. By placing a series of metaballs along the skeleton of each fibre, a smooth surface is formed for each fibre one-by-one as shown in \Cref{fig:ipmi_meshing}a. Supplementary Figure 1 demonstrates that the ConFiG meshing procedure does not impact the diffusion dynamics compared to a straight cylinder.
+\ac{preFiG} meshes are constructed using Blender metaballs, an implicit surface representation which is the isosurface of a function; typically a function analogous to the electric potential from a point charge. When two metaballs come close to one another, the fields combine and the surfaces will merge to form a smooth surface. By placing a series of metaballs along the skeleton of each fibre, a smooth surface is formed for each fibre one-by-one as shown in \Cref{fig:ipmi_meshing}a. Supplementary Figure 1 demonstrates that the \ac{preFiG} meshing procedure does not impact the diffusion dynamics compared to a straight cylinder.
 
 When fibres are densely packed, the surfaces from neighbouring fibres may overlap. To account for this, a meshing procedure was developed in which fibres can deform around nearby fibres to avoid overlap. The metaball surface for one fibre is created as described above. This surface is then turned into a triangulated mesh, however the metaballs are retained. The metaball potential is then turned negative, meaning that rather than merging with any future nearby metaball surfaces, it will repel them, as shown in \Cref{fig:ipmi_meshing}b. This means that subsequent fibres which are meshed very close to, or overlapping with, existing fibres will deform organically to resolve the intersection, thus creating a series of completely non-intersecting fibre meshes which can be used by the dMRI simulator.
 
@@ -144,12 +144,12 @@ When fibres are densely packed, the surfaces from neighbouring fibres may overla
 % Each fibre is defined by a starting point and a target point towards which it will grow as well as an initial fibre diameter, $d_0$.
 % These parameters for each fibre are determined from OD, $\rho$ and $P(d_0)$ by packing circles with the diameters drawn from $P(d_0)$ up to a density of $\rho$ in 2 dimensions. Orientation dispersion is introduced by moving the target points of fibres relative to the starting points. %For instance, planar dispersion can be introduced by splitting the substrate into planes and rotating these relative to one another.
 
-% Alternatively, if the user wishes, the starting point, target point and diameter for each fibre can be directly input, rather than allowing ConFiG to generate them, in order to specify particular fibre configurations such as crossing fibre bundles or fanning fibres.
+% Alternatively, if the user wishes, the starting point, target point and diameter for each fibre can be directly input, rather than allowing \ac{preFiG} to generate them, in order to specify particular fibre configurations such as crossing fibre bundles or fanning fibres.
 
 % Each fibre is allowed to shrink its diameter if it is necessary to fit into spaces close to other fibres.
 % The maximum amount of shrinkage permitted is a controllable parameter, specified as a percentage of the initial fibre diameter.
 
-% Due to the stochastic nature of the algorithm, the final substrate is not guaranteed to have the exact morphological properties as input in the priors, however these inputs give the target morphology that ConFiG will attempt to produce.
+% Due to the stochastic nature of the algorithm, the final substrate is not guaranteed to have the exact morphological properties as input in the priors, however these inputs give the target morphology that \ac{preFiG} will attempt to produce.
 
 
 % %Parameters defining the space in which the fibres grow are used to define a discretisation of the space which is necessary to make the algorithm run in a practically feasible time.
@@ -281,36 +281,36 @@ In both cases, as the number of nodes increases, the resulting fibre has more of
 The uniform grid fibres, have a much more angular, structured path due to being forced to grow on the grid, while the pseudorandom fibres more irregular paths, which could be considered more `organic' looking.
 
 
-\subsection{Demonstration of ConFiG}
+\subsection{Demonstration of \ac{preFiG}}
 \label{sec:ipmi_demonstration}
-To demonstrate the potential of ConFiG, three substrates at different (dispersion, packing density) conditions were generated: (0\degree, 60\%), (15\degree, 30\%) and (35\degree, 25\%), shown in \Cref{fig:ipmi_substrates_signals}a.
+To demonstrate the potential of \ac{preFiG}, three substrates at different (dispersion, packing density) conditions were generated: (0\degree, 60\%), (15\degree, 30\%) and (35\degree, 25\%), shown in \Cref{fig:ipmi_substrates_signals}a.
 Each substrate is grown using $5 \times 10^6$ pseudo-randomly placed source nodes for the growth network, giving a network with $3.88\times10^7$  edges and a mean distance between any given node and its neighbours of 0.29 $\mu$m.
-The packing densities chosen represent the highest densities achievable using ConFiG for each dispersion condition.
+The packing densities chosen represent the highest densities achievable using \ac{preFiG} for each dispersion condition.
 
 
-For the 0\degree\ dispersed substrate, initial diameters were drawn from a gamma distribution with mean $d_0 = 2\ \mu$m and standard deviation $\sigma_d = 0.2\ \mu$m. The 15\degree\ and 35\degree\ substrates were generated with $d_0 = 1.2\ \mu$m and $\sigma_d = 0.2\ \mu$m in order to show the flexibility of ConFiG to generate substrates with different diameter distributions as well as orientation dispersion and packing density. Diameters were limited to be permitted to shrink to 25\% of the original fibre diameter in order to fit into space.
+For the 0\degree\ dispersed substrate, initial diameters were drawn from a gamma distribution with mean $d_0 = 2\ \mu$m and standard deviation $\sigma_d = 0.2\ \mu$m. The 15\degree\ and 35\degree\ substrates were generated with $d_0 = 1.2\ \mu$m and $\sigma_d = 0.2\ \mu$m in order to show the flexibility of \ac{preFiG} to generate substrates with different diameter distributions as well as orientation dispersion and packing density. Diameters were limited to be permitted to shrink to 25\% of the original fibre diameter in order to fit into space.
 
-For each substrate, the Pulsed-Gradient-Spin-Echo (PGSE) signal was simulated in Camino\cite{Cook2006} using $5\times 10^5$ diffusing spins and $5\times 10^3$ discrete time steps, uniformly distributed with bulk-diffusivity D$_0$=2 $\mu$m$^2$/ms. To show the range of simulation possibilities available, three different membrane permeabilities ($\kappa$=0, 0.0025, 0.0050 $\mu$m/ms) were also imposed.
-The simulated PGSE measurement parameters were: $\delta/\Delta=1/40$ ms and 50 b-values from 0 to 9 ms/$\mu$m$^2$ along x-, y- and z-directions.
+For each substrate, the \acf{PGSE} signal was simulated in Camino\cite{Cook2006} using $5\times 10^5$ diffusing spins and $5\times 10^3$ discrete time steps, uniformly distributed with bulk-diffusivity D$_0$=2 $\mu$m$^2$/ms. To show the range of simulation possibilities available, three different membrane permeabilities ($\kappa$=0, 0.0025, 0.0050 $\mu$m/ms) were also imposed.
+The simulated \ac{PGSE} measurement parameters were: $\delta/\Delta=1/40$ ms and 50 b-values from 0 to 9 ms/$\mu$m$^2$ along x-, y- and z-directions.
 
-The corresponding direction-averaged simulated PGSE signals at different permeabilities are shown with SNR = $\infty$ in \Cref{fig:ipmi_substrates_signals}b and SNR = 20 in \Cref{fig:ipmi_substrates_signals}c.
+The corresponding direction-averaged simulated \ac{PGSE} signals at different permeabilities are shown with SNR = $\infty$ in \Cref{fig:ipmi_substrates_signals}b and SNR = 20 in \Cref{fig:ipmi_substrates_signals}c.
 The signal decays to a lower value as the dispersion increases and density decreases, as expected.
 
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{figures/ipmi_implementation/substrates_and_signals_otherlabels.png}
-  \caption{\small a) Example substrates (cut into 30x30x30 $\mu$m$^3$ cube) from the fibre growth algorithm, left to right:  Zero macroscopic dispersion (60\% density), 15\degree\ of macroscopic dispersion (30\% density), 35\degree\ dispersed (25\% density). b) Simulations for each substrate for varying permeabilities with SNR = $\infty$  and c) SNR = 20. Units of $\kappa$ are $\mu$m/ms.}
+  \caption[Examples of generate WM numerical phantoms and simulated dMRI signals]{\small a) Example substrates (cut into 30x30x30 $\mu$m$^3$ cube) from the fibre growth algorithm, left to right:  Zero macroscopic dispersion (60\% density), 15\degree\ of macroscopic dispersion (30\% density), 35\degree\ dispersed (25\% density). b) Simulations for each substrate for varying permeabilities with SNR = $\infty$  and c) SNR = 20. Units of $\kappa$ are $\mu$m/ms.}
   \label{fig:ipmi_substrates_signals}
 \end{figure}
 
 \subsection{Comparison with Brute-Force Approach}
 \label{sec:impi_bruteforce}
-ConFiG was compared against the na\"ive brute-force approach to fibre growth.
+\ac{preFiG} was compared against the na\"ive brute-force approach to fibre growth.
 The brute-force approach grows fibres one segment at a time and checks for collisions between the new segment and all existing fibres.
 Each new segment is chosen from one of 128 candidate directions on a cone aligned with the previous segment, with each direction being weighted according to \Cref{eq:ipmi_original_lt}.
 %In the case of collisions between the proposed new section and an existing fibre, each direction is tested in order of the weight of the direction until a non-colliding direction is found, or all directions have been tested and the fibre is stuck.
 
-Substrates were grown with both the brute-force approach and ConFiG using the same starting and target points and initial diameters.
+Substrates were grown with both the brute-force approach and \ac{preFiG} using the same starting and target points and initial diameters.
 These initial parameters were determined by packing circles with gamma distributed radii (mean $d_0 = 2\ \mu$m, standard deviation $\sigma = 0.6\ \mu$m) into a 40 $\mu$m x 40 $\mu$m square up to a packing density of 60\%. Target points were set as 40 $\mu$m directly above the starting points to define a substrate with 0\degree\ macroscopic orientation dispersion.
 This resulted in a substrate with a total of 54 initial fibres.
 
@@ -321,7 +321,7 @@ From these initial parameters, fibres were grown using a subset of $n = 1, 5, 10
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.8\textwidth]{figures/ipmi_implementation/brute_force_vs_algo_2.eps}
-  \caption{\small Timing of brute force growth vs.\ the fibre growth algorithm along with a quadratic fit (brute-force) and linear fit (fibre growth algorithm). The fibre growth algorithm is clearly linear in the number of fibres, while brute force growth fits an order $n^2$ well. }
+  \caption[Comparison of brute-force growth and proposed fibre growth algorithm]{\small Timing of brute force growth vs.\ the fibre growth algorithm along with a quadratic fit (brute-force) and linear fit (fibre growth algorithm). The fibre growth algorithm is clearly linear in the number of fibres, while brute force growth fits an order $n^2$ well. }
   \label{fig:impi_brute_force}
 \end{figure}
 
@@ -336,11 +336,11 @@ This causes the brute-force approach to have better performance at low $n$, whil
 
 \section{Discussion and Conclusion}
 \label{sec:ipmi_discussion}
-ConFiG shifts perspective from previous works attempting to pack together fibres, by trying to mimic natural fibre genesis.
+\ac{preFiG} shifts perspective from previous works attempting to pack together fibres, by trying to mimic natural fibre genesis.
 This approach represents a major step towards very high fibre packing, enabling us to reach the highest dispersion at the highest packing density reached so far, to our knowledge. Our (15\degree, 30\%) and (35\degree, 25\%) represent an average \mytilde50\% and \mytilde200\% improvement, respectively, over the best previously reported results of (10\degree, 20\%)\cite{Ginsburger2018}.
 
 
-The substrates presented in \Cref{fig:ipmi_substrates_signals} are just a few examples of the kinds of substrates that can be produced using our ConFiG method.
+The substrates presented in \Cref{fig:ipmi_substrates_signals} are just a few examples of the kinds of substrates that can be produced using our \ac{preFiG} method.
 By varying the setup of the morphological controls and start and target points, many different fibre configurations can be produced.
 Currently, fibres will attempt to grow in a straight line between the start and target points, meaning that certain configurations such as kissing bundles cannot be represented.
 However, the algorithm can in principle be extended to allow for series of target points, allowing the definition of a desired 'path' of a fibre.
@@ -353,9 +353,9 @@ This limitation, however, also applies to the fibre packing and  brute force gro
 One weakness of the fibre-growth algorithm is that since the fibre diameters are calculated from a fibre-to-point distance, there can still be some small amount of overlap between fibres.
 This is solved using the meshing process in Blender to deform the regions of slight overlap between neighbouring fibres.
 
-To conclude, the proposed ConFiG approach, using the fully connected growth network, is shown to be more efficient than a `brute-force' growth approach.
-The fact that ConFiG is linear with the number of fibres makes it far more efficient for high numbers of fibres. For instance, a realistic voxel will need hundreds or thousands of fibres which will become impractically slow for the `brute-force' approach, whilst remaining manageable for our algorithm.
-This efficiency, along with the high density and orientation dispersion achieved means that ConFiG represents a promising step forward in the construction of ultra-realistic numerical phantoms of WM.
+To conclude, the proposed \ac{preFiG} approach, using the fully connected growth network, is shown to be more efficient than a `brute-force' growth approach.
+The fact that \ac{preFiG} is linear with the number of fibres makes it far more efficient for high numbers of fibres. For instance, a realistic voxel will need hundreds or thousands of fibres which will become impractically slow for the `brute-force' approach, whilst remaining manageable for our algorithm.
+This efficiency, along with the high density and orientation dispersion achieved means that \ac{preFiG} represents a promising step forward in the construction of ultra-realistic numerical phantoms of WM.
 
 
 %%% Local Variables:
