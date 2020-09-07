@@ -5,10 +5,11 @@
 \chaptertoc{}
 
 \begin{chapterabstract}
-  This chapter introduces the physics behind \ac{dMRI} as well as some techniques used for the simulation of \ac{dMRI}.
+  This chapter introduces the physics behind \ac{dMRI}, some techniques used for the simulation of \ac{dMRI} as well as some background on axonal growth mechanisms.
   Firstly, general MR physics is introduced building up from a single proton to the generation of the spin echo signal.
   The second section discusses how the diffusion of water molecules impacts the MR signal, leading to the diffusion signal attenuation.
-  The third section introduces some simulation approaches which can be used to generate synthetic \ac{dMRI} data and the final section discusses the \ac{GPU} and how it may be used to accelerate \ac{dMRI} simulations. 
+  The third section introduces some simulation approaches which can be used to generate synthetic \ac{dMRI} data.
+  The final section gives an overview of some of the mechanisms which drive axonal growth in nature and which for the inspiration for the synthetic growth algorithm presented in further chapters. 
 \end{chapterabstract}
 
 \section{MR Physics}
@@ -660,7 +661,21 @@ Monte-Carlo simulations are a powerful tool for \ac{dMRI} simulation due to thei
 Additionally, \ac{MC} simulations can be modified to account for effects that are more difficult to formulate for analytical and numerical solutions of the diffusion equation such as semi-permeable membranes, membrane-particle interactions and spatially and/or temporally varying $\mathrm{T_1, T_2}$ and diffusivities.
 
 A drawback of \ac{MC} simulation, particularly for complex substrates is the need to simulate enough spins to mimic the ensemble behaviour of spins \emph{in vivo} as well as enough discrete time points to adequately capture the dynamics through the pulse sequence.
-The huge number of calculations required to handle large simulations can be alleviated by exploiting the inherent parallel nature of the problem to run simulations in parallel on a \ac{CPU} cluster or, even more effectively, a \ac{GPU} cluster.
+The huge number of calculations required to handle large simulations can be alleviated by exploiting the inherent parallel nature of the problem to run simulations in parallel on a \ac{CPU} cluster or, even more effectively, a GPU cluster.
+
+\section{Neural growth}
+\label{sec:bg_nerual_growth}
+Neural development is a complex and constantly evolving field of research, due in part to the sheer size and complexity of the fully developed brain - for instance, during human development about 100 billion cells are generated with about 100 trillion connections between them \cite{Price2017}. This means that development on an individual neuron basis can only be studied in simple organisms with only a few hundred neurons and even then there are many mechanisms which are yet to be fully understood \cite{Price2017}.
+
+In spite of this, many neural growth mechanisms have been identified and studied in simple organisms and \emph{in vitro} experiments \cite{Price2017,Rauch2013,Nikic2011,Dent2011,Polleux2010,Lowery2009,Mortimer2008,Sakisaka2005,Scott2001,NAP1785} which give us some understanding of how neurons take their shape.
+
+At this point, a brief review of some biological terms that will be used extensively is useful. Firstly, brain cells can typically be split into two categories: neurons and glial cells. Neurons are the cells which transmit and receive signals within the brain and between the brain and the rest of the body. Neuronal cells can be thought of in a few parts, firstly the cell body, or soma, contains the nucleus of the cells, secondly long extensions known as neurites grow out from the soma. Neurites themselves are broken down into either dendrites or axons. A neuron typically has a single axon which is a long neurite which carries information away from the soma while the dendrites form a branched tree which integrates incoming information to the neuron \cite{Price2017}. Glial cells perform many functions which enable the nervous system to function efficiently such as creating the myelin sheaths which cover the axons to facilitate fast and efficient transmission of signals.
+
+On a higher level, the brain can broadly be split into two types of tissue, \acf{WM} and \acf{GM}. Grey matter contains the majority of the neuronal cell bodies in the brain while the \acl{WM} is typically composed of primarily axons connecting different \ac{GM} regions together. It is the \acl{WM} which is of interest for this work, so it is important to understand how axons grow to understand how the \ac{WM} is organised.
+
+\subsection{Axonal growth mechanisms}
+\label{sec:bg_axonal_growth}
+
 
 
 %%% Local Variables:
