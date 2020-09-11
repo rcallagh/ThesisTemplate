@@ -1,4 +1,4 @@
-\chapter{FRF Experiment}
+\chapter{Probing assumptions in spherical deconvolution techniques}
 \label{chap:frf_experiment}
 
 \chaptertoc{}
@@ -10,26 +10,40 @@ Put the abstract here.
 
 \section{Introduction}
 \label{sec:frf_introduction}
-Diffusion weighted magnetic resonance imaging (dMRI) has been widely used to probe the structure and organisation of brain tissue, with one particular area of focus being the estimation of the orientational distribution of neuronal fibres in a voxel. Many techniques have been developed for estimating this \ac{FOD}, a family of which are based on \ac{SD}.
+Diffusion weighted magnetic resonance imaging (dMRI) has been widely used to probe the structure and organisation of brain tissue, with one particular area of focus being the estimation of the orientational distribution of neuronal fibres in a voxel. This \ac{FOD} is a particularly interesting since it is used in tractography techniques to probe the structural connectivity of the brain which is important in many clinical and basic neuroscience studies\cite{DellAcqua2019,Johansen-Berg2006,Catani2013}.
 
-While there are a variety of spherical deconvolution methods, the central principle is the same - the diffusion weighted signal as a function of the azimuthal ($\phi$) and elevation ($\theta$) angles is modelled as a spherical convolution of the \ac{FOD}, $F(\theta,\phi)$, with a kernel (called the \ac{FRF}), $R(\theta)$, the typical diffusion weighted signal from a single fibre population estimated a priori:
+
+Many techniques have been developed for estimating the \acl{FOD}, of which perhaps the most prominent are based on \ac{SD}. While there are a variety of spherical deconvolution methods, the central principle is the same - the diffusion weighted signal as a function of the azimuthal ($\phi$) and elevation ($\theta$) angles is modelled as a spherical convolution of the \ac{FOD}, $F(\theta,\phi)$, with a kernel (called the \ac{FRF}), $R(\theta)$, the typical diffusion weighted signal from a single fibre population estimated \emph{a priori}:
 \begin{equation}
   S(\theta, \phi) = F(\theta, \phi) \otimes R(\theta) \,.
   \label{eq:spherical_conv}
 \end{equation}
 
-By modelling the signal in this way, a number of assumptions are made. Firstly, the contribution of the extra-axonal space to the signal is not explicitly modelled. This means that either the extra-axonal signal must be assumed to be identical to the intra-axonal signal (meaning that it can be included in the \ac{FRF}) or that the extra-axonal space has a negligible contribution to the total signal.
+By modelling the signal in this way, a number of assumptions are made. For instance, the \ac{FRF} is typically estimated from a \ac{WM} region expected to contain a single bundle of coherent fibres and that \ac{FRF} is assumed to be constant throughout the rest of the \ac{WM}.
+Recently, a number of works have challenged this assumption [CITE], for instance Schilling et al. \cite{Schilling2019} use known \acs{FOD}s from histology to estimate the \ac{FRF} in different WM regions, showing that the \ac{FRF} does indeed vary across the \ac{WM}.
+
+No works, however, have looked to take this one step further, probing the assumption inherent in the \ac{FRF} definition that the response from each individual fibre in a voxel is the same.
+Indeed, recent works using \ac{EM} to investigate \ac{WM} axonal morphology show that axons within a voxel have different shapes \cite{Lee2019b,Abdollahzadeh2019}. Axons have varying diameters along their length and are generally not straight, at least in part as a result of having to pack together around one another and other cells.
+
+A related factor is that this representation cannot properly account for non-straight fibres since an assumption is made that there is no exchange between fibres or, equivalently, between diffusion in different directions. In essence, this means that the fibres are implicitly assumed to be perfectly straight and pointing a given direction since any deviation from straight (i.e. curved or undulating fibres) would add directions that are dependent on one another.
+
+One further consideration is that the contribution of the extra-axonal space to the signal is not explicitly modelled. This means that either the extra-axonal signal must be assumed to be identical to the intra-axonal signal (meaning that it can be included in the \ac{FRF}) or that the extra-axonal space has a negligible contribution to the total signal.
 
 In fact, certain techniques using \ac{SD}, such \ac{AFD}, rely on the assumption that the extracellular signal is negligible at a high b-value (> 3000 \si{\second\per\milli\metre\squared}), though this has only been tested in simple numerical phantoms of straight parallel cylinders. 
 
+\begin{comment}
 Another assumption is that the \ac{FRF} is assumed to be the same for all fibres (or fibre populations) in the voxel, meaning that the overall signal is just this \ac{FRF} summed up across the orientations of all the fibres.
-Additionally, this representation cannot properly account for non-straight fibres since an assumption is made that there is no exchange between fibres or, equivalently, between diffusion in different directions.
-In essence, this means that the fibres are implicitly assumed to be perfectly straight and pointing a given direction since any deviation from straight (i.e. curved or undulating fibres) would add directions that are dependent on one another.
+Additionally, this representation cannot properly account for non-straight fibres since an assumption is made that there is no exchange between fibres or, equivalently, between diffusion in different directions. In essence, this means that the fibres are implicitly assumed to be perfectly straight and pointing a given direction since any deviation from straight (i.e. curved or undulating fibres) would add directions that are dependent on one another.
 
 In practice, however, it is not possible to have a large number of straight fibres pointing in different directions within the same space and maintain a high fibre volume fraction other than in a few simple cases such as planar dispersed cylinders. Ex vivo studies using 3D electron microscopy of mouse corpus callosum have shown than axons are generally not straight, at least in part as a result of having to pack together around one another and other cells.
+\end{comment}
 
-In this work we use \ac{ConFiG}, our recently developed white matter numerical phantom generator capable of generating realistic WM morphology, to investigate these whether these assumption hold in realistic axonal geometries. Firstly we investigate the contribution of the extracellular space to the total \ac{dMRI} signal, whether the extracellular signal is similar to intracellular signal and how much it contributes to the overall signal. Additional, we investigate how the realistic packing of fibres affects the diffusion within each fibre and whether the dMRI signal from each fibre is the same, as \ac{SD} assumes.
+In this work we use \ac{ConFiG}, our recently developed white matter numerical phantom generator capable of generating realistic WM morphology, to investigate these whether these assumption hold in realistic axonal geometries.
+Firstly, we investigate how the realistic packing of fibres affects the diffusion within each fibre and whether the dMRI signal from each fibre is the same, as \ac{SD} assumes.
+As well as using \ac{ConFiG} phantoms, we use axons reconstructed from the \ac{EM} data from Lee at al. \cite{Lee2019b} to test the \ac{dMRI} signal in real axonal geometry.
+Additionally, we investigate the contribution of the extracellular space to the total \ac{dMRI} signal, whether the extracellular signal is similar to intracellular signal and how much it contributes to the overall signal.
 
+The rest of this chapter is organised as follows: \Cref{sec:frf_method} describes the experiments performed to probe the assumptions outlined above and \Cref{sec:frf_results,sec:frf_discussion} summarise the contributions and discuss future work.
 \section{Method}
 \label{sec:frf_method}
 % In order to test what impact the complex morphology introduced by packing fibres together has on the individual fibre response functions and how this varies from the straight fibre model used in SD a simulation experiment was performed in a set of numerical phantoms generated using ConFiG.
@@ -45,36 +59,49 @@ Phantoms were generated for a single bundle of fibres with different amounts of 
 A low $\kappa$ means high orientation dispersion, so phantoms with a lower $\kappa$ were expected to have more complex morphology since higher \ac{OD} means that they must grow around one another more to avoid intersections. A typical $\kappa$, estimated using \ac{NODDI} \cite{Zhang2012}, for the corpus callosum of a healthy \ac{HCP} \cite{Sotiropoulos2013a,VanEssen2012} subject is $\kappa \sim 6$, as demonstrated in \Cref{sec:config_results}.
 Crossing bundle phantoms were generated by using starting and target points arrange into two or three crossing bundles and grown using \ac{ConFiG} to generate complex phantoms with interleaved fibres.
 
-For testing individual fibre response functions, only the intracellular signal was needed since the ideal \ac{FRF} comes solely from the intracellular space. In this case, each fibre was rotated to be aligned with the $z-$axis and then extended with a reflected copy as in Lee et al. \cite{Lee2019a}.
+For testing individual fibre response functions, only the intracellular signal was needed since the ideal \ac{FRF} comes solely from the intracellular space. In this case, each fibre was rotated to be aligned with the $z-$axis and then extended with a reflected copy as in Lee et al. \cite{Lee2019a}. The rotation matrix used to align the fibre with $z$ was stored so that signals could be rotated back into the dispersed directions if necessary.
 
 % \todo[inline]{Here I want to quantify the microstructural complexity of the phantoms, primarily amount of undulation and amount of beading, to associate with variability in per-fibre FRF}
+
+\subsubsection{Real WM fibres from EM}
+\label{sec:frf_real_axon_meshing}
+To simulate diffusion in real axons, 3D meshes were generated from \ac{WM} axon segmentations from \acf{EM} of mouse corpus callosum presented by Lee et al.\cite{Lee2019b}.
+
+The axonal segmentations are provided in the NifTI format, a volumetric format. In order to convert these into surface meshes for \ac{dMRI} simulation, the \texttt{isosurface} function in MATLAB was used, however this produces meshes with some artifacts such as loose surfaces inside the fibres.
+In order to account for this, a further mesh refinement procedure was developed using the shrinkwrap feature in Blender to create a smooth, closed surface mesh around each fibre.
+
+As in the case of ConFiG fibres, each axon mesh was rotated to align with $z$ and extended with a reflected copy for simulation. Only axons that were longer than \SI{18}{\micro\metre} before extension were used in simulation to remove very short fibres that had been segmented at the edge of the volume. 
+
+
 
 \subsection{dMRI simulation}
 \label{sec:frf_dMRI_simulation}
 Diffusion MRI signals were simulated from ConFiG phantoms using the Camino \ac{dMRI} simulator \cite{Cook2006,Hall2009} to perform the experiments described below. For all experiments a bulk diffusivity $D = \SI{2.0}{\micro\metre\squared\per\milli\second}$ was used in agreement with similar Monte Carlo experiments as in \Cref{sec:config_experiments} with standard Camino periodic boundaries \cite{Panagiotaki2010}.
+
+
+\subsubsection{Per-fibre \ac{FRF}}
+For each fibre 10,000 spins were initialised uniformly intra-axonal space and the simulations were performed using 5000 timesteps. A small set of test simulations were performed using 10$^5$ spins and 10$^4$ timesteps yielding negligibly different signals to these settings, so 10,000 and 5,000 were used for the main simulations. The measurement parameters were $\Delta = \SI{28}{\milli\second}$, $\delta = \SI{24}{\milli\second}$, $b = 0,1000,2000,3000,5000,\SI{10000}{\second\per\milli\metre\squared}$ and 256 gradient directions at each shell. This gives a diffusion time $d_t = \SI{20}{\milli\second}$ and $G = \SI{60}{\milli\tesla\per\metre}$ at $b = \SI{3000}{\second\per\milli\metre\squared}$, chosen to be a feasible gradient strength on a high-end clinical system.
+
+To compare to the collection of straight fibres assumption implicit in the spherical deconvolution, an infinite cylinder representing each fibre was generated using the endpoints of each fibre to give the direction and the mean radius of the fibre as the cylinder radius. For simulation, each cylinder was aligned with the $z$-axis similarly to the ConFiG fibres so that everything was in the same space to compare the signals. The same measurement scheme was simulated in each cylinder in order to compare to the \ac{ConFiG} fibres.
+
 
 \subsubsection{Extracellular contribution}
 \label{sec:frf_method_extra}
 To probe the contribution of the extracellular space on the overall signal, simulations were performed in \ac{ConFiG} phantoms using $10^5$ spins initialised uniformly space. All fibres in the \ac{ConFiG} phantoms were treated as impermeable, meaning that the intracellular and extracellular signals could be calculated independently by labelling which compartment each spin started in. As in \Cref{sec:config_experiments}, phantoms were extended with reflected copies.
 
 Two different measurement schemes were used to assess the contribution of the extracellular space to the overall signal. Firstly, a radial scheme with 256 measurements equally space in the plane perpendicular to the main fibre direction with $b = 0, 1000, 2000, 3000, 5000, \SI{10000}{\second\per\milli\metre\squared}$ was used to assess how the extracellular signal decays in the radial direction where there should be the largest difference between intracellular and extracellular signals as in Raffelt et al. \cite{Raffelt2012}. Additionally, a scheme with the same b-values but directions equidistributed across the sphere was used to test how the signal varies in all directions.
-
-\subsubsection{Per-fibre \ac{FRF}}
-
-For each fibre 10,000 spins were initialised uniformly intra-axonal space and the simulations were performed using 5000 timesteps. A small set of test simulations were performed using 10$^5$ spins and 10$^4$ timesteps yielding negligibly different signals to these settings, so 10,000 and 5,000 were used for the main simulations. The measurement parameters were $\Delta = \SI{28}{\milli\second}$, $\delta = \SI{24}{\milli\second}$, $b = 0,1000,2000,3000,5000,\SI{10000}{\second\per\milli\metre\squared}$ and 256 gradient directions at each shell. This gives a diffusion time $d_t = \SI{20}{\milli\second}$ and $G = \SI{60}{\milli\tesla\per\metre}$ at $b = \SI{3000}{\second\per\milli\metre\squared}$, chosen to be a feasible gradient strength on a high-end clinical system.
-
-To compare to the collection of straight fibres assumption implicit in the spherical deconvolution, a cylinder representing each fibre was generated using the endpoints of each fibre to give the direction and the mean radius of the fibre as the cylinder radius. The same measurement scheme was simulated in each cylinder in order to compare to the \ac{ConFiG} fibres. 
-
 \subsection{Signal analysis}
 \label{sec:frf_signal_analysis}
+Throughout this work, \ac{SH} representations of signals are used. The MATLAB implementation of \ac{CSD} from J-Donald Tournier (\url{https://github.com/jdtournier/csd}) is used to calculate \ac{SH} decompositions of signals.
 
 \subsubsection{Extracellular contribution}
 \label{sec:frf_sig_proc_extra}
+For the radial simulations, the mean radial signal at each b-value was calculated for each of the compartments (intracellular, extracellular and total space). For the simulations in all directions, the spherical harmonic representation of the signal was calculated for each of the compartments at each b-value.
 
 \subsubsection{Per-fibre \ac{FRF}}
 \label{sec:frf_sig_proc_per_fibre}
-
-
+Since the individual axons have been aligned with the $z$-axis, the signals from each fibre can be directly compared with one another as the gradient directions are aligned with respect to each fibre.
+For each numerical phantom the median, 10th and 90th percentile of the signal in each direction at each b-value across all the axons in the phantom were calculated.
 
 
 \section{Results}
@@ -156,6 +183,10 @@ To compare to the collection of straight fibres assumption implicit in the spher
   \caption{Per-fibre FRF at $b = \SI{2000}{\second\per\milli\metre\squared}$ for $\kappa$ =(a)2, (b)6, (c)100. Solid line shows mean signal and shaded area shows 5th and 95th percentiles. }
   \label{fig:frf_prctiles_kappa_b2000}
 \end{figure}
+
+\section{Discussion and Conclusion }
+\label{sec:frf_discussion}
+
 
 %%% Local Variables:
 %%% mode: latex
