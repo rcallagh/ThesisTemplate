@@ -124,15 +124,27 @@
 \pagestyle{scrheadings}
 \pagenumbering{arabic}
 % \include{src/plan}
+
+\part{Introduction and background}
+\label{part:intro_background}
 \include{src/introduction}
 \include{src/background}
 \include{src/literature_review}
+
+\part{Methods Development}
+\label{part:methods-development}
 \include{src/IPMI_implementation}
 \include{src/config}
 \include{src/Microstructure_eval}
+
+\part{Applications}
+\label{part:applications}
 \include{src/FRF_experiment}
-%\include{src/conclusions}
-\include{src/future}
+
+\part{Conlusions}
+\label{part:conclusion}
+\include{src/conclusions}
+% \include{src/future}
 \begin{appendix}
   \include{src/publications}
   \include{src/colophon}
