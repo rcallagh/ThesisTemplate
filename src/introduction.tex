@@ -17,7 +17,7 @@ One year later, Francis Crick, fellow discoverer of DNA, and Edward Jones publis
 Just one year after that, in 1994, Basser et al.\ \cite{Basser1994} showed that it was possible to use \ac{MRI} to measure the movement of water along axons, providing the basis for exactly the kind of new technique Crick and Jones had felt was needed.
 This technique of using \ac{MRI} for measuring the movement of water molecules is known as \ac{dMRI}.
 
-In the 25 years since the work of Basser et al.\ the topic of \acl{dMRI} has grown into a major \ac{MRI} research field, generating thousands of publications per year.
+In the 25 years since the work of Basser et al., \acl{dMRI} has grown into a major \ac{MRI} research field, generating thousands of publications per year.
 Diffusion MRI has found extensive use for imaging the brain, generating new techniques such as tractography, which attempts to map out the connections in the brain \emph{in vivo}, and microstructure imaging, in which measurements of the diffusion of water in tissue is used to infer information about the structure of the tissue on a scale much lower than the size of an MRI voxel.
 
 \begin{comment}
@@ -26,18 +26,32 @@ One technique which is commonly employed to study the structure of the human bra
 \end{comment}
 
 These techniques work because \ac{dMRI} sensitises the \ac{MRI} signal to the diffusive motion of water molecules on the micrometer scale - the further the water diffuses, the more strongly the MR signal is attenuated.
-The environment in which the water molecules move restricts the motion of the molecules and so will affect the \ac{dMRI} signal.
+The environment in which the water molecules move restricts the motion of the molecules and so will affect how strongly the \ac{dMRI} signal is attenuated.
 This dependency of the \ac{dMRI} signal on the environment in which water molecules diffuse can be exploited to infer information about the environment solely from the \ac{dMRI} signal.  
-
 
 Microstructure imaging attempts to do exactly this, infer information about the microstructural environment such as cell size and density from the \ac{dMRI} signal.
 Since the microstructural environment is on a much smaller scale than the \ac{dMRI} voxels, we cannot directly image this structure, so models are used to relate the \ac{dMRI} signal from a voxel to microstructural features.
 
 The validation of these microstructural models can be difficult since ground truth microstructural features are typically inaccessible \emph{in vivo} and classical histological validation techniques have limitations such as disruption due to tissue extraction and preparation.
-One approach commonly taken for the validation of new models is simulation of the \ac{dMRI} signal using well defined and controllable ground truth microstructural environments known as numerical phantoms. 
 
-Whilst these numerical phantoms often provide a valuable ground truth for simulation, they typically over simplify the complex microstructure of real tissue.
-An example of this is in \ac{WM}, where fibres are commonly represented as straight cylinders \cite{Hall2009,Leemans2005} whereas in real tissue, fibres have complex shapes with undulation and diameter variation \cite{Abdollahzadeh2019, Lee2019b}.
+One approach commonly taken for the validation of new models is simulation of the \ac{dMRI} signal using well defined and controllable ground truth microstructural environments known as numerical phantoms which allow us to compare model fitting results to the ground truth from the numerical phantoms. Recent studies have used this approach to investigate grey matter \cite{Palombo2020}, however numerical phantoms have more commonly been used to study \ac{dMRI} in \ac{WM} \cite{Li2019,Jelescu2017,Nilsson2017,Scherrer2016,Tariq2016,Daducci2015,Xu2014,Zhang2012,Nilsson2010}.
+
+Another application of numerical phantoms which is growing in popularity is in the direct computational modelling of microstructure.
+These techniques use machine learning or fingerprinting-style techniques to match simulated signals and the corresponding ground truth microstructure of the numerical phantom to the measured signal in order to directly estimate microstructural features without using and explicit analytical model \cite{Rensonnet2018,Hill2019,Palombo2018a,Nedjati-Gilani2017}.
+
+As well as affecting the dMRI signal, tissue microstructure also affects other MR techniques such as susceptibility-weighted imaging \cite{Li2012,Lee2010}. For instance, simulations have been used to show that using realistic \ac{WM} axonal models affect the susceptibility weighted MR image differently to the commonly assumed straight cylinders \cite{Xu2018}.
+It is, therefore, important to the MRI community to generate realistic \ac{WM} numerical phantoms which accurately capture microstructural features in order to get realistic simulated signal.
+
+Typically, however, there is a mismatch between the true complexity of brain tissue and the numerical phantoms that are used in simulations.
+For instance, \ac{WM} fibres are commonly represented using simple geometric constructs such as straight, parallel cylinders \cite{Nilsson2010,Fieremans2010,Nilsson2009,Ford1997,Hall2009,Alexander2010}. Real \ac{WM} fibres, however, have complex shapes with morphological features such as undulation and diameter variation, as revealed by \ac{EM} studies \cite{Abdollahzadeh2019, Lee2019b}.
+
+It is very difficult to know exactly how this complex microstructure impacts on the \ac{dMRI} signal and to understand which of these complex morphological features ca be detected using \ac{dMRI}.
+Developing new numerical phantoms which allow us to generate realistic \ac{WM} microstructure would enable us to study these effects with more control and detail as well as enabling us to validate new and existing \ac{dMRI} microstructure models more comprehensively.
+Additionally, realistic \ac{WM} numerical phantoms would enable us to drive forward a new generation of computational models of \ac{WM}, using machine learning to link simulated signals to the realistic \ac{WM} microstructure.
+
+The first step on the road to developing these new computational models, however, is to develop a method to generate realistic \ac{WM} numerical phantoms with controllable microstructure.
+% order to validate models in scenarios that are as close as possible to \emph{in vivo} conditions, the realism of numerical phantoms should be improved, attempting to fully capture all of the microstructural variation found in \emph{in vivo}.
+
 
 \begin{figure}
   \centering
@@ -45,12 +59,6 @@ An example of this is in \ac{WM}, where fibres are commonly represented as strai
   \caption[Overview of the main goal of the thesis]{The work presented in this abstract aims to bridge the gap between the true complexity of white matter axonal morphology and the simplistic representation currently used as numerical phantoms. }
   \label{fig:intro_overview}
 \end{figure}
-
-In order to validate models in scenarios that are as close as possible to \emph{in vivo} conditions, the realism of numerical phantoms should be improved, attempting to fully capture all of the microstructural variation found in \emph{in vivo}.
-
-Another application of numerical phantoms which is growing in popularity is in the direct computational modelling of microstructure.
-These techniques use machine learning or fingerprinting-style techniques to match simulated signals and the corresponding ground truth microstructure of the numerical phantom to the measured signal \cite{Rensonnet2018,Hill2018,Palombo2018a,Nedjati-Gilani2017}.
-Again, in this case, the more realistic the numerical phantoms used for simulation, the more accurately microstructural features can be estimated. 
 
 \section{Problem Statement}
 \label{sec:intro_problem_statement}
@@ -70,8 +78,9 @@ The mains aims of this work are as follows:
 \item Use \ac{WM} numerical phantoms to probe assumptions in spherical deconvolution based dMRI modelling techniques.
 \end{enumerate}
 
-In an effort to achieve aim 1, a method called\acused{ConFiG} \acs{ConFiG} (\textbf{Con}textual \textbf{Fi}bre \textbf{G}rowth) is presented which `grows' fibres densely attempting to respect some morphological priors to generate realistic \ac{WM} numerical phantoms.
+In an effort to achieve these aims, a method called\acused{ConFiG} \acs{ConFiG} (\textbf{Con}textual \textbf{Fi}bre \textbf{G}rowth) is presented which `grows' fibres densely attempting to respect some morphological priors to generate realistic \ac{WM} numerical phantoms.
 %\ac{ConFiG} is tested, using it to general phantoms with simple morphology that can be easily generated using other means to test its ability to replicate simple situations and explore the input parameter space.
+
 
 \section{Report Overview}
 \label{sec:intro_report_overview}
