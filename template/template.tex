@@ -12,9 +12,13 @@
 % Standard packages
 \input{template/CommonPackages}
 
+\ifx\darkmode\undefined
 \definecolor[named]{myColorMainA}{RGB}{0,0,0}
 \definecolor[named]{myColorMainB}{RGB}{174,49,54}
-
+\else
+\definecolor[named]{myColorMainA}{RGB}{223,223,223}
+\definecolor[named]{myColorMainB}{RGB}{174,49,54}
+\fi
 
 % Math related
 \input{template/Math}
