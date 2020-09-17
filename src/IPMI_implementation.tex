@@ -108,9 +108,9 @@ This, in addition to shrinking the radius of future fibres according to $d_c$ at
 Since the value of $d_c$ is set based on fibre-to-point distances, there can be cases in which the fibres would intersect when the closest point between two fibre sections is not at one of the fibre nodes.
 In order to account for this, a meshing process developed which can deform fibres around one another. This is described in \Cref{sec:ipmi_step3_meshing}.
 
-  \item [STEP 2.4] Repeat steps 2.2 and 2.3 until fibre reaches target (\Cref{fig:ipmi_config_algorithm}g). By default in \ac{preFiG}, each fibre will grow completely before the next one starts, meaning that step 5 only needs to be performed once the fibre has finished growing. If fibres are allowed to grow concurrently, step 5 must be performed after each growth step.
+  \item [STEP 2.4] Repeat \textbf{\sffamily STEP 2.2} and \textbf{\sffamily 2.3} until fibre reaches target (\Cref{fig:ipmi_config_algorithm}g). By default in \ac{preFiG}, each fibre will grow completely before the next one starts, meaning that \textbf{\sffamily STEP 2.3} only needs to be performed once the fibre has finished growing. If fibres are allowed to grow concurrently, \textbf{\sffamily STEP 2.3} must be performed after each growth step.
 
-  \item [STEP 2.5] Repeat steps 2.2-2.4 for remaining fibres (\Cref{fig:ipmi_config_algorithm}h-i). As noted in \Cref{fig:ipmi_config_algorithm} (e-h), as the network is updated, more and more nodes become inaccessible making the network sparser. This means that some fibres may reach a point from which they cannot grow any further and will become stuck. Currently, these fibres are simply removed from the final phantom, meaning the final phantom may have a lower density than the target density.
+  \item [STEP 2.5] Repeat \textbf{\sffamily STEP 2.2-2.4} for remaining fibres (\Cref{fig:ipmi_config_algorithm}h-i). As noted in \Cref{fig:ipmi_config_algorithm} (e-h), as the network is updated, more and more nodes become inaccessible making the network sparser. This means that some fibres may reach a point from which they cannot grow any further and will become stuck. Currently, these fibres are simply removed from the final phantom, meaning the final phantom may have a lower density than the target density.
 \end{description}
 
 
@@ -125,7 +125,7 @@ In order to account for this, a meshing process developed which can deform fibre
   \label{fig:ipmi_meshing}
 \end{figure}
 
-Finally, Step 3, the meshing procedure is described in more detail below:
+Finally, \textbf{\sffamily STEP 3}, the meshing procedure is described in more detail below:
 \begin{description}
   \item [STEP 3] Generate 3D fibre meshes. After the growth process, each fibre will be represented by a series of connected 3D points and corresponding diameters at each point, stored in the Stockley-Wheal-Cole (SWC) format \cite{Stockley1993}. In order to simulate diffusion MRI signals, these fibre skeleta need to be turned into 3D meshes. \ac{preFiG} uses a meshing procedure designed to eliminate overlap between fibres, using Blender (\url{https://blender.org}), building upon on the SWC mesher addon (\url{https://github.com/mcellteam/swc_mesher}).
 
@@ -281,7 +281,7 @@ In both cases, as the number of nodes increases, the resulting fibre has more of
 The uniform grid fibres, have a much more angular, structured path due to being forced to grow on the grid, while the pseudorandom fibres more irregular paths, which could be considered more `organic' looking.
 
 
-\subsection{Demonstration of \ac{preFiG}}
+\subsection{Demonstration of \acs{preFiG}}
 \label{sec:ipmi_demonstration}
 To demonstrate the potential of \ac{preFiG}, three substrates at different (dispersion, packing density) conditions were generated: (0\degree, 60\%), (15\degree, 30\%) and (35\degree, 25\%), shown in \Cref{fig:ipmi_substrates_signals}a.
 Each substrate is grown using $5 \times 10^6$ pseudo-randomly placed source nodes for the growth network, giving a network with $3.88\times10^7$  edges and a mean distance between any given node and its neighbours of 0.29 $\mu$m.
@@ -336,12 +336,11 @@ This causes the brute-force approach to have better performance at low $n$, whil
 
 \section{Discussion and Conclusion}
 \label{sec:ipmi_discussion}
-\ac{preFiG} shifts perspective from previous works attempting to pack together fibres, by trying to mimic natural fibre genesis.
-This approach represents a major step towards very high fibre packing, enabling us to reach the highest dispersion at the highest packing density reached so far, to our knowledge. Our (15\degree, 30\%) and (35\degree, 25\%) represent an average \mytilde50\% and \mytilde200\% improvement, respectively, over the best previously reported results of (10\degree, 20\%)\cite{Ginsburger2018}.
+\ac{preFiG} shifts the perspective from previous works attempting to pack together fibres, by trying to mimic natural fibre genesis.
+This approach represents a major step towards very high fibre packing, enabling us to reach the highest dispersion at the highest packing density reached so far, to our knowledge. Our (15\degree, 30\%) and (35\degree, 25\%) represent an average \mytilde50\% and \mytilde200\% improvement, respectively, over the best previously reported results of (10\degree, 20\%)\cite{Ginsburger2018}\footnote{The \ac{preFiG} method presented here outperformed the state-of-the-art at the time it was published \cite{Callaghan2019}}.
 
 
-The substrates presented in \Cref{fig:ipmi_substrates_signals} are just a few examples of the kinds of substrates that can be produced using our \ac{preFiG} method.
-By varying the setup of the morphological controls and start and target points, many different fibre configurations can be produced.
+The substrates presented in \Cref{fig:ipmi_substrates_signals} are just a few examples of the kinds of substrates that can be produced using our \ac{preFiG} method, though by varying the setup of the morphological controls and start and target points, many different fibre configurations can be produced.
 Currently, fibres will attempt to grow in a straight line between the start and target points, meaning that certain configurations such as kissing bundles cannot be represented.
 However, the algorithm can in principle be extended to allow for series of target points, allowing the definition of a desired 'path' of a fibre.
 
@@ -352,6 +351,8 @@ This limitation, however, also applies to the fibre packing and  brute force gro
 
 One weakness of the fibre-growth algorithm is that since the fibre diameters are calculated from a fibre-to-point distance, there can still be some small amount of overlap between fibres.
 This is solved using the meshing process in Blender to deform the regions of slight overlap between neighbouring fibres.
+
+Another limitation of the \ac{preFiG} implementation is that while the phantoms produced improve upon the state-of-the-art, the fibre density achieved is still too low to really be applicable to white matter. Typical expected fibre density would be between 50 and 80\%, so improvements need to made to enable phantoms to be generated at a higher fibre density.
 
 To conclude, the proposed \ac{preFiG} approach, using the fully connected growth network, is shown to be more efficient than a `brute-force' growth approach.
 The fact that \ac{preFiG} is linear with the number of fibres makes it far more efficient for high numbers of fibres. For instance, a realistic voxel will need hundreds or thousands of fibres which will become impractically slow for the `brute-force' approach, whilst remaining manageable for our algorithm.
