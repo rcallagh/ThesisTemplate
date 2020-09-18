@@ -154,7 +154,11 @@
         \else
         \node[opacity=0.025] (gofl) at (0.5\paperwidth,5.25cm) {
           \ifthenelse{\equal{\LifeChapter}{}}{}{
-            \includegraphics[width=\paperwidth]{figures/myelin_bw3.eps}
+            \ifnum\value{chapter}>0
+            \includegraphics[width=\paperwidth, page=\value{chapter}]{figures/chapter_headers.pdf}
+            \else
+            \includegraphics[width=\paperwidth, page=1]{figures/chapter_headers.pdf}
+            \fi
           }
         };
         %
