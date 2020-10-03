@@ -18,20 +18,32 @@
    src/IPMI_implementation,
    src/config,
    src/Microstructure_eval,
+   src/intracellular,
    src/FRF_experiment,
    src/conclusions,
    src/future,
    src/publications,
    src/colophon,
+   src/abstract,
+   src/impact_statement,
  }
 
 
 
 \newcommand{\titleinfo}{Generation of realistic white matter substrates with controllable morphology for diffusion MRI simulations}
 
-\pagenumbering{Alph}
+% \pagenumbering{Alph}
 \begin{document}
 
+\makeatletter
+\newcommand*{\org@overidelabel}{}
+\let\org@overridelabel\@verridelabel
+\renewcommand*{\@verridelabel}[1]{%
+    \@bsphack
+    \protected@write\@auxout{}{\string\AC@undonewlabel{#1@cref}}%
+    \org@overridelabel{#1}%
+    \@esphack
+  }%
 
 %% Title Page
 \author{Ross Callaghan}
@@ -95,11 +107,12 @@
 
 
 \renewcommand*{\chapterpagestyle}{empty}
-\input{src/abstract}
+\include{src/abstract}
+\include{src/impact_statement}
 \renewcommand*{\chapterpagestyle}{plain}
 \cleardoublepage
 \pagestyle{plain}
-\pagenumbering{roman}
+% \pagenumbering{roman}
 
 \renewcommand{\BrainFuckChapter}{
 }
@@ -116,8 +129,8 @@
 \renewcommand{\BrainFuckChapter}{
 }
 
-\listofalgorithms
-\addcontentsline{toc}{chapter}{List of Algorithms}
+% \listofalgorithms
+% \addcontentsline{toc}{chapter}{List of Algorithms}
 
 
 \include{src/acronyms}
@@ -128,7 +141,7 @@
 \renewcommand*{\chapterpagestyle}{scrheadings}
 
 \pagestyle{scrheadings}
-\pagenumbering{arabic}
+% \pagenumbering{arabic}
 % \include{src/plan}
 
 \part{Introduction and background}
@@ -145,6 +158,7 @@
 
 \part{Applications}
 \label{part:applications}
+\include{src/intracellular}
 \include{src/FRF_experiment}
 
 \part{Conlusions}
