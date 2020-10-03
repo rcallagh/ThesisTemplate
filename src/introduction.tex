@@ -18,7 +18,7 @@ Just one year after that, in 1994, Basser et al.\ \cite{Basser1994} showed that 
 This technique of using \ac{MRI} for measuring the movement of water molecules is known as \ac{dMRI}.
 
 In the 25 years since the work of Basser et al., \acl{dMRI} has grown into a major \ac{MRI} research field, generating thousands of publications per year.
-Diffusion MRI has found extensive use for imaging the brain, generating new techniques such as tractography, which attempts to map out the connections in the brain \emph{in vivo}, and microstructure imaging, in which measurements of the diffusion of water in tissue is used to infer information about the structure of the tissue on a scale much lower than the size of an MRI voxel.
+Diffusion MRI has found extensive use for imaging the brain, generating new techniques such as tractography, which attempts to map out the connections in the brain \emph{in vivo}, and microstructure imaging, in which measurements of the diffusion of water in tissue are used to infer information about the structure of the tissue on a scale much lower than the size of an MRI voxel.
 
 \begin{comment}
 \ac{MRI} provides researchers and clinicians a powerful and flexible tool for non-invasively imaging the human body \emph{in vivo} and has found extensive use over the past few decades in furthering the understanding the structure and function of the human brain.
@@ -42,14 +42,15 @@ These techniques use machine learning or fingerprinting-style techniques to matc
 As well as affecting the dMRI signal, tissue microstructure also affects other MR techniques such as susceptibility-weighted imaging \cite{Li2012,Lee2010}. For instance, simulations have been used to show that using realistic \ac{WM} axonal models affect the susceptibility weighted MR image differently to the commonly assumed straight cylinders \cite{Xu2018}.
 It is, therefore, important to the MRI community to generate realistic \ac{WM} numerical phantoms which accurately capture microstructural features in order to get realistic simulated signal.
 
-Typically, however, there is a mismatch between the true complexity of brain tissue and the numerical phantoms that are used in simulations.
+Typically, however, there is a mismatch between the true complexity of brain tissue and the numerical phantoms that are used in simulations, outlined in \Cref{fig:intro_overview}.
 For instance, \ac{WM} fibres are commonly represented using simple geometric constructs such as straight, parallel cylinders \cite{Nilsson2010,Fieremans2010,Nilsson2009,Ford1997,Hall2009,Alexander2010}. Real \ac{WM} fibres, however, have complex shapes with morphological features such as undulation and diameter variation, as revealed by \ac{EM} studies \cite{Abdollahzadeh2019, Lee2019b}.
 
-It is very difficult to know exactly how this complex microstructure impacts on the \ac{dMRI} signal and to understand which of these complex morphological features ca be detected using \ac{dMRI}.
+It is very difficult to know exactly how this complex microstructure impacts on the \ac{dMRI} signal and to understand which of these complex morphological features can be detected using \ac{dMRI}.
 Developing new numerical phantoms which allow us to generate realistic \ac{WM} microstructure would enable us to study these effects with more control and detail as well as enabling us to validate new and existing \ac{dMRI} microstructure models more comprehensively.
-Additionally, realistic \ac{WM} numerical phantoms would enable us to drive forward a new generation of computational models of \ac{WM}, using machine learning to link simulated signals to the realistic \ac{WM} microstructure.
 
-The first step on the road to developing these new computational models, however, is to develop a method to generate realistic \ac{WM} numerical phantoms with controllable microstructure.
+Additionally, realistic \ac{WM} numerical phantoms would enable us to drive forward a new generation of computational models of \ac{WM}, using machine learning to link simulated signals to the realistic \ac{WM} microstructure which could potentially improve the accuracy of microstructure models. For instance, it may be possible to disentangle axonal loss and demyelination using these computational models which can give us valuable information for differential diagnosis in diseases such as \ac{MS}.
+
+The first step on the road to developing these new computational models, however, is to develop a method to generate realistic \ac{WM} numerical phantoms with controllable microstructure. That is the main purpose of the work presented in this thesis, the development of a new tool to generate more realistic \ac{WM} numerical phantoms than was previously possible.
 % order to validate models in scenarios that are as close as possible to \emph{in vivo} conditions, the realism of numerical phantoms should be improved, attempting to fully capture all of the microstructural variation found in \emph{in vivo}.
 
 
