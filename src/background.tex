@@ -9,7 +9,8 @@
   Firstly, general MR physics is introduced building up from a single proton to the generation of the spin echo signal.
   The second section discusses how the diffusion of water molecules impacts the MR signal, leading to the diffusion signal attenuation.
   The third section introduces some simulation approaches which can be used to generate synthetic \ac{dMRI} data.
-  The final section gives an overview of some of the mechanisms which drive axonal growth in nature and which for the inspiration for the synthetic growth algorithm presented in further chapters. 
+  % The final section gives an overview of some of the mechanisms which drive axonal growth in nature and which for the inspiration for the synthetic growth algorithm presented in further chapters.
+  The final section gives a brief overview of the kinds of \ac{dMRI} models typically used in the brain with a focus on spherical deconvolution techniques which will be used later in the thesis.
 \end{chapterabstract}
 
 \section{MR Physics}
@@ -176,7 +177,7 @@ This kind of motion is known as nutation and is illustrated in \Cref{fig:nutatio
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{figures/background/nutation.eps}
-	\caption[Nutation motion of an on-resonance spin the presence of an \ac{RF} field.]{Nutation motion of an on-resonance spin in the presence of an \ac{RF} field. Precession about the $B_0$ and $B_1$ fields create the spiralling motion in the laboratory frame.}
+	\caption[Nutation motion of an on-resonance spin the presence of an \acs{RF} field.]{Nutation motion of an on-resonance spin in the presence of an \ac{RF} field. Precession about the $B_0$ and $B_1$ fields create the spiralling motion in the laboratory frame.}
 	\label{fig:nutation}
 \end{figure}
 
@@ -259,7 +260,7 @@ This is referred to as $\mathrm{T}_2^*$, with
 where $\mathrm{T}_2'$ is the relaxation time associated with these external sources and $\mathrm{T}_2$ is the intrinsic spin-spin relaxation time. The $\mathrm{T}_2'$ effect can be negated using special MR pulse sequences which will be covered in \Cref{sec:spin_echoes}, however the intrinsic $\mathrm{T}_2$ relaxation cannot be avoided.  
 
 
-\subsubsection{The Rotating Frame}
+\subsubsection{The rotating frame}
 To this point, everything has been described in a static Cartesian frame known as the laboratory frame. 
 The lab frame is not the most convenient reference frame to analyse the \ac{NMR} experiment in, however.
 Moving to a frame which is rotating about $\mathbf{B}_0$ (i.e.\ the $z$-axis) at a frequency $\omega$ matching the $\mathbf{B}_1$ field oscillation simplifies the maths of the system. 
@@ -287,7 +288,7 @@ When $\Omega = 0$, meaning that $\mathbf{B}_1$ oscillates at the Larmor frequenc
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{figures/background/nutation_onres.eps}
-	\caption[Motion of a spin in the presence of a $B_1$ \ac{RF} field in the rotating frame]{Motion of a spin in the presence of a $B_1$ RF field in the rotating frame. This is identical to the nutation in \Cref{fig:nutation}, however viewing from the rotating frame simplifies the motion. }
+	\caption[Motion of a spin in the presence of a $B_1$ \acs{RF} field in the rotating frame]{Motion of a spin in the presence of a $B_1$ RF field in the rotating frame. This is identical to the nutation in \Cref{fig:nutation}, however viewing from the rotating frame simplifies the motion. }
 	\label{fig:onres}
 \end{figure}
 
@@ -311,7 +312,7 @@ The effective field is illustrated in \Cref{fig:B_e} with the additional compone
 Off-resonance effects can produce unwanted results meaning the spin does not get flipped as much as expected under an \ac{RF} pulse which can result in signal losses. 
  
 
-\subsection{Detecting the MR Signal}
+\subsection{Detecting the MR signal}
 The detection and processing of \ac{NMR} signals is a deep topic which could be the subject of its own book, however some very basic details of how a signal is formed are useful to go on from here.
  
 The reason for flipping the magnetisation into the transverse plane using $\mathbf{B}_1$ fields is to make the magnetisation detectable. 
@@ -382,7 +383,7 @@ Peaks like this form the basis of all spectra used in \ac{NMR} spectroscopy.
 
 
 
-\subsection{Spin Echoes}
+\subsection{Spin echoes}
 \label{sec:spin_echoes}
 \begin{figure}
 	\centering
@@ -486,7 +487,7 @@ The dot product here indicates that only displacement projected onto the gradien
 \begin{figure}
   \centering
   \includegraphics[width=0.9\textwidth]{figures/background/PGSE_diagram.eps}
-  \caption{The standard \acl{PGSE} sequence used in \ac{dMRI}.}
+  \caption{The standard \acl{PGSE} sequence used in \acs{dMRI}.}
   \label{fig:PGSE_diagram}
 \end{figure}
 
@@ -570,7 +571,7 @@ For diffusion in an isotropic, homogeneous medium, the diffusion propagator is a
 
 \end{comment}
 
-\subsection{The \acl{BT} Equations}
+\subsection{The \acl{BT} equations}
 \label{sec:bg_bloch_torrey}
 As well as describing the \ac{dMRI} signal by considering the microscopic diffusion of spins, a macroscopic formulation can be derived considering Fick's laws of diffusion. The combination of the Bloch equations (\Cref{eq:blochx,eq:blochy,eq:blochz}) with Fick's second law of diffusion leads to the \ac{BT} equations, proposed by H.\ C.\ Torrey in 1956\cite{Torrey1956,Callaghan1991,Price2009}:
 
@@ -598,7 +599,7 @@ Diffusion simulations attempt to evaluate \Cref{eq:sig_phi_complex} or \Cref{eq:
 At a high level, all diffusion simulations have three common components: the substrate, the diffusion dynamics and the measurement.
 The substrate describes the environment in which the diffusion is taking place. A common example of this is parallel cylinders representing axons in white matter.
 The diffusion dynamics describe our understanding of the processes underlying the diffusive motion of molecules and the measurement describes how this diffusive motion results in a synthetic \ac{dMRI} signal.
-\subsection{Numerical Solutions}
+\subsection{Numerical solutions}
 \label{sec:numerical_solutions}
 Numerical solution approaches generally attempt to solve the \acl{BT} equation \cite{Torrey1956}.
 These approaches combine both the dynamics and the measurement components of the diffusion simulation by solving for the magnetisation in  \Cref{eq:bloch_torrey}.
@@ -613,7 +614,7 @@ In each element, the \ac{PDE} solution is approximated by simple functions such 
 The combination of all of these local approximations can be solved to give a numerical solution of the \ac{PDE} across the whole domain \cite{Logan2007}.
 \acp{FEM} are generally more complex to formulate and implement than \acp{FDM}, however the added complexity can be worth the effort for more difficult problems in which \acp{FDM} may be ineffective \cite{Iserles2009}.
 
-\subsection{Monte-Carlo Simulations}
+\subsection{Monte-Carlo simulations}
 \label{sec:montecarlo}
 Monte-Carlo methods take a different approach to the simulation of the \ac{dMRI} signal. Monte-Carlo methods simulate the Brownian motion of a large number of particles, simulating the motion of each particle individually, along with the MR acquisition to generate the \ac{dMRI} signal.
 
@@ -663,19 +664,78 @@ Additionally, \ac{MC} simulations can be modified to account for effects that ar
 A drawback of \ac{MC} simulation, particularly for complex substrates is the need to simulate enough spins to mimic the ensemble behaviour of spins \emph{in vivo} as well as enough discrete time points to adequately capture the dynamics through the pulse sequence.
 The huge number of calculations required to handle large simulations can be alleviated by exploiting the inherent parallel nature of the problem to run simulations in parallel on a \ac{CPU} cluster or, even more effectively, a GPU cluster.
 
+\section{Diffusion Modelling}
+\label{sec:bg_diffusion-modelling}
+As discussed in \Cref{sec:diffusion_physics}, the environment in which spins diffuse can impact on the diffusion process, imparting information about this environment in the diffusion weighted \ac{MRI} signal via the diffusion propagator. As \ac{dMRI} research has advanced, many works have tried to take advantage of this to estimate information about the cellular environment spins are diffusing to gain biological meaningful information \cite{Novikov2019,Jelescu2017,Alexander2017}.
+
+Broadly speaking, these models fall into two families: signal representations and biophysical models. Signal representations seek to express the signal from a voxel using a general expression which captures salient features of the data without making too many assumptions and by construction don't carry any particular biological meaning \cite{Novikov2019}. Some examples of representations are \ac{DTI}\cite{basserMRDiffusionTensor1994}, \ac{DKI}\cite{Jensen2005} and \ac{DSI}\cite{Wedeen2005}. Biophysical models, however, model tissue by breaking it down into compartments that can be described by simple analytical models such as spheres and cylinders. Some examples of this kind of model are ball-and-stick\cite{Behrens2003}, \ac{CHARMED}\cite{Assaf2005} and \ac{NODDI}\cite{Zhang2012}.
+
+As different models and representations have been proposed over the past two decades, a menagerie of techniques has emerged that is too deep and varied to summarise here, however a number of articles have attempted to review the field \cite{Alexander2017,Novikov2019,Jelescu2017}.
+The remainder of this section will briefly cover one family of models that are used in this thesis.
+
+\subsection{Spherical deconvolution techniques}
+\label{sec:bg_spherical_deconv}
+A popular approach in \ac{dMRI} modelling of brain tissue, in particular \ac{WM}, is to model the signal as a combination of two components: one describing the orientational distribution of the tissue (e.g. direction of axons) and one describing the \ac{dMRI} response of typical tissue (e.g. the typical signal from an axon), sometimes called the kernel.
+One such family of techniques, which aims to estimate the orientational distribution of fibres in \ac{WM}, models this relationship as a spherical convolution of the \ac{FOD} with a kernel that is the typical \ac{dMRI} response of a single fibre (or bundle of fibres). This kernel is commonly referred to as the \ac{FRF}.
+Mathematically, this is expressed as
+\begin{equation}
+  S(\theta,\phi) = F(\theta, \phi) \otimes R(\theta) \,,
+  \label{eq:bg_sd}
+\end{equation}
+where $S$ is the \ac{dMRI} signal, $F$ the \ac{FOD}, $R$ the \ac{FRF} and $\theta$ and $\phi$ are the elevation and azimuthal angles respectively. Note here that the \ac{FRF}, $R(\theta)$, is assumed to be axially symmetric. 
+
+Since the goal of these techniques is typically to estimate the \ac{FOD}, the approach is to estimate the \ac{FRF} \emph{a priori} and deconvolve this out to leave the \ac{FOD}.
+While there are many techniques based on this \ac{SD} each with slightly different approaches, many such techniques express the signal, \ac{FOD} and \ac{FRF} in their \ac{SH} expansions to facilitate \ac{SD}.
+
+\subsubsection{Spherical harmonics}
+\label{sec:bg_spherical_harmonics}
+The \acl{SH} series is a spherical analogue to the Fourier series in Cartesian space, providing an orthonormal basis of functions on the sphere which can be used to represent any spherical function.
+The basis functions are denoted $Y_l^m(\theta, \phi)$ where $l$ is called the degree and $m$ the order of the \ac{SH}. Any (potentially complex valued) function, $f$, on the sphere can then be written as a linear combination of \acp{SH}:
+\begin{equation}
+  f(\theta, \phi) = \sum_{l=0}^\infty \sum_{m=-l}^l c_l^m Y_l^m(\theta, \phi) \,,
+  \label{eq:bg_sh}
+\end{equation}
+where the \ac{SH} coefficients, $c_l^m$, are given by
+\begin{equation}
+  c_l^m = \int_0^{2\pi} \int_0^\pi f(\theta, \phi) Y_l^{m*}(\theta, \phi) sin(\theta) d\theta d\phi\,,
+\end{equation}
+where $*$ denotes complex conjugation.
+
+The benefit of working in \acp{SH} is that the spherical convolution in \Cref{eq:bg_sd} simplifies to a set of matrix multiplications in spherical harmonics:
+\begin{equation}
+  \vec{S}_l = R_l \vec{F}_l\,,
+  \label{eq:bg_sd_matrix}
+\end{equation}
+where $\vec{S}_l$ is the $2l + 1$ vector of $l^{\mathrm{th}}$ degree \ac{SH} coefficients of the signal, $\vec{F}_l$ is similarly the $l^{\mathrm{th}}$ degree \ac{SH} decomposition of the \ac{FOD} and $R_l$ is the $(2l+1)(2l+1)$ matrix representing the $l^{\mathrm{th}}$ degree rotational harmonic decomposition of the \ac{FRF}.
+$R_l$ must be represented by rotational harmonics (an analogue of the Fourier series in $SO(3)$ rather than $S^2$ as with \ac{SH}) for this to work mathematically \cite{Healy1998,Tournier2004} however much of the complexity is simplified due to the physical properties of the \ac{dMRI} signal.
+
+Firstly, the assumption that the \ac{FRF} is axially symmetric means that the $R_l$ collapses to a single scalar value for each $l$ \cite{Tournier2004}, making the solution of \Cref{eq:bg_sd_matrix} for $\vec{F}_l$ a simple case of the division of $\vec{S}_l$ by a scalar. Secondly, since the \ac{dMRI} signal is antipodally symmetric, all odd $m$ terms are zero and since it's real valued, the \ac{SH} coefficients exhibit conjugate symmetry, that is $c_l^m = (-1)^mc_l^{-m*}$ \cite{Tournier2004,Alexander2002}.
+
+All of this means that \ac{SD} based techniques are efficient methods to estimate the \ac{FOD} from \ac{dMRI} and as such have been used in many studies to investigate the organisation and structural connectivity of the brain \cite{DellAcqua2019,Schilling2019,Raffelt2012,Tournier2007,Tournier2004,Schilling2019b,Maier-Hein2017,Neher2014a,Jbabdi2011}.
+These techniques will, of course, depend on the \ac{FRF} which is estimate prior to performing the spherical deconvolution, something which we investigate in \Cref{chap:frf_experiment}. 
+\begin{comment}
 \section{Neural growth}
 \label{sec:bg_nerual_growth}
 Neural development is a complex and constantly evolving field of research, due in part to the sheer size and complexity of the fully developed brain - for instance, during human development about 100 billion cells are generated with about 100 trillion connections between them \cite{Price2017}. This means that development on an individual neuron basis can only be studied in simple organisms with only a few hundred neurons and even then there are many mechanisms which are yet to be fully understood \cite{Price2017}.
 
 In spite of this, many neural growth mechanisms have been identified and studied in simple organisms and \emph{in vitro} experiments \cite{Price2017,Rauch2013,Nikic2011,Dent2011,Polleux2010,Lowery2009,Mortimer2008,Sakisaka2005,Scott2001,NAP1785} which give us some understanding of how neurons take their shape.
 
-At this point, a brief review of some biological terms that will be used extensively is useful. Firstly, brain cells can typically be split into two categories: neurons and glial cells. Neurons are the cells which transmit and receive signals within the brain and between the brain and the rest of the body. Neuronal cells can be thought of in a few parts, firstly the cell body, or soma, contains the nucleus of the cells, secondly long extensions known as neurites grow out from the soma. Neurites themselves are broken down into either dendrites or axons. A neuron typically has a single axon which is a long neurite which carries information away from the soma while the dendrites form a branched tree which integrates incoming information to the neuron \cite{Price2017}. Glial cells perform many functions which enable the nervous system to function efficiently such as creating the myelin sheaths which cover the axons to facilitate fast and efficient transmission of signals.
+At this point, a brief review of some biological terms that will be used extensively is useful.
+Firstly, brain cells can broadly be split into two categories: neurons and glial cells.
+Neurons are the cells which transmit and receive signals within the brain and between the brain and the rest of the body.
+Neuronal cells can be thought of in a few parts, firstly the cell body, or soma, contains the nucleus of the cells, secondly long extensions known as neurites grow out from the soma.
+Neurites themselves are broken down into either dendrites or axons.
+A neuron typically has a single axon which is a long neurite which carries information away from the soma while the dendrites form a branched tree which integrates incoming information to the neuron \cite{Price2017}.
+Glial cells perform many functions which enable the nervous system to function efficiently such as creating the myelin sheaths which cover the axons to facilitate fast and efficient transmission of signals.
 
 On a higher level, the brain can broadly be split into two types of tissue, \acf{WM} and \acf{GM}. Grey matter contains the majority of the neuronal cell bodies in the brain while the \acl{WM} is typically composed of primarily axons connecting different \ac{GM} regions together. It is the \acl{WM} which is of interest for this work, so it is important to understand how axons grow to understand how the \ac{WM} is organised.
 
 \subsection{Axonal growth mechanisms}
 \label{sec:bg_axonal_growth}
-
+Axons grow by following chemical cues in their environment which are detected by the so-called growth cone at the tip of the axon.
+The growth cone is a set of finger- and sheet-like outgrowths which explore the environment surrounding the tip of the axon to drive the growth of the axon\cite{Price2017}.
+Whilst not fully understood, there are a number of proposed mechanisms by which the growth cone interacts with its surroundings guide axonal growth. The remainder of this section will outline some of the prominent growth mechanisms.
+\end{comment}
 
 
 %%% Local Variables:
