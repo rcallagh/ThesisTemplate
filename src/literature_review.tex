@@ -61,8 +61,7 @@ DiffSim is used to simulate myelinated white matter \cite{Baxter2013}, showing t
 
 Landman et al.\ \cite{Landman2010} developed the DW-MRI \ac{RWS} showing, as an example of its flexibility and reproducibility, a range of geometrical models for white matter damage, including healthy straight cylinders, bulging cylinders, crimped cylinders and broken cylinders.
 
-Yeh et al.\ \cite{Yeh2013} present \ac{DMS}, showing a range of diffusion substrates ranging from simple parallel uniform cylinders to more complex undulating, beading or crossing arrangements of fibres.
-A recent extension of \ac{DMS} shows more complex white matter numerical phantom including orientation dispersion, tortuosity, beading and nodes of Ranvier \cite{Ginsburger2018}, however the range of orientation dispersion and axon densities achieved does not reach typical \emph{in vivo} values.
+Yeh et al.\ \cite{Yeh2013} present \ac{DMS}, showing a range of diffusion substrates ranging from simple parallel uniform cylinders to more complex undulating, beading or crossing arrangements of fibres, albeit at relatively low fibre densities.
 As of the writing of this review, the \ac{DMS} software package has not been publicly released. 
 
 \section{Monte-Carlo - Numerical Phantoms}
@@ -73,7 +72,7 @@ A common target of microstructure imaging is the estimation of axonal diameter a
 As mentioned above, \ac{FDM} approaches have been used to investigate this \cite{Chin2002,Xu2014}, whilst this has been the subject of \ac{MC} simulation studies as well.
 Alexander et al.\ \cite{Alexander2010} use Camino to simulate a series of numerical phantoms of parallel cylinders with radii drawn from a Gamma distribution for the validation of a technique for orientationally invariant indices of axon diameter and density.
 
-Recently Nilsson et al.\ \cite{Nilsson2017}, investigated the theoretical resolution limit for cylinder diameter estimation using diffusion MRI. Analytic expressions based on the Gaussian phase distribution approximation \cite{Price1997} were used for the intracellular signal and validated with \ac{MC} simulations to determine a $d_{min}$, the diameter below which a cylinder cannot be differentiated from a cylinder with diameter approaching zero. The resolution limit for clinical scanners was found to be between 4 - 8 $\mu$m.
+Nilsson et al.\ \cite{Nilsson2017}, investigated the theoretical resolution limit for cylinder diameter estimation using diffusion MRI. Analytic expressions based on the Gaussian phase distribution approximation \cite{Price1997} were used for the intracellular signal and validated with \ac{MC} simulations to determine a $d_{min}$, the diameter below which a cylinder cannot be differentiated from a cylinder with diameter approaching zero. The resolution limit for clinical scanners was found to be between 4 - 8 $\mu$m.
 This suggests a limitation on the level of microstructural detail that can be estimated using current clinical \ac{MRI} machines.
 
 % Zhang et al.\ \cite{Zhang2011} extend this technique to include orientation dispersion, and then refine the technique to only estimate neurite orientation dispersion and density (NODDI) \cite{Zhang2012}. All of these techniques are validated using MC simulations on numerical phantoms of cylinders with varying densities and orientation dispersion introduced.\todo{make sure this actually true} 
@@ -125,13 +124,25 @@ The random forest regression is shown to estimate membrane permeability well, pe
 Palombo et al.\ \cite{Palombo2018a} verify this method using a cuprizone treated \emph{in vivo} mouse model. Cuprizone is a well known mouse model of \ac{WM} demyelination, which is important as demyelination is hypothesised to affect axonal permeability.
 The random forest approach achieves accurate and robust estimation of microstructural parameters which match expected microstructure changes from electron microscopy and gains more specific information that typical \ac{dMRI} measures such as \ac{ADC} and \ac{FA}. 
 
-Hill et al.\ \cite{Hill2018} extend this work to use a deep \ac{NN} in place of the random forest regression. They are able to show that the \ac{NN} outperforms the random forest approach and an application in \emph{in vivo} mice estimates microstructural parameters in the biologically plausible range.
+Hill et al.\ \cite{Hill2019} extend this work to use a deep \ac{NN} in place of the random forest regression. They are able to show that the \ac{NN} outperforms the random forest approach and an application in \emph{in vivo} mice estimates microstructural parameters in the biologically plausible range.
 
 Rensonnet et al.\ \cite{Rensonnet2018} also attempt to use computational models to directly estimate microstructural parameters using \ac{dMRI} simulations.
 Using the hybrid approach mentioned above \cite{Rensonnet2015}, they generate a dictionary of \ac{dMRI} simulation signals for various combinations of microstructural parameters and crossing fascicles.
 Measured signals are then compared against this dictionary to find the entry that most closely matches the measured signal to get an estimate of the microstructural parameters.
 They show that their approach achieves accurate and robust estimates of microstructural parameters and shows good correspondence with histology compared to traditional closed-form models when applied to an \emph{in vivo} mouse model of spinal cord injury. 
 
+\subsection{Towards realistic \acs{WM} numerical phantoms}
+\label{sec:review_realistic_phantoms}
+One thing common to all of the \ac{dMRI} simulation studies presented so far is that they represent \ac{WM} axons using simplified representations. By far the most common representation of axons in as straight cylinders in parallel bundles or simple crossing arrangements \cite{Rensonnet2018,Rensonnet2015,Nilsson2010,Alexander2010,Hall2009}.
+
+True axonal morphology, however, is much more complex than this. \emph{ex vivo} \ac{EM} and high-resolution x-ray imaging studies have shown that real axons have complex morphologies with undulation, beading (variable diameter along the axon) and non-circular cross sections \cite{Abdollahzadeh2019,Lee2019b,Salo2018,Andersson2020}.
+Recently, a few groups have tried to tackle the challenge of generating \ac{WM} phantoms with more realistic microstructure, capturing some of these features.
+
+Rafael-Patino et al.\ \cite{Rafael-Patino2018} extend the phantom generator of Close et al. \cite{Close2009}, previously used to simulated \ac{dMRI} using a simple diffusion tensor model, to generate crossing, interdigitated fibre bundles. They use these models to show that previous simple representations may not be sufficient to accurately represent realistic \ac{dMRI} signals \cite{Rafael-patino2020}.
+
+Ginsberger et al.\ presented an extension of \ac{DMS} which shows more complex white matter numerical phantom including orientation dispersion, tortuosity, beading and nodes of Ranvier \cite{Ginsburger2018}, however the range of orientation dispersion and axon densities achieved does not reach typical \emph{in vivo} values.
+They subsequently improved their phantom generator, producing \ac{MEDUSA}, which works by generating a set of overlapping fibres decomposed into small segments and iteratively refining their positions to remove the overlap between them \cite{Ginsburger2019,Matuschke2019a}.
+\ac{MEDUSA} produces phantoms with complex fibre configurations at high fibre density, but as of writing, no \ac{dMRI} application has been presented. 
 
 \begin{comment}
 \section{\ac{GPU} accelerated \ac{MC} simulations}
@@ -162,17 +173,16 @@ Currently, the \ac{GPU} \ac{dMRI} simulator presented by Nguyen et al.\ is not p
 \section{Conclusions}
 \label{sec:review_conclusions}
 There has been significant work into the use of numerical phantoms in the simulation of \acl{dMRI} signals.
-One thing which is common throughout most of the works is a simple model of \ac{WM}.
-Typically, \ac{WM} is represented as a set of densely packed, straight, parallel cylinders, which oversimplifies the underlying complexity of the microstructure.
-Lee et al.\ \cite{Lee2018a} use electron microscopy to reconstruct a 3D section of mouse corpus callosum, showing that real \ac{WM} contains a large amount of microstructural complexity, including orientation dispersion, undulation and diameter variations.
+As discussed, one thing which is common throughout most of the works is a simple model of \ac{WM}.
+Typically, \ac{WM} is represented as a set of densely packed, straight, parallel cylinders, which oversimplifies the underlying complexity of the microstructure which has been revealed through \ac{EM} \cite{Abdollahzadeh2019,Lee2019b}.
 
-Generating \ac{WM} substrates which accurately represent real microstructure is important for the kinds of model validation studies mentioned in \Cref{sec:app_monte_carlo_numerical_phantoms} because if a model is validated using overly simplified simulations, it may not be very robust when applied to real data.
+Generating \ac{WM} substrates which accurately represent real microstructure is important for the kinds of model validation studies mentioned in \Cref{sec:app_monte_carlo_numerical_phantoms} because if a model is validated using overly simplified simulations, it may not be very robust when applied to real data, something with Rafael-Patino et al.\ have studied \cite{Rafael-patino2020}.
 
-Realistic \ac{WM} representations are important for the kind of computational models mentioned in \Cref{sec:app_monte_carlo_numerical_phantoms} for similar reasons.
+Realistic \ac{WM} representations are additionally important for the kind of computational models mentioned in \Cref{sec:app_monte_carlo_numerical_phantoms} for similar reasons.
 Another element which is particularly important for building the training datasets or dictionaries for these kinds of computational models is controllability.
 The \ac{WM} numerical phantoms need to be realistic, but also must be able to be generated in a controlled manner so that we can generate substrates covering the relevant ranges of microstructural parameters needed to build robust computational models.
 
-These are the main driving reasons behind the work presented in \Cref{chap:config} which aims to build these realistic \ac{WM} substrates with controllable morphology.
+These are the main driving reasons behind the work presented in this thesis which aims to build these realistic \ac{WM} substrates with controllable morphology.
 
 
 %%% Local Variables:
