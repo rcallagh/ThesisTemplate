@@ -68,18 +68,18 @@
   \begin{titlepage}
   	\begin{center}
     \includegraphics[width=0.5\columnwidth]{template/logos/UCL_logo.eps}
-    \vfill%
+    % \vfill%
 
-    % \vspace*{20mm}%
+    \vskip 15mm%
     {\def\baselinestretch{1.2}\Huge\bfseries \@title \par} % Title
-    \vskip 25mm%
+    \vskip 20mm%
 
     {\huge\bfseries \@author} % Author
-    \vskip 10mm%
+    \vskip 20mm%
 
 
     {\Large \@provisionaltext} % Provisional text
-    \vfill
+    % \vfill
 
     {\large
       \begin{description}
@@ -90,29 +90,43 @@
     \vskip 5mm
 
     {\large A thesis submitted for the degree of}\vskip 4mm
-    {\large \bfseries \@degree } \vskip 2mm
-    {\large in } \vskip 2mm
-    {\large \bfseries \@subject} \vskip 4mm
-    {\large as part of} \vskip 2mm
-    {\large \bfseries \@school } \vskip 2mm
+    {\large \bfseries \@degree } \vskip 1mm
+    {\large in } \vskip 1mm
+    {\large \bfseries \@subject} \vskip 2mm
+    {\large as part of} \vskip 1mm
+    {\large \bfseries \@school } \vskip 1mm
     {\large \bfseries \@program} % Program
-    \vskip 30mm
+    % \vskip 30mm
     \vfill
 
     \@thesisdate % Date\
   \end{center}
 \end{titlepage}
+\declaration
 \funding
- 
+
+}
+
+\def\declaration{
+  \newpage
+  \thispagestyle{empty}
+  \begin{center}
+    \vskip 2cm
+    \large \sffamily
+    I, Ross Callaghan, confirm that the work presented in this thesis is my own. Where information has been derived from other sources, I confirm that this has been indicated in the thesis.
+    \vskip 1cm
+    \includegraphics[width=4cm]{template/logos/signature.pdf}
+  \end{center}
+  \vspace*{\fill}
 }
 
 % \newpage
 \def\funding
 {%
-	\newpage
+	% \newpage
 	\thispagestyle{empty}
 	\begin{center}
-		\Large \sffamily
+		\sffamily
 		
 		This work is supported by the EPSRC-funded UCL Centre for Doctoral Training in Medical Imaging (EP/L016478/1) and the Department of Health's NIHR-funded Biomedical Research Centre at UCLH  %\vspace*{\fill}
 		\\[3em]
@@ -122,7 +136,7 @@
 		\hfill\includegraphics[height=2.75cm]{template/logos/cdt.png}
 		%\hfill\\[2em]
 	\end{center}
-	\vspace*{\fill}
+	% \vspace*{\fill}
 }
 
 \makeatother
