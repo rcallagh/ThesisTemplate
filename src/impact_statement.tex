@@ -1,0 +1,47 @@
+\chapter*{Impact Statement}
+\begin{comment}
+How the brain works has long been one of the great mysteries facing mankind, with every step on the way to understanding potentially helping us to know why we behave in the ways we do. Further, if we can understand how the brain works, then we can understand how and why things go wrong in diseases such as \ac{MS} and how we can go about preventing and treating it.
+
+% As with all scientific discoveries, our knowledge of the brain throughout history has been limited by the tools humanity has had at its disposal for investigation.
+% For the majority of human history, those tools have been rather crude, requiring us to cut open the skull to look at the brain typically, though not exclusively, of deceased subjects.
+% Even so, astonishing work by Camillo Golgi and Santiago Ram\'on y Cajal painstakingly studying brain tissue under microscopes lead to great advances in understanding the cellular buildup of the brain in the late 1800's, work which is still in use for educational and training purposes today.
+
+One of the most prominent modern tools for investigating the brain is \ac{MRI} and in particular diffusion \ac{MRI} \acused{dMRI}(\acs{dMRI}) which is sensitive to how water moves inside tissues.
+This means that if we can understand how the structure of tissues affects the way that water moves within them, then we can potentially extract information about that structure from the \ac{dMRI} signal.
+
+Since \ac{dMRI} was first proposed as a tool to measure information on the structure of brain tissues, thousands of works have been produced looking to develop and improve techniques and find interesting use cases for them.
+One thing common to many of these techniques, however, is that they're based on and validated in models which simplify the structure of the tissue, for instance representing axonal fibres in \ac{WM} as straight cylinders.
+We know from electron microscopy studies that real axons are much more complex that this, with wobbly, bulgy shapes that make it very difficult to understand how the \ac{dMRI} signal will behave.
+
+The focus of this thesis is the development of a new tool to generate realistic synthetic \ac{WM} phantoms which we can use in simulation experiments to test and develop existing and new \ac{dMRI} models. This tool, which we call \acused{ConFiG}\acs{ConFiG}, enables us to generate synthetic models of white matter that are more realistic than previously achievable, opening a door into investigation of the \ac{dMRI} process in more detail than ever before.
+
+In this thesis, we demonstrate the performance of \ac{ConFiG}, showing that it produces \ac{WM} phantoms at higher fibre density (an important propery for realistic phantoms) than the previous state-of-the-art while also producing microscopically realistic structure in the generated axons.
+We apply \ac{ConFiG} to probe assumptions in \ac{dMRI} models in a way that was previously infeasible, showing that some of the assumptions may not hold true which may have a downstream effect on popular \ac{dMRI} techniques.
+
+However, \ac{ConFiG} could have a wider reaching impact than that. With \ac{ConFiG} we have the potential to develop new models which will enable us to garner more detailed information from the \ac{dMRI} signal, hopefully leading to better diagnosis and monitoring of diseases such as \ac{MS}.
+Not only that, but the idea behind \ac{ConFiG} could be extended to produce phantoms for other tissues including grey matter and non-brain tissues, potentially creating a whole suite of realistic tissues to build new models for all sorts of applications.
+
+\end{comment}
+
+The focus of this thesis is the development of a new tool to generate realistic synthetic \ac{WM} phantoms which we can use in simulation experiments to test and develop existing and new \ac{dMRI} models. This tool, which we call \acused{ConFiG}\acs{ConFiG}, works by mimicking natural fibre growth and enables us to generate synthetic models of white matter that are more realistic than previously achievable, opening a door into investigation of the \ac{dMRI} process in more detail than ever before.
+This tool has the potential to impact not just out immediate academic community, but the wider academic community and society as a whole as outlined in the remainder of this statement.
+
+\paragraph{Immediate academic community}
+\ac{ConFiG} produces highly realistic \ac{WM} phantoms which outperform the previous state-of-the-art, producing microscopically realistic structure in the generated axons. An immediate of impact of this the recently published NeuroImage paper outlining the method and demonstrating its effectiveness. Further, in this thesis we demonstrate that \ac{ConFiG} can be to probe assumptions in \ac{dMRI} models in a way that was previously infeasible, showing that some of the assumptions may not hold true which may have a downstream effect on popular \ac{dMRI} techniques. This is merely the tip of the iceberg of what \ac{ConFiG} could potentially bring to the \ac{dMRI} offering the potential to study the diffusion process in greater detail than ever and generate new \ac{dMRI} models capable of more accurately quantify microscopic features of tissue non-invasively.
+
+
+\paragraph{Wider academic community}
+The idea behind \ac{ConFiG}, to grow cells mimicking nature, could be extended to produce phantoms for other tissues including branching neuronal cells in grey matter and non-brain tissues (for instance the complex microenvironment of a tumour), potentially creating a whole suite of realistic tissues to build new models for all sorts of applications.
+On top of this, the phantoms \ac{ConFiG} produces are stored as 3D meshes, which could be applied to many modalities outside of \ac{dMRI} in which it is possible to simulate the signal using a mesh.
+For instance the realistic microstructure could be used with an \ac{EM} simulator to generate realistic \ac{EM} images to help train and test models designed to segment \ac{WM} axons. 
+
+
+\paragraph{Beyond academia}
+The work presented in this thesis is the first step on a journey towards potentially exciting clinical applications such as more accurate imaging of diseases affecting the \ac{WM} such as \ac{MS}. Here we demonstrate that \ac{ConFiG} can generate realistic \ac{WM} microstructure, and from that realistic \ac{dMRI} signal which lays the groundwork for this to be used to develop new \ac{dMRI} models to estimate microstructural information from \ac{WM}.
+As an example of this, \ac{ConFiG} could be used to help us more effectively differentiate axonal loss and demyelination in \ac{MS}, something which valuable information for differential diagnosis but is currently very difficult from \ac{dMRI}.
+
+\acresetall
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:
