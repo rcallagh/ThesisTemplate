@@ -20,7 +20,7 @@ For instance, Xu et al. \cite{Xu2018} recently used simulations to show that usi
 Therefore, it is important to the \ac{MRI} community to generate realistic \ac{WM} numerical phantoms which accurately capture microstructural features in order to get realistic simulated signal.
 
 Typically, however, there is a mismatch between the complexity of true brain tissue microstructure and the models used in simulation, with simulations simplifying the microstructure.
-On one hand, ex vivo \ac{EM} studies have revealed the high complexity of real axonal morphology \cite{Abdollahzadeh2019,Lee2019b,Salo2018}.
+On one hand, \emph{ex vivo} \ac{EM} studies have revealed the high complexity of real axonal morphology \cite{Abdollahzadeh2019,Lee2019b,Salo2018}.
 Reconstructions of axons from these studies show that real \ac{WM} contains axons with complex morphologies on an individual axon basis such as undulation, beading and non-circular cross sections, as well as non-trivial configurations including orientation dispersion and crossing bundles.
 On the other hand, the models used in simulation studies often represent axons in \ac{WM} using simplistic geometrical representations such as parallel cylinders with uniform \cite{Fieremans2010,Nilsson2010,Nilsson2009,Ford1997} or polydisperse \cite{Alexander2010,Hall2009} radii.
 Some studies investigate the effect of differing configurations of fibres such as simple crossing \cite{Rensonnet2017,Zhang2011a} and orientation-dispersed \cite{Tariq2016,Zhang2012,Zhang2011} fibre bundles.
@@ -152,13 +152,13 @@ Growing fibres along the network using just this chemoattractive mechanism is th
 
 \Cref{sec:config_fibre_collapse,sec:config_dynam_growth,sec:config_fasciculation} describe further mechanisms which were added to enable \ac{ConFiG} to address these limitations in order to meet more complex morphological priors (e.g. high density and orientation dispersion together).
 
-\subsubsection{Fibre Collapse}
+\subsubsection{Fibre collapse}
 \label{sec:config_fibre_collapse}
 As mentioned in \Cref{sec:config_biol_motiv}, in \ac{ConFiG} a fibre can become stuck when there are no possible next steps because all neighbouring nodes are inaccessible. In an attempt to ameliorate this a process mimicking fibre collapse was implemented, illustrated in \Cref{fig:config_chemoattraction}b.
 
 In \ac{ConFiG} fibre collapse, the fibre will move back by an initial distance, $g_0$, and regrow from there avoiding any nodes in the route it took previously. If the fibre becomes stuck again, it will move back by a further distance, $g_0+ \delta$, where $\delta$ is the additional distance to step back. This process is repeated until the fibre reaches the target or gets stuck a user-defined maximum number of times. In this work, $g_0=\SI{2}{\micro\metre}$  and $\delta=\SI{5}{\micro\metre}$ in an approximation of the biological fibre collapse process investigated by Rauch et al. \cite{Rauch2013} who show fibres collapsing up to \SI{25}{\micro\metre} back towards the soma. The maximum number of steps back is set to 5, meaning that the maximum step back is \SI{27}{\micro\metre}, in line with real fibres. If there is no possible route after 5 attempts then the fibre will stop growing and will be removed from the phantom. This process of removing stuck fibres means that the resulting substrate may not always have the same density as the input desired fibre density.
 
-\subsubsection{Dynamic Growth Network}
+\subsubsection{Dynamic growth network}
 \label{sec:config_dynam_growth}
 
 \begin{figure}
@@ -174,7 +174,7 @@ A dynamic growth network was implemented to ameliorate these effects. Now, once 
 
 This is also loosely motivated by the contact guidance mechanism in which axons are attracted to or repelled by chemical cues on the surface of other cells, known as \acp{CAM}. Here, the added points act like \acp{CAM} meaning that a future fibre which grows can use these points near to the fibre to grow around or along it as if it were following contact guidance cues. \Cref{fig:config_dynam_growth} shows how \acp{CAM} work in biological axonal growth alongside the \ac{ConFiG} dynamic network, illustrating the parallels between the two.
 
-\subsubsection{Axon Fasciculation}
+\subsubsection{Axon fasciculation}
 \label{sec:config_fasciculation}
 
 \begin{figure}
@@ -199,7 +199,7 @@ Where $b_f$ is an index identifying the bundle that fibre $f$ belongs to and $b_
 
 This new form of the cost function encourages fibres of the same bundle to stick together while still avoiding fibres of different bundles, inspired by the labelled pathway hypothesis, which states that axons join different fascicles based on different \acp{CAM} expressed on the fibres \cite{Price2017}. In this case, bundle indices $b_c$ and $b_f$ act like different identifying \acp{CAM}. \Cref{fig:config_fasciculation} shows how this fasciculation process is expected to happen in biology alongside how the improved cost function encourages a similar process in \ac{ConFiG}.
 
-\subsubsection{Global Optimisation}
+\subsubsection{Global optimisation}
 \label{sec:config_global_optimisation}
 Since the growth of fibres in \ac{ConFiG} takes place on a discrete network of points, the final positions of fibre nodes may be suboptimal for achieving the maximum density. In other words, certain fibres’ nodes may be closer to other fibres than they would ideally be in order to reach their target diameter (i.e. the fibre has had to shrink its diameter at that node).
 
@@ -251,7 +251,7 @@ There is some biological evidence that this kind of interaction between fibres i
 \label{sec:config_experiments}
 In order to assess the performance of \ac{ConFiG}, a range of experiments were performed. The first set of experiments were performed in order to explore the impact of each of the biologically inspired growth mechanisms. Another set of experiments aimed to show that \ac{ConFiG} is able to generate substrates with realistic microstructure by comparing generated substrates with real tissue. Additionally, the relationship between the user-specified target morphology and the final output morphology was investigated by comparing resulting phantoms to their inputs (target density and orientation distribution). Finally, a simulation experiment was performed to assess how well \ac{ConFiG} phantoms can be used to generate realistic diffusion \ac{MRI} data. The rest of this section outlines these experiments.
 
-\subsection{Testing the performance of \ac{ConFiG}}
+\subsection{Testing the performance of \acs{ConFiG}}
 \label{sec:config_test_perf}
 In order to test how each of the biological mechanisms proposed in \Cref{sec:config_methods} impacted on the resulting phantoms, an experiment was devised to measure how phantoms changed when each mechanism was introduced. Four scenarios of interest were generated using several variants of the \ac{ConFiG} algorithm that included these mechanisms either one at a time or all at once, attempting to grow phantoms as densely as possible:
 \begin{itemize}
@@ -271,7 +271,7 @@ The \ac{dMRI} signal was simulated in the phantoms using Camino \cite{Cook2006,H
 All \ac{dMRI} simulations in this work used a bulk diffusivity $D=\SI{2.0}{\micro\metre\squared\per\milli\second}$ in agreement with values used in similar Monte Carlo simulations \cite{Hall2009,Nilsson2009,Rensonnet2017} with $10^5$ spins and $2000$ timesteps. Standard Camino periodic boundaries were used \cite{Hall2009}, with \ac{dMRI} signal was generated from a central region 75\% the size of the total phantom to avoid boundary effects \cite{Panagiotaki2010}.
 
 
-\subsection{Diffusion \ac{MRI} simulation}
+\subsection{Diffusion \acs{MRI} simulation}
 \label{sec:config_diffusion_sim}
 To qualitatively verify that the simulated diffusion \ac{MRI} signals from \ac{ConFiG} phantoms are realistic, simulated signals from \ac{ConFiG} phantoms were compared to real \ac{HCP} data \cite{Sotiropoulos2013a,VanEssen2012}.
 
@@ -283,6 +283,36 @@ In each voxel, the diffusion tensor was fit to the signal and the principal eige
 To attempt to generate representative microstructure for each voxel using \ac{ConFiG}, the \ac{NODDI} model \cite{Zhang2012} was fitted to the average signal to give some initial parameters for \ac{ConFiG}. Most importantly, the value of $\kappa$ for the Watson distribution \cite{Mardia2008} estimated using \ac{NODDI} was used to initialise the orientation dispersion in the \ac{ConFiG} phantoms used to represent \ac{CC} ($\kappa=6.2$) and \ac{IC} $(\kappa=5.5)$ regions. To represent the \ac{TC} voxel, a phantom generated using three mutually perpendicular crossing bundles was used.
 
 ConFiG phantoms were grown using these initial conditions and the diffusion \ac{MRI} signal simulated using the Camino Monte Carlo diffusion \ac{MRI} simulator \cite{Hall2009}. For each phantom, the same processing as with the real data was performed, finding the direction dependent and direction averaged signal per b-shell.
+
+\subsection{3D signal visualisation}
+\label{sec:config_3d_signal_vis}
+In order to better understand how close the simulated signal is to the real signal, a new method for 3D visualisation of the signal was developed.
+A 6th order \ac{SH} representation of the simulated signal was calculated for a given $b$-value and the surface plotted in 3D. On top of this, the real data for that $b$-value were plotted as points with a line projected along the gradient direction to the surface to show the distance between the real and simulated signals in that direction.
+Each point is coloured red or blue depending on whether the measured signal is above or below the simulated signal respectively.
+
+Since there is no guarantee that the microstructure is aligned similarly relative to the gradients in the \ac{ConFiG} phantom and real data (indeed, it is highly unlikely that they are), the Bingham-NODDI model \cite{Tariq2016} is fit to the both the real and simulated data to give a basis for each, defined by three orthogonal vectors: the principal diffusion direction $\mu_1$, the principal fanning direction $\mu_2$ and a vector mutually orthogonal to both of these, $\mu_3$, defined as $\mu_1 \times \mu_2$.
+
+A rotation matrix is use to bring these two bases into alignment, defined as follows\footnote{This solution is based on \url{https://math.stackexchange.com/questions/1125203/finding-rotation-axis-and-angle-to-align-two-3d-vector-bases}}: The rotation matrix $R$ that brings a basis of unit vectors$(\vec{a}, \vec{b}, \vec{c})$ onto another basis $(\vec{d}, \vec{e}, \vec{f})$ must fulfil
+\begin{align}
+R\vec{\vphantom{t}a} &= \vec{d} & R\vec{b} &= \vec{\vphantom{t}e} & R\vec{\vphantom{t}c} &= \vec{f}\,.
+\end{align}
+
+This matrix can constructed through the addition of three dyads
+\begin{equation}
+  R = \vec{d}\,\vec{\vphantom{f}a} + \vec{\vphantom{f}e}\,\vec{b} + \vec{f}\,\vec{\vphantom{f}c} \,,
+\end{equation}
+which can be seen to work if we multiply through by one of the first basis vectors $R\vec{a} = \vec{d}\,\vec{\vphantom{f}a}\cdot\vec{\vphantom{f}a} = \vec{d}$, since $\vec{a}$ multiplied with itself gives unity and is orthogonal to $\vec{b}$ and $\vec{c}$.
+Each of these dyads can be written as a 3x3 matrix using the vector direct product, giving the rotation matrix
+\begin{equation}
+R = \vec{d} \otimes \vec{\vphantom{f}a}^{\,T} + \vec{\vphantom{f}e} \otimes \vec{\vphantom{f}b}^{\,T} + \vec{f} \otimes \vec{\vphantom{f}c}^{\,T}\,,
+\end{equation}
+where $\otimes$ denotes the Kronecker product. This rotation matrix, $R$ is used to bring the simulated and real data into the same space for visualisation.
+
+
+This approach to signal visualisation enables us to get a better feel for how close the signals are and whether there is any pattern to the discrepancy (for instance, is the measured signal high along one axis and low along another).
+Besides its application here to see how close our simulated and real signals are, this could be a useful tool to see how fitting models are behaving. For instance plotting the data against a surface from a \ac{NODDI} fit may enable easy identification of cases where the isotropic orientation dispersion assumed in Watson-NODDI is a poor fit to the data and where Bingham-NODDI \cite{Tariq2016} may be better.
+In this case of plotting data against a fit, the alignment approach described above does not need to be followed since the fitting parameters will already be in the same space as the real data.
+
 
 \section{Results}
 \label{sec:config_results}
@@ -329,30 +359,42 @@ The improvement in the density of phantoms leads to a much more realistic simula
 
 \subsection{Diffusion \ac{MRI} simulation}
 \label{sec:config_result_dmri_sim}
-Simulated data from \ac{ConFiG} substrates match real \ac{dMRI} data well, as shown in \Cref{fig:config_res_dMRI}. The direction averaged signal matches well in each case, in particular, for the corpus callosum and three crossing phantoms, the simulated signal matches the real signal closely. The b = \SI{3}{\milli\second\per\micro\metre\squared} signal in the internal capsule and corpus callosum is lower in simulation than in real data. This is to be expected however because as $|n\cdot G|$ approaches 1, the signal reaches the noise floor and the noise-free simulations fall below the measured data. Supplementary Figure 3 shows the difference between the simulated and measured signal in 3D.
+Simulated data from \ac{ConFiG} substrates match real \ac{dMRI} data well, as shown in \Cref{fig:config_res_dMRI}. The direction averaged signal matches well in each case, in particular, for the corpus callosum and three crossing phantoms, the simulated signal matches the real signal closely. The b = \SI{3}{\milli\second\per\micro\metre\squared} signal in the internal capsule and corpus callosum is lower in simulation than in real data. This is to be expected however because as $|n\cdot G|$ approaches 1, the signal reaches the noise floor and the noise-free simulations fall below the measured data.
+
+\Cref{fig:config_3d_vis} shows the difference between the simulated and measured signal in 3D for the \acl{CC} and \acl{IC}. In this visualisation it is possible to see some systematic differences that are not visible in the signal plotted against $|n\cdot G|$ in \Cref{fig:config_res_dMRI} such as the anisotropic dispersion in the \ac{IC} data.
+It can be seen that the real signal is generally lower than the \ac{ConFiG} along the principle dispersion direction, $\mu_2$, and higher in the orthogonal dispersion direction, $\mu_3$, highlighting that the real data shows some anisotropic dispersion which isn't captured by the \ac{ConFiG} phantom which was generated using the isotropic Watson distribution. 
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{figures/config/hcp_vs_sim_new_review_2_whitebg.png}
-  \caption[dMRI signals from \ac{HCP} subject and \ac{ConFiG} phantoms ]{Comparison of diffusion \ac{MRI} simulations and real data from three different brain regions:  a) a voxel  in the midbody of the corpus callosum, with phantom with volume fraction 55\% and mean orientation from z 25 o. b) a voxel  in which there are three crossing bundles, with phantom of three crossing bundles with volume fraction 50\% and c) a voxel in the internal capsule, with phantom with volume fraction 58\% and mean orientation from z 22o. Top row shows the \ac{ConFiG} phantom and corresponding \ac{WM} voxel. Middle row shows the direction dependent signal for \ac{ConFiG} (lines) and \ac{HCP} data (dots). Bottom row shows the direction averaged signal. Black lines correspond to phantom in top row. Grey lines are signal from phantoms with the same orientation distribution as the black line in each plot but different densities to show that \ac{ConFiG} has the flexibility to generate a wide range of realistic signals. Simulations performed with 105 spins, 2000 timesteps, diffusivity 2.0micrometersquaredpermillsecond  and \ac{HCP} measurement scheme (Stamatios N. Sotiropoulos et al., 2013). }
+  \caption[dMRI signals from \acs{HCP} subject and \ac{ConFiG} phantoms ]{Comparison of diffusion \ac{MRI} simulations and real data from three different brain regions:  a) a voxel  in the midbody of the corpus callosum, with phantom with volume fraction 55\% and mean orientation from z 25 o. b) a voxel  in which there are three crossing bundles, with phantom of three crossing bundles with volume fraction 50\% and c) a voxel in the internal capsule, with phantom with volume fraction 58\% and mean orientation from z 22o. Top row shows the \ac{ConFiG} phantom and corresponding \ac{WM} voxel. Middle row shows the direction dependent signal for \ac{ConFiG} (lines) and \ac{HCP} data (dots). Bottom row shows the direction averaged signal. Black lines correspond to phantom in top row. Grey lines are signal from phantoms with the same orientation distribution as the black line in each plot but different densities to show that \ac{ConFiG} has the flexibility to generate a wide range of realistic signals. Simulations performed with 105 spins, 2000 timesteps, diffusivity 2.0micrometersquaredpermillsecond  and \ac{HCP} measurement scheme (Stamatios N. Sotiropoulos et al., 2013). }
   \label{fig:config_res_dMRI}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{figures/config/plot3d_whitebg}
+  \caption[3D visualisation of simulated and real \ac{dMRI} signals]{3D visualisation of simulated and real \acs{dMRI} signals in the corpus callosum and internal capsule for $b=\SI{3}{\milli\second\per\micro\metre\squared}$. Surface is 6th order \ac{SH} representation of the simulated signal. Points are measured data coloured such that red points have measured signal higher than corresponding simulated signal and blue points have signal lower than simulated signal. Lines connected to each point show distance to corresponding point on the simulated signal surface. }
+  \label{fig:config_3d_vis}
 \end{figure}
 
 \section{Discussion}
 \label{sec:config_discussion}
-ConFiG is shown to produce substrates with microstructural properties comparable to real white matter, both in terms of measures derived from histology (i.e., electron microscopy) and in terms of the diffusion \ac{MRI} signal.
+ConFiG is shown to produce \ac{WM} numerical phantoms with state-of-the-art performance, producing phantoms with higher fibre density than the MEDUSA approach, particularly in complex arrangements of fibres. These improvements lead to much more realistic simulated signals from \ac{ConFiG} phantoms than the preliminary fibre growth algorithm as demonstrated in \Cref{fig:config_res_improvements_sig}. \ac{ConFiG} is able to produce this realistic microstructure ant high fibre density by following simple biologically inspired growth rules.
 
-ConFiG is shown to produce \ac{WM} numerical phantoms with state-of-the-art performance. The amount of real data containing 3D microstructural morphology information available to compare to is limited, so we have only compared to one sample in this study. Whilst limited, this shows that \ac{ConFiG} is able to produce realistic microstructure by following simple biologically inspired growth rules.
+% \Cref{fig:config_res_slice_wise_metrics} demonstrates that \ac{ConFiG} phantoms are able to create fibre morphologies that match real axons much more closely than previous methods based on cylinders. Whilst some of the features such as eccentricity may be achievable with cylinders oriented obliquely to the cutting plane, \ac{ConFiG} phantoms capture morphological features that are otherwise impossible with cylinders such as convexity less than one.
 
-\Cref{fig:config_res_slice_wise_metrics} demonstrates that \ac{ConFiG} phantoms are able to create fibre morphologies that match real axons much more closely than previous methods based on cylinders. Whilst some of the features such as eccentricity may be achievable with cylinders oriented obliquely to the cutting plane, \ac{ConFiG} phantoms capture morphological features that are otherwise impossible with cylinders such as convexity less than one.
+% Whilst the input morphological priors do not necessarily correspond to the morphology of the resulting \ac{ConFiG} phantom, Table 2 shows that even for relatively high orientation dispersion and density, this effect is small. Even so, for use in further analysis, microstructural measures such as orientation dispersion and density should be calculated based on the resultant phantom, rather than taking the input microstructural parameters.
 
-Whilst the input morphological priors do not necessarily correspond to the morphology of the resulting \ac{ConFiG} phantom, Table 2 shows that even for relatively high orientation dispersion and density, this effect is small. Even so, for use in further analysis, microstructural measures such as orientation dispersion and density should be calculated based on the resultant phantom, rather than taking the input microstructural parameters.
-
-A related property of \ac{ConFiG} is that the growth algorithm strongly depends on the growth network, meaning that the resulting phantom for the same input fibre configuration will be different for different network choices. This is alleviated to an extent by using the dynamic network introduced here, however the phantom will still be dependent on the initialisation of the network. The dependence appears to be relatively minor as is demonstrated by the small standard errors on the mean density shown in \Cref{fig:config_res_improvements} across the five repetitions.
+The \ac{ConFiG} growth algorithm of course depends on the specific instance of the growth network, meaning that the resulting phantom for the same input fibre configuration will be different for different network choices. This is alleviated to an extent by using the dynamic network introduced here, however the phantom will still be dependent on the initialisation of the network. The dependence appears to be relatively minor as is demonstrated by the small standard errors on the mean density shown in \Cref{fig:config_res_improvements} across the five repetitions.
 
 The diffusion \ac{MRI} simulations shown in \Cref{fig:config_res_dMRI} demonstrate the ability of \ac{ConFiG} to generate phantoms which reproduce real diffusion \ac{MRI} data well. These simulations, however, are just three examples of \ac{ConFiG} phantoms and corresponding simulations. Using \ac{NODDI} as input to \ac{ConFiG} means that the resulting phantoms have sensible morphologies and are shown to generate signals that match the real tissue well, though there may be other configurations that can better reproduce the signal. As an example, the b = \SI{3}{\milli\second\per\micro\metre\squared} signal from the internal capsule is higher at low $|n\cdot G|$ in the simulated versus the real data (~\Cref{fig:config_res_dMRI}c). One explanation of this is that the phantom generated does not have microstructure accurately representing this region, for instance the phantom may have too little dispersion caused by \ac{ConFiG} underrepresenting the target orientation dispersion, as seen at low $\kappa$ in Table 2.
 
- It may be possible to find a better matching phantom using a computational modelling approach such as that proposed in \cite{Nedjati-Gilani2017}, however the simulations presented are sufficient to demonstrate a proof-of-concept that \ac{ConFiG} can be used to generate realistic simulated \ac{dMRI} data.
+Another explanation, as highlighted in \Cref{fig:config_3d_vis}, is that the orientation dispersion distribution used is not right to fully characterise the signal.
+The fact that the real signal is lower in the principle dispersion direction $\mu_2$ and higher in the orthogonal dispersion direction $\mu_3$ suggests that that there is anisotropic dispersion in the real data which is not captured by the \ac{ConFiG}.
+In this case, the \ac{ConFiG} phantom was generated using a Watson distribution for the orientation dispersion, which gives the isotropic \ac{OD} seen in \Cref{fig:config_3d_vis}, however, it may be better to use something like the \ac{ESAG} or Bingham distribution to better represent the \ac{IC}.
+
+Eventually, it may be possible to find a better matching phantom using a computational modelling approach such as that proposed in \cite{Nedjati-Gilani2017}, however the simulations presented are sufficient to demonstrate a proof-of-concept that \ac{ConFiG} can be used to generate realistic simulated \ac{dMRI} data.
 
 \subsection*{Limitations and future work}
 \label{sec:config_limitations_future}
@@ -362,7 +404,9 @@ One further potential limitation of \ac{ConFiG} is that once a fibre has grown, 
 
 A limitation of the current study is that the simulations assume a single diffusivity for the intra and extracellular spaces and no permeability of the axonal membranes. Furthermore, effects such as T2 and magnetic susceptibility are ignored. These effects are a limitation of the simulator used rather than \ac{ConFiG}, and work is planned to improve these aspects of the simulator for more realistic simulated signals.
 
-Additionally, as mentioned above, this study only compares \ac{ConFiG} to one EM sample of real tissue. Future work will also aim at more extensive validation of the digital phantoms generated using \ac{ConFiG}, making comparison with larger EM dataset, including different \ac{WM} configurations from different brain regions.
+While the \ac{dMRI} simulations presented here provide a good sanity check that the \ac{ConFiG} phantoms are realistic since the simulated signals match well with real \ac{dMRI} signals, a more thorough validation of the microstructure generated is planned. \Cref{chap:microstructure_eval} outlines a series of experiments performed to compare the microstructure generated with \ac{ConFiG} to real axons segmented from \ac{EM} \cite{Lee2019b}.
+
+% Additionally, as mentioned above, this study only compares \ac{ConFiG} to one EM sample of real tissue. Future work will also aim at more extensive validation of the digital phantoms generated using \ac{ConFiG}, making comparison with larger EM dataset, including different \ac{WM} configurations from different brain regions.
 
 We will work towards decreasing the difference between the input and output morphological measures, particularly in complex situations, such as high orientation dispersion and crossing bundles. This can be addressed through the improvements to \ac{ConFiG} mentioned here and also by improving the strategy for the generation of starting and target points for each fibre. For instance, currently it is not intuitive how starting and target points should be arranged to achieve a desired density in crossing regions of fibres.
 
@@ -370,7 +414,20 @@ One planned extension of \ac{ConFiG} is to implement periodic boundary condition
 
 The core growth algorithm for \ac{ConFiG} relies on a set of starting and target points, a connected network of nodes and some rules defining the growth. As such, \ac{ConFiG} is very flexible since the exact form of each of these components can be modified based on the application. One example of a simple modification that may be explored is the order of growth of the axons. Currently, in the absence of any clear biological precedent know to the authors, fibres grow in a random order, but it may be possible that there is a better order such as growing large diameter axons first, or central axons in a bundle growing first.
 
-In this work, \ac{ConFiG} is applied to the case of densely packed axons, without contributions from neuronal cell bodies or other processes. A planned future extension of \ac{ConFiG} is to allow for the addition of glial cells such as astrocytes and oligodendrocytes \cite{Palombo2019} to the extracellular space to make the virtual \ac{WM} tissue more realistic.
+In this work, \ac{ConFiG} is applied to the case of densely packed axons, without contributions from neuronal cell bodies or other processes. A planned future extension of \ac{ConFiG} is to allow for the addition of glial cells such as astrocytes and oligodendrocytes \cite{Palombo2019} to the extracellular space to make the virtual \ac{WM} tissue more realistic. A proof-of-concept of this is shown in \Cref{fig:config_with_cells} where we generated fibres which grow around realistic cells from \url{https://neuromorpho.org}. An astrocyte, an oligodendrocyte and a microglial cell were manually placed into the space before the fibres grew and the network was updated in the same as once a fibre has grown meaning that the growing fibres grow around the cells. 
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[]{0.49\textwidth}
+    \includegraphics[width=\textwidth]{figures/config/render_cells}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[]{0.49\textwidth}
+    \frame{\includegraphics[width=\textwidth]{figures/config/render_cells_transparent_hard_zoom}}
+  \end{subfigure}
+  \caption[Proof-of-concept \acs{ConFiG} phantoms with real cells]{Proof-of-concept \ac{ConFiG} phantom grown around real cells from \url{https://neuromorpho.org}. One astrocyte (green), oligodendrocyte (red) and microglial cell (blue) were added to the network before fibres grew and the network updated in the same as once a fibre has grown to prevent fibres intersecting the cells. Fibres then grew as normal.}
+  \label{fig:config_with_cells}
+\end{figure}
 
 Additionally, to further add to the realism of \ac{ConFiG} phantoms, realistic myelin may be modelled, creating spiral layers wrapped around the axons \cite{Brusini2019}. Furthermore, intra-axonal structures such as mitochondria and microtubules may be added to investigate their contributions to the diffusion weighted signal.
 
@@ -380,7 +437,7 @@ A planned future application will be to use \ac{ConFiG} to generate a wide range
 \label{sec:config_beyond_dmri}
 As mentioned in the introduction, axonal configuration impacts MR signals beyond \ac{dMRI}. One potential avenue of exploration would be to investigate the impact of realistic axonal configurations on magnetic susceptibility in a similar way to Xu et al. \cite{Xu2018}, extending their 2D simulations to use realistic 3D geometries generated in \ac{ConFiG}.
 
-The virtual histology presented in \Cref{fig:config_res_real_vs_virt_hist} shows an approximation of electron microscopy generated using \ac{ConFiG} substrates. In this work, the purpose of this is to show that \ac{ConFiG} is generating microstructurally realistic phantoms. For this reason, the virtual histology is simply produced by rendering images to have similar contrast to electron microscopy for comparison. It may be possible, however to generate more realistic electron microscopy images using a physically realistic electron microscopy simulator \cite{Ophus2017,Grella2003,Babin2010} which may be used to train and test axon segmentation routines. This may be of particular use for cases of fibres parallel to the electron microscopy plane or crossing bundles which are typically difficult for 3D reconstruction and segmentation algorithms.
+The virtual histology presented in \Cref{fig:config_res_improvements_virthist} shows an approximation of a histology image generated using \ac{ConFiG} substrates. In this work, the purpose of this is to show the impact the growth mechanisms have on \ac{ConFiG} phantoms. For this reason, the virtual histology is simply produced by rendering images with false colours. It may be possible, however to generate more realistic electron microscopy images using a physically realistic electron microscopy simulator \cite{Ophus2017,Grella2003,Babin2010} which may be used to train and test axon segmentation routines. This may be of particular use for cases of fibres parallel to the electron microscopy plane or crossing bundles which are typically difficult for 3D reconstruction and segmentation algorithms.
 
 The 3D meshes generated by \ac{ConFiG} are saved in the PLY format, a widely used format for storing meshes for many purposes. This means that the \ac{ConFiG} phantoms may be used in other types of simulations such as polarized light imaging \cite{Matuschke2019,Menzel2015} or molecular dynamics simulations using software such as MCell (\url{https://mcell.org}) \cite{Kerr2008a,Stiles2001,Stiles1996} or LAMMPS (\url{http://lammps.sandia.gov}) \cite{Plimpton1997}.
 
