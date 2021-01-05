@@ -40,6 +40,9 @@ In this section, I demonstrate how acronyms and citations work in my thesis. Acr
 Citations are made in the usual LaTeX manner, stored in \texttt{references.bib}. Here's an example \cite{ref1,ref2}.
 
 You can cross reference sections, equations etc. using \texttt{cleveref}. e.g. \Cref{sec:bg_algorithm}.
+
+\subsection{A subsection describing the chapter header images}
+The chapter header images are defined in the \texttt{figures/chapter\_headers.pdf}. Basically each page is an image for a different chapter, taken in order. If you want to change it, the update pdf pages should be the same size as they are now. You can turn it off by using \verb|\renewcommand{LifeChapter}{}| instead of \verb|\renewcommand{LifeChaper}{y}| at the top of the file.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../main"
