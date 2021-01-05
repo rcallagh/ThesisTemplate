@@ -33,9 +33,10 @@ Indeed, recent works using \ac{EM} to investigate \ac{WM} axonal morphology show
 
 A related factor is that this representation cannot properly account for non-straight fibres since an assumption is made that there is no exchange between fibres or, equivalently, between diffusion in different directions. In essence, this means that the fibres are implicitly assumed to be perfectly straight and pointing a given direction since any deviation from straight (i.e. curved or undulating fibres) would add directions that are dependent on one another.
 
-One further consideration is that the contribution of the extra-axonal space to the signal is not explicitly modelled. This means that either the extra-axonal signal should be assumed to be identical to the intra-axonal signal (meaning that it can be included in the \ac{FRF}) or that the extra-axonal space has a negligible contribution to the total signal.
-
-In fact, certain techniques using \ac{SD}, such \ac{AFD} \cite{Raffelt2012}, rely on the assumption that the extracellular signal is negligible at a high b-value (> 3000 \si{\second\per\milli\metre\squared}), though this has only been tested in simple numerical phantoms of straight parallel cylinders.
+% One further consideration is that the contribution of the extra-axonal space to the signal is not explicitly modelled. This means that either the extra-axonal signal should be assumed to be identical to the intra-axonal signal (meaning that it can be included in the \ac{FRF}) or that the extra-axonal space has a negligible contribution to the total signal.
+One further consideration is that the contribution of the extra-axonal space to the signal is not explicitly modelled. The convolution in \Cref{eq:spherical_conv} assumes that there is no exchange between diffusion in different directions, meaning that should the extracellular space be included in the \ac{FRF}, then we must assume that the extracellular space does not exchange (which is unlikely due to its relatively unrestricted structure) or that its contribution is minimal.
+Indeed, certain techniques using \ac{SD}, such \ac{AFD} \cite{Raffelt2012}, make this assumption explicitly, assuming that the extracellular signal is negligible at a high b-value (> 3000 \si{\second\per\milli\metre\squared}), though this has only been tested in simple numerical phantoms of straight parallel cylinders.
+It may be the case that the realistic extra-axonal in complex fibre arrangements (such as with orientation dispersion or interleaved crossing bundles) behaves differently to this simple cylinder case, and may violate this assumption. 
 
 \begin{comment}
 Another assumption is that the \ac{FRF} is assumed to be the same for all fibres (or fibre populations) in the voxel, meaning that the overall signal is just this \ac{FRF} summed up across the orientations of all the fibres.
@@ -44,16 +45,18 @@ Additionally, this representation cannot properly account for non-straight fibre
 In practice, however, it is not possible to have a large number of straight fibres pointing in different directions within the same space and maintain a high fibre volume fraction other than in a few simple cases such as planar dispersed cylinders. Ex vivo studies using 3D electron microscopy of mouse corpus callosum have shown than axons are generally not straight, at least in part as a result of having to pack together around one another and other cells.
 \end{comment}
 
-In this work we use \ac{ConFiG}, our recently developed white matter numerical phantom generator capable of generating realistic WM morphology, to investigate these whether these assumptions hold in realistic axonal geometries.
+In this work we use \ac{ConFiG}, our recently developed white matter numerical phantom generator capable of generating realistic WM morphology, to investigate what effect, if any, violation of these assumptions introduced by realistic axonal morphologies has on have on the estimated \ac{FOD}.% these whether these assumptions hold in realistic axonal geometries.
 Firstly, we investigate how the realistic packing of fibres affects the diffusion within each fibre and whether the dMRI signal from each fibre is the same, as \ac{SD} assumes.
 As well as using \ac{ConFiG} phantoms, we use axons reconstructed from the \ac{EM} data from Lee at al. \cite{Lee2019b} to test the \ac{dMRI} signal in real axonal geometry.
 Additionally, we investigate the contribution of the extracellular space to the total \ac{dMRI} signal, whether the extracellular signal is similar to intracellular signal and how much it contributes to the overall signal.
 
 The rest of this chapter is organised as follows: \Cref{sec:frf_method} describes the experiments performed to probe the assumptions outlined above, \Cref{sec:frf_results} presents the results and \Cref{sec:frf_discussion,sec:frf_conclusion} summarise the contributions and discuss future work.
+
+
 \section{Method}
 \label{sec:frf_method}
 % In order to test what impact the complex morphology introduced by packing fibres together has on the individual fibre response functions and how this varies from the straight fibre model used in SD a simulation experiment was performed in a set of numerical phantoms generated using ConFiG.
-In order to test the assumptions in \ac{SD} techniques, experiments were performed in a range of numerical phantoms generated using ConFiG. In this section, we describe the phantoms that we generate and the \ac{dMRI} simulation experiments that were performed to probe these assumptions. 
+In order to test the assumptions in \ac{SD} techniques, experiments were performed in a range of numerical phantoms generated using ConFiG, using an acquisition typical of \ac{SD} applications. In this section, we describe the phantoms that we generate and the \ac{dMRI} simulation experiments that were performed to probe these assumptions.
 
 \subsection{Phantom Generation}
 \label{sec:frf_phantom_generation}
@@ -81,7 +84,7 @@ In order to account for this, a further mesh refinement procedure was developed 
 
 As in the case of ConFiG fibres, each axon mesh was rotated to align with $z$ and extended with a reflected copy for simulation. Only axons that were longer than \SI{18}{\micro\metre} before extension were used in simulation to remove very short fibres that had been segmented at the edge of the volume. 
 
-\subsubsection{`True' FOD extraction from microstructure}
+\subsubsection{Gold standard FOD extraction from microstructure}
 \label{sec:frf_true_frf_extraction}
 \begin{figure}
   \centering
@@ -90,7 +93,7 @@ As in the case of ConFiG fibres, each axon mesh was rotated to align with $z$ an
   \label{fig:frf_od_estimation}
 \end{figure}
 
-In order to generate a ground truth to compare with \acp{FOD} estimated from the simulated \ac{dMRI} signals, the `true' \ac{FOD} was estimated from the \ac{WM} numerical phantom meshes.
+In order to generate a ground truth to compare with \acp{FOD} estimated from the simulated \ac{dMRI} signals, a gold standard \ac{FOD} was estimated from the \ac{WM} numerical phantom meshes.
 As discussed in \Cref{sec:micro_conclusion}, it is difficult to directly compare the microstructural \ac{FOD} as seen in \Cref{fig:config_res_OD} to the \ac{SD} based \ac{FOD} since the \ac{SD} based \ac{FOD} assumes each fibre contributes to a single direction.
 As an attempt to generate a microstructural \ac{FOD} comparable to that estimated from the simulated \ac{dMRI} based \acp{FOD}, the microstructural \ac{FOD} was calculated using this assumption of one direction per fibre, namely the direction that was used to align each fibre with the $z$-axis.
 An alternative to this could be to split the fibre into many segments and take the mean direction of all the segments to be the fibre direction. This approach was tested, but the difference in the resulting \ac{FOD} to the proposed approach using fibre end points was minimal.
@@ -133,7 +136,7 @@ Diffusion MRI signals were simulated from ConFiG phantoms using the Camino \ac{d
 
 
 \subsubsection{Per-fibre response function}
-For each fibre 10,000 spins were initialised uniformly within the intra-axonal space and the simulations were performed using 5000 timesteps. A small set of test simulations were performed using 10$^5$ spins and 10$^4$ timesteps yielding negligibly different signals to these settings, so 10,000 and 5,000 were used for the main simulations for the sake of time. The measurement parameters were $\Delta = \SI{28}{\milli\second}$, $\delta = \SI{24}{\milli\second}$, $b = 0,1000,2000,\SI{3000}{\second\per\milli\metre\squared}$ and 256 gradient directions at each shell. This gives a diffusion time $d_t = \SI{20}{\milli\second}$ and $G = \SI{60}{\milli\tesla\per\metre}$ at $b = \SI{3000}{\second\per\milli\metre\squared}$, chosen to be a feasible gradient strength on a high-end clinical system.
+For each fibre 10,000 spins were initialised uniformly within the intra-axonal space and the simulations were performed using 5000 timesteps. Each phantom had $\sim 300$ fibres giving $\sim 3\times 10^6$ spins in total per phantom. A small set of test simulations were performed using 10$^5$ spins per fibre and 10$^4$ timesteps yielding negligibly different signals to these settings, so 10,000 and 5,000 were used for the main simulations for the sake of time. The measurement parameters were $\Delta = \SI{28}{\milli\second}$, $\delta = \SI{24}{\milli\second}$, $b = 0,1000,2000,\SI{3000}{\second\per\milli\metre\squared}$ and 256 gradient directions at each shell. This gives a diffusion time $d_t = \SI{20}{\milli\second}$ and $G = \SI{60}{\milli\tesla\per\metre}$ at $b = \SI{3000}{\second\per\milli\metre\squared}$, chosen to be a feasible gradient strength on a high-end clinical system.
 
 To compare to the collection of straight fibres assumption implicit in the spherical deconvolution, an infinite cylinder representing each fibre was generated using the endpoints of each fibre to give the direction and the mean radius of the fibre as the cylinder radius. For simulation, each cylinder was aligned with the $z$-axis similarly to the ConFiG fibres so that everything was in the same space to compare the signals. The same measurement scheme was simulated in each cylinder in order to compare to the \ac{ConFiG} fibres.
 
@@ -143,7 +146,8 @@ To compare to the collection of straight fibres assumption implicit in the spher
 To probe the contribution of the extracellular space on the overall signal, simulations were performed in \ac{ConFiG} phantoms using $10^5$ spins initialised uniformly in the space.
 All fibres in the \ac{ConFiG} phantoms were treated as impermeable, meaning that the intracellular and extracellular signals could be calculated independently by labelling which compartment each spin started in. As in \Cref{sec:config_experiments}, phantoms were extended with reflected copies.
 
-Two different measurement schemes were used to assess the contribution of the extracellular space to the overall signal. Firstly, a radial scheme with 256 measurements equally spaced in the plane perpendicular to the main fibre direction with $b = 0, 1000, 2000, 3000, 5000, \SI{10000}{\second\per\milli\metre\squared}$ was used to assess how the extracellular signal decays in the radial direction where there should be the largest difference between intracellular and extracellular signals as in Raffelt et al. \cite{Raffelt2012}. Additionally, a scheme with the same b-values but directions equidistributed across the sphere was used to test how the signal varies in all directions.
+Two different measurement schemes were used to assess the contribution of the extracellular space to the overall signal. Firstly, a radial scheme with 256 measurements equally spaced in the plane perpendicular to the main fibre direction with $\delta=\SI{30}{\milli\second}, \Delta=\SI{30}{\milli\second}, r = 0, 1000, 2000, 3000, 5000, \SI{10000}{\second\per\milli\metre\squared}$ was used to assess how the extracellular signal decays in the radial direction where there should be the largest difference between intracellular and extracellular signals as in Raffelt et al. \cite{Raffelt2012}. Additionally, a scheme with the same b-values but directions equidistributed across the sphere was used to test how the signal varies in all directions.
+
 
 In each case, simulations were also performed in a phantom of straight parallel cylinders with radii matching the radii in the $\kappa=100$ phantom.
 
@@ -161,13 +165,13 @@ Throughout this work, \ac{SH} representations of signals are used. The MATLAB im
 Since the individual axons have been aligned with the $z$-axis, the signals from each fibre can be directly compared with one another as the gradient directions are aligned with respect to each fibre.
 For each numerical phantom the median, 10th and 90th percentile of the signal in each direction at each b-value across all the axons in the phantom were calculated.
 
-To assess how much of an impact any variation in the per-fibre response function may have on the \ac{FOD} estimation, the per-fibre signals were rotated to align with the original fibre direction and the volume-weighted mean signal calculated for each phantom. This mean signal was used to estimate the \ac{FOD} using an \ac{FRF} based on the median, 10th and 90th percentile signal from each phantom using \ac{CSD} \cite{Tournier2019,Tournier2007}. In order to better compare against the `true' \ac{FOD} calculated from the microstructure (\Cref{sec:frf_true_frf_extraction}), the resulting \ac{FOD} was normalised to integrate to one using \Cref{frf:fod_normalisation}.
+To assess how much of an impact any variation in the per-fibre response function may have on the \ac{FOD} estimation, the per-fibre signals were rotated to align with the original fibre direction and the volume-weighted mean signal calculated for each phantom. This mean signal was used to estimate the \ac{FOD} using an \ac{FRF} based on the median, 10th and 90th percentile signal from each phantom using \ac{CSD} \cite{Tournier2019,Tournier2007}. In order to better compare against the gold standard \ac{FOD} calculated from the microstructure (\Cref{sec:frf_true_frf_extraction}), the resulting \ac{FOD} was normalised to integrate to one using \Cref{frf:fod_normalisation}.
 
 \subsubsection{Extracellular contribution}
 \label{sec:frf_sig_proc_extra}
 For the radial simulations, the mean radial signal at each b-value was calculated for each of the compartments (intracellular, extracellular and total space). For the simulations in all directions, the spherical harmonic representation of the signal was calculated for each of the compartments at each b-value.
 
-As in the per-fibre response function experiment, the impact of the variation in signals between intracellular-only and total signals on the \ac{FOD} was investigate. The \ac{FRF} was calculated from the intracellular-only signal and total signal and each were used to estimate the \ac{FOD} from the total signals. In some sense, this experiment can be seen as testing the `true' \ac{FRF} from the intracellular signal which we ideally wish to obtain against the `practical' \ac{FRF} from the total signal which we obtain in practice.
+As in the per-fibre response function experiment, the impact of the variation in signals between intracellular-only and total signals on the \ac{FOD} was investigate. The \ac{FRF} was calculated from the intracellular-only signal and total signal and each were used to estimate the \ac{FOD} from the total signals. In some sense, this experiment can be seen as testing the `ideal' \ac{FRF} from the intra-axonal signal only which we ideally wish to obtain against the `practical' \ac{FRF} from the total signal (including extra-axonal contributions) which we obtain in practice.
 
 
 \section{Results}
@@ -322,7 +326,7 @@ This variation in the \ac{FRF} is seen across each $b$-value from $1000$ to $\SI
   \begin{minipage}[c]{1\textwidth}
   % \begin{subfigure}[]{1\textwidth}
   \begin{subfigure}[]{0.245\textwidth}
-    \caption*{`True' FOD}
+    \caption*{Gold standard FOD}
     \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa100_b_3000n_1}
   \end{subfigure}
   \begin{subfigure}[]{0.245\textwidth}
@@ -457,14 +461,169 @@ This variation in the \ac{FRF} is seen across each $b$-value from $1000$ to $\SI
     \includegraphics[width=\textwidth]{figures/frf_experiment/EMfibres_fod_3D_b_3000n_4_f1}
     % \caption*{90th percentile}
   \end{subfigure}
-  % \caption{EM fibres}
+j  % \caption{EM fibres}
   % \end{subfigure}
   \end{minipage}
 }
   
-  \caption[Imapct of the FRF variability on FOD estimation]{Variations in the \ac{FOD} estimated using the 10th percentile, median and 90th percentile signal for the \ac{FRF} for a range of phantoms. Left-to-right: the `true' \ac{FOD} from microstructure, \ac{FOD} using 10th percentile, \ac{FOD} using median, \ac{FOD} using 90th percentile. 3D glyphs represent the \ac{FOD} for each column and lines show previous \acp{FOD} overlaid. }
+  \caption[Imapct of the FRF variability on FOD estimation]{Variations in the \ac{FOD} estimated using the 10th percentile, median and 90th percentile signal for the \ac{FRF} for a range of phantoms. Left-to-right: the gold standard \ac{FOD} from microstructure, \ac{FOD} using 10th percentile, \ac{FOD} using median, \ac{FOD} using 90th percentile. 3D glyphs represent the \ac{FOD} for each column and lines show previous \acp{FOD} overlaid. }
   \label{fig:frf_fod_kappa_b2000}
 \end{figure}
+
+
+\begin{figure}
+  \centering
+  \makebox[\textwidth][c]{
+  \begin{minipage}[c]{0.15\textwidth}
+    \subcaption{$\kappa = 100$}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{1\textwidth}
+  % \begin{subfigure}[]{1\textwidth}
+  \begin{subfigure}[]{0.245\textwidth}
+    \caption*{Gold standard FOD}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa100_b_3000n_1_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \caption*{10th percentile}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa100_b_3000n_2_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \caption*{Median}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa100_b_3000n_3_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \caption*{90th percentile}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa100_b_3000n_4_snr30}
+  \end{subfigure}
+  % \caption{$\kappa = 100$}
+  % \end{subfigure}
+  \end{minipage}
+}
+
+ % \begin{subfigure}[]{\textwidth}
+\makebox[\textwidth][c]{
+  \begin{minipage}[c]{0.15\textwidth}
+    \subcaption{$\kappa = 6$}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{\textwidth}
+    \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa6_b_3000n_1_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa6_b_3000n_2_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa6_b_3000n_3_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa6_b_3000n_4_snr30}
+  \end{subfigure}
+  % \caption{$\kappa = 6$}
+  % \end{subfigure}
+  \end{minipage}
+}
+\makebox[\textwidth][c]{
+  \begin{minipage}[c]{0.15\textwidth}
+    \subcaption{$\kappa = 2$}
+  \end{minipage}
+  \hfill
+  % \begin{subfigure}[]{\textwidth}
+  \begin{minipage}[c]{\textwidth}
+    \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa2_b_3000n_1_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa2_b_3000n_2_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa2_b_3000n_3_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/fibres_fod_3D_kappa2_b_3000n_4_snr30}
+  \end{subfigure}
+  % \caption{$\kappa = 2$}
+  % \end{subfigure}
+  \end{minipage}
+}
+\makebox[\textwidth][c]{
+  \begin{minipage}[c]{0.15\textwidth}
+    \subcaption{Two crossing}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{\textwidth}
+  % \begin{subfigure}[]{\textwidth}
+    \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/twoperp_fod_3D_b_3000n_1_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/twoperp_fod_3D_b_3000n_2_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/twoperp_fod_3D_b_3000n_3_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/twoperp_fod_3D_b_3000n_4_snr30}
+  \end{subfigure}
+  % \caption{Two crossing}
+  % \end{subfigure}
+  \end{minipage}
+}
+\makebox[\textwidth][c]{
+  \begin{minipage}[c]{0.15\textwidth}
+    \subcaption{Three crossing}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{\textwidth}
+  % \begin{subfigure}[]{\textwidth}
+    \begin{subfigure}[]{0.245\textwidth}
+      \includegraphics[width=\textwidth]{figures/frf_experiment/threeperp_fod_3D_b_3000n_1_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/threeperp_fod_3D_b_3000n_2_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/threeperp_fod_3D_b_3000n_3_snr30}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/threeperp_fod_3D_b_3000n_4_snr30}
+  \end{subfigure}
+  % \caption{Three crossing}
+  % \end{subfigure}
+  \end{minipage}
+}
+\makebox[\textwidth][c]{
+  \begin{minipage}[c]{0.15\textwidth}
+    \subcaption{EM fibres}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{\textwidth}
+ % \begin{subfigure}[]{\textwidth}
+    \begin{subfigure}[]{0.245\textwidth}
+      \includegraphics[width=\textwidth]{figures/frf_experiment/EMfibres_fod_3D_b_3000n_1_snr30}
+
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/EMfibres_fod_3D_b_3000n_2_snr30}
+    % \caption*{10th percentile}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/EMfibres_fod_3D_b_3000n_3_snr30}
+    % \caption*{Median}
+  \end{subfigure}
+  \begin{subfigure}[]{0.245\textwidth}
+    \includegraphics[width=\textwidth]{figures/frf_experiment/EMfibres_fod_3D_b_3000n_4_snr30}
+    % \caption*{90th percentile}
+  \end{subfigure}
+  % \caption{EM fibres}
+  % \end{subfigure}
+  \end{minipage}
+}
+\end{figure}
+
+
+
 
 \begin{figure}
   \centering
@@ -529,15 +688,15 @@ This variation in the \ac{FRF} is seen across each $b$-value from $1000$ to $\SI
   \end{subfigure}
   \caption{EM fibres}
   \end{subfigure}
-  \caption[Variation in \acs{FOD} estimated at $b = 1000,2000,\SI{3000}{\second\per\milli\metre\squared}$]{Variation in \ac{FOD} estimated using 10th percentile, median and 90th percentile \ac{FRF} at $b = 1000,2000,\SI{3000}{\second\per\milli\metre\squared}$ (left-to-right) for (a) the $\kappa=2$ phantom, (b) the two crossing bundles phantoms  (c) the three crossing bundles phantom and (d) the EM fibres. Green 3D surface is `true' \ac{FOD} from microstructure and lines outline the \ac{FOD} using the 10th percentile, median and 190th percentile signals. }
+  \caption[Variation in \acs{FOD} estimated at $b = 1000,2000,\SI{3000}{\second\per\milli\metre\squared}$]{Variation in \ac{FOD} estimated using 10th percentile, median and 90th percentile \ac{FRF} at $b = 1000,2000,\SI{3000}{\second\per\milli\metre\squared}$ (left-to-right) for (a) the $\kappa=2$ phantom, (b) the two crossing bundles phantoms  (c) the three crossing bundles phantom and (d) the EM fibres. Green 3D surface is gold standard \ac{FOD} from microstructure and lines outline the \ac{FOD} using the 10th percentile, median and 190th percentile signals. }
   \label{fig:frf_fod_b123}
 \end{figure}
 
 The variation in the \ac{FRF} for each fibre leads to a variation in the estimated \ac{FOD} as seen in \Cref{fig:frf_fod_kappa_b2000}.
 Again, the magnitude of differences in \ac{FOD} tends to depend on the complexity of the fibre arrangements since the more complex arrangements have more variation in the \ac{FRF}.
 The resultant \ac{FOD} is dependent on the $b$-value as demonstrated by \Cref{fig:frf_fod_b123}. While the direction of peaks in the \ac{FOD} does not differ greatly at different $b$-values, the overall shape can change. 
-Generally, the \ac{FOD} calculated from \ac{SD} picks out the correct main peak direction that is seen in the `true' \ac{FOD} from the microstructure, with differences in the overall peak amplitude and shape.
-A notable exception to this is the $\kappa=2$ phantom which at low $b$-value identifies two peaks with some \acp{FRF} which are not present in the `true' \ac{FOD}.
+Generally, the \ac{FOD} calculated from \ac{SD} picks out the correct main peak direction that is seen in the gold standard \ac{FOD} from the microstructure, with differences in the overall peak amplitude and shape.
+A notable exception to this is the $\kappa=2$ phantom which at low $b$-value identifies two peaks with some \acp{FRF} which are not present in the gold standard \ac{FOD}.
 
 \subsection{Extracellular contribution}
 \label{sec:frf_res_extracellular}
@@ -598,7 +757,7 @@ A notable exception to this is the $\kappa=2$ phantom which at low $b$-value ide
     \caption{}
   \end{subfigure}
 
-  \caption[Impact of the extracellular space on FOD estimate]{Impact of the extracellular space on FOD estimation for (a) $\kappa=2$, (b) $\kappa=6$, (c) $\kappa=100$, (d) Cylinders. When using the `true' \ac{FRF} from the intracellular signal, the \ac{FOD} estimated varies quite significantly compared to when using the `practical' \ac{FRF} using the total signal.}
+  \caption[Impact of the extracellular space on FOD estimate]{Impact of the extracellular space on FOD estimation for (a) $\kappa=2$, (b) $\kappa=6$, (c) $\kappa=100$, (d) Cylinders. When using the `ideal' \ac{FRF} from the intracellular signal, the \ac{FOD} estimated varies quite significantly compared to when using the `practical' \ac{FRF} using the total signal.}
   \label{fig:frf_intra_ex_fod}
 \end{figure}
 
@@ -622,21 +781,21 @@ As demonstrated in \Cref{fig:frf_prctiles_kappa_b2000,fig:frf_prctiles_b123}, th
 Indeed, the variation in responses in fibres reconstructed from real \ac{EM} images of \acl{WM} is large, similar to that of the ConFiG three crossing simulations, and much larger than \ac{ConFiG} phantoms containing a single fibre bundle.
 This suggests that there is in fact more variation in real axons than in the axons generated by \ac{ConFiG}, even in simple arrangements of a single bundle of fibres. This is something that may be used to inform future versions of \ac{ConFiG} to generate more realistic phantoms.
 
-In the main, the largest variation in the per-fibre response, as well as the largest difference between cylinders and realistic axons happens in the axial direction which is to be expected. Even with diameter variations and undulation, the radial diffusion is still strongly restricted, while recent studies have shown that real axonal morphology causes time-dependent deviations from Gaussian diffusivity along the axial direction \cite{Lee2019a}.
+In the main, the largest variation in the per-fibre response, as well as the largest difference between cylinders and realistic axons happens in the axial direction which is to be expected. Even with diameter variations and undulation, the radial diffusion is still strongly restricted under the assumption of no axonal permeability, while recent studies have shown that real axonal morphology causes time-dependent deviations from Gaussian diffusivity along the axial direction \cite{Lee2019a}.
 
-Variations in the \ac{FRF} have an impact on the estimated \ac{FOD} as demonstrated in \Cref{fig:frf_fod_kappa_b2000,fig:frf_fod_b123}. In the simplest fibre arrangements with the lowest dispersion (\Cref{fig:frf_fod_kappa_b2000}a\&b), the \ac{FRF} variation is relatively small and so the \ac{FOD} variation is small and the \ac{FOD} peak directions match the `true' \ac{FOD} well, however in the $\kappa=2$ case, the \ac{FOD} varies greatly when using different \ac{FRF}s (\Cref{fig:frf_fod_kappa_b2000}c and \Cref{fig:frf_prctiles_b123}a).
+Variations in the \ac{FRF} have an impact on the estimated \ac{FOD} as demonstrated in \Cref{fig:frf_fod_kappa_b2000,fig:frf_fod_b123}. In the simplest fibre arrangements with the lowest dispersion (\Cref{fig:frf_fod_kappa_b2000}a\&b), the \ac{FRF} variation is relatively small and so the \ac{FOD} variation is small and the \ac{FOD} peak directions match the gold standard \ac{FOD} well, however in the $\kappa=2$ case, the \ac{FOD} varies greatly when using different \ac{FRF}s (\Cref{fig:frf_fod_kappa_b2000}c and \Cref{fig:frf_prctiles_b123}a).
 
-Interestingly, when using the 10th percentile and median \ac{FRF}, the \ac{FOD} seems to pick out two crossing bundles which are not present in the `true' \ac{FOD}, while the 90th percentile \ac{FRF} picks up one dispersed bundle much closer to the `true' \ac{FOD}. On top of this, the relative amplitudes of the \ac{FOD} change with $b$-value as seen in \Cref{fig:frf_prctiles_b123}a in which the median and the 10th percentile \ac{FOD} changes from two distinct peaks at $b=\SI{1000}{\second\per\milli\metre\squared}$ to one wider merged peak at $b=\SI{3000}{\second\per\milli\metre\squared}$.
+Interestingly, when using the 10th percentile and median \ac{FRF}, the \ac{FOD} seems to pick out two crossing bundles which are not present in the gold standard \ac{FOD}, while the 90th percentile \ac{FRF} picks up one dispersed bundle much closer to the gold standard \ac{FOD}. On top of this, the relative amplitudes of the \ac{FOD} change with $b$-value as seen in \Cref{fig:frf_prctiles_b123}a in which the median and the 10th percentile \ac{FOD} changes from two distinct peaks at $b=\SI{1000}{\second\per\milli\metre\squared}$ to one wider merged peak at $b=\SI{3000}{\second\per\milli\metre\squared}$.
 These kinds of effects could have significant impacts on tractography techniques which use the \ac{FOD} to trace fibre bundles through the brain.
 
-In the case of crossing fibres, the \ac{FOD} varies depending on the \ac{FRF} used too. In the case of two crossing bundles of fibres (\Cref{fig:frf_fod_kappa_b2000}d), each bundle responds in a similar way, with peak directions and amplitudes largely unaffected by the \ac{FRF} used and matching the `true' \ac{FOD} well.
-In the three perpendicular bundle case, however, peak amplitudes are affected by the \ac{FRF} used as seen in \Cref{fig:frf_fod_kappa_b2000}e and \Cref{fig:frf_prctiles_b123}c, in which different \acp{FRF} create \acp{FOD} with different relative peak amplitudes. The 90th percentile \ac{FRF} selects the largest peak very strongly, creating smaller perpendicular peaks while the 10th percentile (and, in fact `true') \ac{FRF} pick out more even lobes.
+In the case of crossing fibres, the \ac{FOD} varies depending on the \ac{FRF} used too. In the case of two crossing bundles of fibres (\Cref{fig:frf_fod_kappa_b2000}d), each bundle responds in a similar way, with peak directions and amplitudes largely unaffected by the \ac{FRF} used and matching the gold standard \ac{FOD} well.
+In the three perpendicular bundle case, however, peak amplitudes are affected by the \ac{FRF} used as seen in \Cref{fig:frf_fod_kappa_b2000}e and \Cref{fig:frf_prctiles_b123}c, in which different \acp{FRF} create \acp{FOD} with different relative peak amplitudes. The 90th percentile \ac{FRF} selects the largest peak very strongly, creating smaller perpendicular peaks while the 10th percentile (and, in fact gold standard) \ac{FRF} pick out more even lobes.
 This is significant because as shown by Schilling et al.\cite{Schilling2019}, even changes in \ac{FOD} peak amplitudes without peak direction changes can have an impact on tractography results.
-%with the \ac{SD} based \ac{FOD} picking out one large and small peak in \Cref{fig:frf_fod_b123}b with the small peak much smaller than the `true' \ac{FOD}.This is significant because as shown by Schilling et al.\cite{Schilling2019}, even changes in \ac{FOD} peak amplitudes without peak direction changes can have an impact on tractography results.
+%with the \ac{SD} based \ac{FOD} picking out one large and small peak in \Cref{fig:frf_fod_b123}b with the small peak much smaller than the gold standard \ac{FOD}.This is significant because as shown by Schilling et al.\cite{Schilling2019}, even changes in \ac{FOD} peak amplitudes without peak direction changes can have an impact on tractography results.
 %Further, the orientation of the vertical lobes in \Cref{fig:frf_fod_b123} changes from $b=1000$ to $b=\SI{3000}{\second\per\milli\metre\squared}$ which again could have a significant impact on tractography results.
 
-In the real \ac{EM} fibres, the large differences in \ac{FRF} lead to large differences in the \ac{FOD} as seen in \Cref{fig:frf_fod_kappa_b2000}f and \Cref{fig:frf_fod_b123}d. Similarly to the $\kappa=2$ case, the 10th percentile \ac{FRF} seems to pick out two crossing peaks, while the others pick out a single peak, closer to the `true' \ac{FOD}. This effect is dependent on $b$-value, with the two peaks at $b = \SI{1000}{\second\per\milli\metre\squared}$ merging into one at $b=\SI{3000}{\second\per\milli\metre\squared}$.
-One possible explanation for this finding two peaks where there in fact is only one be that the number of fibres in the phantom is lower than you'd expect in a full \ac{dMRI} phantom (typically ~300 fibres per fibre) so the sampling of the orientation distribution may appear to be two peaks. Another possible explanation is that the Tikhonov regularisation in \ac{CSD} \cite{Tournier2007} encourages directions in which there is little diffusion to zero and it may be over-regularising in the $\kappa=2$ and \ac{EM} fibres cases.
+In the real \ac{EM} fibres, the large differences in \ac{FRF} lead to large differences in the \ac{FOD} as seen in \Cref{fig:frf_fod_kappa_b2000}f and \Cref{fig:frf_fod_b123}d. Similarly to the $\kappa=2$ case, the 10th percentile \ac{FRF} seems to pick out two crossing peaks, while the others pick out a single peak, closer to the gold standard \ac{FOD}. This effect is dependent on $b$-value, with the two peaks at $b = \SI{1000}{\second\per\milli\metre\squared}$ merging into one at $b=\SI{3000}{\second\per\milli\metre\squared}$.
+One possible explanation for this finding two peaks where there in fact is only one be that the number of fibres in the phantom is lower than you'd expect in a full \ac{dMRI} phantom (typically ~300 fibres per phantom) so the sampling of the orientation distribution may appear to be two peaks. Another possible explanation is that the Tikhonov regularisation in \ac{CSD} \cite{Tournier2007} encourages directions in which there is little diffusion to zero and it may be over-regularising in the $\kappa=2$ and \ac{EM} fibres cases.
 %As above, even though the \ac{FOD} is relatively simple and varies only in amplitude, this could have an impact on tractography results.
 
 
@@ -646,8 +805,8 @@ Additionally, these simulations lend further support to challenge the assumption
 \subsection{Extracellular contribution}
 \label{sec:frf_discussion_extra_contribution}
 As seen in \Cref{fig:frf_intra_ex_rad,fig:frf_extra_sh}, the contribution of the extracellular space to the overall signal is small but non-zero.
-The radial extracellular signal decays more quickly than the intracellular signal, even in highly dispersed fibres, but does not completely decay even at relatively high $b$-values (\SIlist{3000; 5000}{\second\per\milli\metre\squared}).
-This brings into question the assumption inherent in \ac{SD} techniques that the extracellular space is negligible and is also contrary to the simulation experiment performed by Raffelt et al. \cite{Raffelt2012} who show the extracellular signal decaying to negligible levels by $b=\SI{3000}{\second\per\milli\metre\squared}$. The exact cause of this difference requires further investigation, especially for the cylinder phantom which should be comparable.
+The radial extracellular signal decays more quickly than the intracellular signal, even in highly dispersed fibres, but does not completely decay even at relatively high $b$-values (around $15\%$ extracellular signal fraction at \SI{3000}{\second\per\milli\metre\squared} and $10\%$ at \SI{5000}{\second\per\milli\metre\squared}).
+This brings into question the assumption inherent in some \ac{SD} techniques such as \ac{AFD} that the extracellular space is negligible and is also contrary to the simulation experiment performed by Raffelt et al. \cite{Raffelt2012} who show the extracellular signal decaying to negligible levels by $b=\SI{3000}{\second\per\milli\metre\squared}$. The exact cause of this difference requires further investigation, especially for the cylinder phantom which should be comparable.
 
 The signals from the intracellular and extracellular space also do not always have the same shape, with highly dispersed fibres showing a more isotropic signal in the extracellular space than the intracellular space (\Cref{fig:frf_extra_sh}).
 This again can question the assumption that the impact of the extracellular space is negligible on \ac{SD} techniques, particularly as the shape of the extracellular signal varies in different fibre arrangements. This may lead to \ac{FRF}s estimated in one environment misestimating the \ac{FOD} in an environment with a different underlying geometry.
@@ -663,14 +822,17 @@ As an example of this, \Cref{fig:frf_different_FRF} shows the \ac{FOD} estimated
 \end{comment}
 
 This contribution of the extracellular space additionally impacts \ac{FOD} estimation with \acl{SD} as shown in \Cref{fig:frf_intra_ex_fod}.
-When using the `true' \ac{FRF} from the intracellular signal only compared to the `practical' \ac{FRF} from the total signal, the estimated \ac{FOD} varies and although the variation is largely in the \ac{FOD} amplitude, this will have an impact on tractography techniques. Additionally, in the $\kappa=2$ case, the \ac{FOD}s have slightly different primary directions, which will also affect tractography techniques.
+When using the `ideal' \ac{FRF} from the intracellular signal only compared to the `practical' \ac{FRF} from the total signal, the estimated \ac{FOD} varies and although the variation is largely in the \ac{FOD} amplitude, this will have an impact on tractography techniques. Additionally, in the $\kappa=2$ case, the \ac{FOD}s have slightly different primary directions, which will also affect tractography techniques.
 
 \subsection{Limitations and future work }
 \label{sec:frf_limitations}
 In this work we investigated how complex fibre morphology affects \acl{SD} techniques using a \ac{dMRI} scheme chosen to use clinically feasible gradient strength and duration, though it may be possible that other measurement schemes exhibit greater or lesser sensitivity to these effects. For instance Yeh et al. \cite{Yeh2010} have shown that the gradient pulse duration can impact fibre orientation estimation.
+Another factor to investigate is the impact of the diffusion time on the observed effects, since longer diffusion times can `smooth out' these microscopic morphological variations as spins are able to diffuse further.
 
-Throughout this work we have referred to the \ac{FOD} generated from the phantom microstructure as the `true' \ac{FOD} in inverted commas. This is deliberate since, as mentioned in \Cref{sec:frf_true_frf_extraction,sec:micro_limitations}, the definition of the \ac{FOD} from microstructure does not entirely correspond to that from \ac{dMRI}.
-Efforts have been made to make the two \acp{FOD} comparable in this work by defining the `true' \ac{FOD} using a single direction per fibre and normalising all \acp{FOD} to one, however future work will investigate the best way to represent these \acp{FOD}.
+The simulations presented here are performed with no noise added, representing an ideal case of infinite \ac{SNR}. In reality, \ac{dMRI} measurements would be expected to have an \ac{SNR} between 15 and 100. The impact of noise on the effects presented here will be the subject of future work to investigate whether realistic noise levels may mask these differences.
+
+Throughout this work we have referred to the \ac{FOD} generated from the phantom microstructure as the gold standard \ac{FOD} in inverted commas. This is deliberate since, as mentioned in \Cref{sec:frf_true_frf_extraction,sec:micro_limitations}, the definition of the \ac{FOD} from microstructure does not entirely correspond to that from \ac{dMRI}.
+Efforts have been made to make the two \acp{FOD} comparable in this work by defining the gold standard \ac{FOD} using a single direction per fibre and normalising all \acp{FOD} to one, however future work will investigate the best way to represent these \acp{FOD}.
 
 The variability that is demonstrated in the per-fibre response in this experiment is suggested to arise due to the complexity of fibre morphology introduced due to complex fibre arrangements.
 This seems to be case, as shown in \Cref{fig:frf_prctiles_kappa_b2000}, though the exact nature of the link is not known for certain since there are many sources of morphological complexity (undulation, beading, non-circular cross-sections, etc.) which could all contribute to these variations.
@@ -690,7 +852,7 @@ Future work will aim to investigate this effect and investigate whether it is po
 \label{sec:frf_conclusion}
 The complex axonal morphology introduced by axons packing together in complex arrangements leads to differences in the \ac{dMRI} response across different fibres.
 These variations in per-fibre response functions lead to differences in the \ac{FOD} estimated using \acl{CSD}, suggesting that the assumption of a single \ac{FRF} across all fibres and all voxels may need to be considered carefully.
-Further, the extracellular space contributes to the overall signal, even at high b-values ($>$\SI{3000}{\second\per\milli\metre\squared}) obscuring the `true' \ac{FRF} from the intracellular space which leads to a `practical' \ac{FRF} which leads to differences in the \ac{FOD}.
+Further, the extracellular space contributes to the overall signal, even at high b-values ($>$\SI{3000}{\second\per\milli\metre\squared}) obscuring the `ideal' \ac{FRF} from the intracellular space which leads to a `practical' \ac{FRF} which leads to differences in the \ac{FOD}.
 
 All of this means that the interpretation of the \ac{FRF} and \ac{FOD} in \acl{SD} needs to be carefully considered and future models may seek to disentangle some of these effects for more accurate \ac{FRF} and \ac{FOD} estimation. 
 
