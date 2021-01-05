@@ -3,33 +3,8 @@
 %{.}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{+}{.}{-}{-}{.}{<}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{+}{.}{+}{+}{.}{>}{+}{+}{.}{[}{>}{]}{<}{[}{[}{-}{]}{<}{]}{<}{<}{-}{<}{+}{+}{-}{<}{-}{-}
 %}
 \chapter*{Abstract}
-%\addcontentsline{toc}{chapter}{Abstract}
-\begin{comment}
-This thesis presents work towards improving the realism of \ac{WM} numerical phantoms for \ac{dMRI} simulations.
-\ac{WM} substrates are commonly used for simulation in the validation of diffusion MRI (dMRI) techniques and construction of computational models of the \ac{dMRI} signal so it is important that they are as realistic as possible.
-% Current numerical phantoms either oversimplify the complex morphology of WM or are unable to produce realistic orientation dispersion at high packing density. The highest packing density and orientation dispersion achieved so far is only 20\% at 10\degree. 
-
-The most significant work towards this goal is the development of a new method for generating realistic \ac{WM} substrates with some control on the morphology of the resulting substrates.
-This method is called \textbf{Con}textual \textbf{Fi}bre \textbf{G}rowth \acused{ConFiG}(\acs{ConFiG}).
-\ac{ConFiG} generates \ac{WM} substrates by `growing' fibres contextually, avoiding intersections between fibres whilst attempting to follow some morphological priors.
-The potential of \ac{ConFiG} is demonstrated by the generation of example substrates with realistic morphology and at high density-orientation dispersion combinations (up to 25\% at 35\degree).
-
-% With the increased complexity of substrates, the computational load increases and so simulations take longer.
-% In an attempt to combat this, a \ac{GPU} accelerated \ac{dMRI} simulator is presented, called CUDAmino.
-% CUDAmino is tested against the established \ac{CPU} \ac{dMRI} simulator, Camino, and is shown to generate similar synthetic \ac{dMRI} signals whilst achieving a speedup in execution of around $100\times$.
-
-A summary of potential improvements that can be made to both \ac{ConFiG} and CUDAmino is presented along with an outline of the work planned to be completed during the remainder of the PhD.
-
-This paper presents Contextual Fibre Growth (ConFiG), an approach to generate white matter numerical phantoms by mimicking natural fibre genesis. ConFiG grows fibres one-by-one, following simple rules motivated by real axonal guidance mechanisms. These simple rules enable ConFiG to generate phantoms with tuneable microstructural features by growing fibres while attempting to meet morphological targets such as user-specified density and orientation distribution. We compare ConFiG to the state-of-the-art approach based on packing fibres together by generating phantoms in a range of fibre configurations including crossing fibre bundles and orientation dispersion. Results demonstrate that ConFiG produces phantoms with up to 20\% higher densities than the state-of-the-art, particularly in complex configurations with crossing fibres. We additionally show that the microstructural morphology of ConFiG phantoms is comparable to real tissue, producing diameter and orientation distributions close to electron microscopy estimates from real tissue as well as capturing complex fibre cross sections. Signals simulated from ConFiG phantoms match real diffusion MRI data well, showing that ConFiG phantoms can be used to generate realistic diffusion MRI data. This demonstrates the feasibility of ConFiG to generate realistic synthetic diffusion MRI data for developing and validating microstructure modelling approaches.
-\end{comment}
-
-Numerical phantoms have played a key role in the development of \ac{dMRI} techniques which seek to estimate features of the microscopic structure and organisation of tissue by providing a ground truth for simulation experiments against which we can validate and compare techniques.
-One common limitation of numerical phantoms which represent \ac{WM} is that they oversimplify the true complex morphology of the tissue which has been revealed through \emph{ex vivo} studies.
-It is important to try to generate \ac{WM} numerical phantoms that capture this realistic complexity in order to understand how it impacts the \ac{dMRI} signal. 
-
-This thesis presents work towards improving the realism of \ac{WM} numerical by generating fibres mimicking natural fibre genesis.
-A novel phantom generator is presented which was developed over two works, resulting in \textbf{Con}textual \textbf{Fi}bre \textbf{G}rowth \acused{ConFiG} (\acs{ConFiG}). \ac{ConFiG} grows fibres one-by-one, following simple rules motivated by real axonal guidance mechanisms. These simple rules enable ConFiG to generate phantoms with tuneable microstructural features by growing fibres while attempting to meet morphological targets such as user-specified density and orientation distribution. We compare ConFiG to the state-of-the-art approach based on packing fibres together by generating phantoms in a range of fibre configurations including crossing fibre bundles and orientation dispersion. Results demonstrate that ConFiG produces phantoms with up to 20\% higher densities than the state-of-the-art, particularly in complex configurations with crossing fibres. We additionally show that the microstructural morphology of ConFiG phantoms is comparable to real tissue, producing diameter and orientation distributions close to electron microscopy estimates from real tissue as well as capturing complex fibre cross sections. \ac{ConFiG} is applied to probe assumptions in a family of \ac{dMRI} modelling techniques based on \ac{SD}, demonstrating that the microscopic variations in fibres' shapes leads to variations in the per-fibre signal contrary to the assumptions inherent in \ac{SD} which may have a knock-on effect in popular techniques such as tractography.
-
+% \addcontentsline{toc}{chapter}{Abstract}
+\blindtext
 
 \acresetall
 %%% Local Variables:
